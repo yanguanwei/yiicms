@@ -50,8 +50,6 @@ CREATE TABLE IF NOT EXISTS `y_archive` (
 -- 转存表中的数据 `y_archive`
 --
 
-INSERT INTO `y_archive` (`id`, `title`, `cover`, `cid`, `uid`, `model_id`, `template`, `visits`, `status`, `is_highlight`, `is_top`, `keywords`, `description`, `post_time`, `update_time`) VALUES
-(3, 'asdfasdf', '', 2, 1, 3, '0', 0, 0, 0, 0, 'asdf', 'asf', 1370596073, 1370596020);
 
 -- --------------------------------------------------------
 

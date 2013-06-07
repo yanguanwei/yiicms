@@ -1,3 +1,8 @@
+<style type="text/css">
+    .table-filters { border-bottom: 1px solid #CCCCCC; padding: 5px 0; margin: 0 0 10px 0;}
+    .table-filters label { font-size: bold; display: inline-block; margin-right: 10px;}
+
+</style>
 <?php
 $script = <<<code
 $('td.title-column').each(function() {
@@ -42,6 +47,15 @@ $widget = $this->beginWidget('application.widgets.Tabs', array(
     'defaultTab' => $defaultTab
   ));
 
+if ($filters) {
+    echo '<form class="table-filters" method="get">';
+    echo '<input type="hidden" name="r" value="' . $_GET['r'] .'" />';
+    echo '<input type="hidden" name="cid" value="' . $_GET['cid'] .'" />';
+    echo '<label>filters: </label>';
+    echo implode("\n", $filters) . "\n";
+    echo '<input type="submit" value="submit" class="button" /></form>';
+}
+
 $widget->beginTab($defaultTab);
 
 $table = $this->beginWidget('apps.ext.young.ListTable', array(
@@ -50,7 +64,7 @@ $table = $this->beginWidget('apps.ext.young.ListTable', array(
     'selectable' => true,
     'titles' => array(
       'id' => 'ID',
-      'title' => '新闻标题',
+      'title' => '标题',
       'update_time' => '更新时间',
       'operate' => '操作'
     )

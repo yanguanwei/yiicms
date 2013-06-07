@@ -17,7 +17,7 @@ class SelectSQL
 	
 	public function leftJoin($table, $fields, $on)
 	{
-		$this->addColumns($table, $fields, 'LEFTJOIN', $on);
+		$this->addColumns($table, $fields, 'LEFT JOIN', $on);
 		
 		return $this;
 	}
@@ -157,10 +157,10 @@ class SelectSQL
 				$s .= " ON {$meta['on']}";
 			$a[] = $s;
 			
-			if ( !$isCountField ) {
-				if ( $meta['columns'] ) {
+			if (!$isCountField) {
+				if ($meta['columns']) {
 					foreach ($meta['columns'] as $column) {
-						if ( $column !== '*' )
+						if ($column !== '*')
 							$column = $this->quoteColumnName($column);
 						$f[] = "{$meta['alias']}.{$column}";
 					}
@@ -170,7 +170,7 @@ class SelectSQL
 		
 		$a = implode(' ', $a);
 		
-		if ( $isCountField ) {
+		if ($isCountField) {
 			$f = 'COUNT(*)';
 		} else {
 			$f = implode(',', $f);
@@ -181,7 +181,7 @@ class SelectSQL
 	
 	protected function parseWhere($where)
 	{
-		if ( $where ) {
+		if ($where) {
 			$s = array('1=1');
 			foreach ($where as $meta) {
 				$s[] = "{$meta['op']} ({$meta['cond']})";
@@ -192,29 +192,29 @@ class SelectSQL
 	
 	protected function parseOrder($order)
 	{
-		if ( $order )
+		if ($order)
 			return 'ORDER BY '.implode(',', $order);
 	}
 	
 	protected function parseLimit($limit)
 	{
-		if ( $limit )
+		if ($limit)
 			return "LIMIT {$limit[0]}, $limit[1]";
 	}
 	
 	protected function addColumns($table, $fields, $type, $on = null)
 	{
-		if ( is_string($fields) ) {
+		if (is_string($fields)) {
 			$fields = explode(',', $fields);
 		}
 		
-		if ( is_array($table) ) {
+		if (is_array($table)) {
 			list($table, $alias) = $table;
 		} else {
 			$alias = $table;
 		}
 		
-		if ( !isset($this->_sql['from'][$table]) )
+		if (!isset($this->_sql['from'][$table]))
 			$this->_sql['from'][$table] = array(
 				'columns' => array(),
 				'type' => $type,
@@ -222,7 +222,7 @@ class SelectSQL
 				'alias' => $alias
 			);
 		
-		if ( is_array($fields) ) {
+		if (is_array($fields)) {
 			foreach ($fields as $field)
 				if ( !in_array($field, $this->_sql['from'][$table]['columns']) )
 					 $this->_sql['from'][$table]['columns'][] = trim($field);
@@ -233,7 +233,7 @@ class SelectSQL
 	
 	protected function addIn($op, $column, $value)
 	{
-		if ( strpos($column, '.') > 0) {
+		if (strpos($column, '.') > 0) {
 			list($table, $column) = explode('.', $column, 2);
 			$column = $table.'.'.$this->quoteColumnName($column);
 		} else {

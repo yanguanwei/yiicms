@@ -1,0 +1,19 @@
+@CHARSET "UTF-8";
+DIV.black-red {
+	FONT-SIZE: 11px; COLOR: #fff; FONT-FAMILY: Tahoma, Arial, Helvetica, Sans-serif; BACKGROUND-COLOR: #3e3e3e
+}
+DIV.black-red A {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; MARGIN: 2px; COLOR: #fff; PADDING-TOP: 2px; BACKGROUND-COLOR: #3e3e3e; TEXT-DECORATION: none
+}
+DIV.black-red A:hover {
+	COLOR: #fff; BACKGROUND-COLOR: #ec5210
+}
+DIV.black-red A:active {
+	COLOR: #fff; BACKGROUND-COLOR: #ec5210
+}
+DIV.black-red SPAN.current {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 2px; MARGIN: 2px; COLOR: #fff; PADDING-TOP: 2px; BACKGROUND-COLOR: #313131
+}
+DIV.black-red SPAN.disabled {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; MARGIN: 2px; COLOR: #868686; PADDING-TOP: 2px; BACKGROUND-COLOR: #3e3e3e
+}

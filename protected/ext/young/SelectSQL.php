@@ -244,20 +244,21 @@ class SelectSQL
 		
 		return $this;
 	}
-	
-	/**
-	 * $this->addWhere('AND', "`title`='some title'");
-	 * $this->addWhere('AND', "`title`=?", $title)
-	 * $this->addWhere('AND', array(
-	 * 		'`id`=?' => $id,
-	 * 		'`title`<>:title',
-	 * 		"`visible`='1'"
-	 * ))
-	 * 
-	 * @param string $op AND | OR
-	 * @param string $column
-	 * @param string|array|null $value
-	 */
+
+  /**
+   * $this->addWhere('AND', "`title`='some title'");
+   * $this->addWhere('AND', "`title`=?", $title)
+   * $this->addWhere('AND', array(
+   *    '`id`=?' => $id,
+   *    '`title`<>:title',
+   *    "`visible`='1'"
+   * ))
+   *
+   * @param string $op AND | OR
+   * @param $cond
+   * @param string|array|null $value
+   * @internal param string $column
+   */
 	protected function addWhere($op, $cond, $value = null)
 	{
 		if ( is_array($cond) ) {

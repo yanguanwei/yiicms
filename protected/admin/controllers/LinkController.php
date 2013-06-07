@@ -20,7 +20,7 @@ class LinkController extends AdminController
 		$sql = new SelectSQL();
 		$sql->from('{{link}}', '*')
 		->in('cid', $cids)
-		->order('sort_id DESC, id DESC');
+		->order('sort_id DESC, id ASC');
 		
 		$dataProvider = new SelectDataProvider(Yii::app()->db, $sql);
 		

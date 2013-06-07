@@ -40,6 +40,8 @@ class Channel extends CActiveRecord
 	public $description;
 	
 	public $visible = 1;
+
+  public $tags;
 	
 	/**
 	 * Returns the static model of the specified AR class.
@@ -76,7 +78,11 @@ class Channel extends CActiveRecord
 	{
 		if ( in_array($this->getScenario(), array('insert', 'update')) )
 			$this->post_time = time();
-	
+
+    if ($this->tags && is_array($this->tags)) {
+        $this->tags = implode('|', $this->tags);
+    }
+
 		return parent::beforeSave();
 	}
 	
@@ -435,7 +441,15 @@ class Channel extends CActiveRecord
 	public static function findChannel($id)
 	{
 		$id = intval($id);
-		$sql = "SELECT * FROM `{{channel}}` WHERE `id`='{$id}'";
+		$sql = "SELECT * FROM {{channel}} WHERE id='{$id}'";
 		return Yii::app()->db->createCommand($sql)->queryRow();
 	}
+
+  public static function getChannelTags($cid)
+  {
+    $cid = intval($cid);
+    $sql = "SELECT tags FROM {{channel}} WHERE id='{$cid}'";
+    $row = Yii::app()->db->createCommand($sql)->queryRow();
+    return ($row && $row['tags']) ? explode('|', $row['tags']) : array();
+  }
 }

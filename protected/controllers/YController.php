@@ -17,12 +17,12 @@ class YController extends CController
 		} else {
 			$baseUrl = Yii::app()->request->getBaseUrl();
 		}
-		return $baseUrl . '/assets/' . $path;
+		return $baseUrl . '/static/' . $path;
 	}
 	
 	public function assets($path)
 	{
-		return Yii::app()->request->getBaseUrl() . '/assets/' . $path;
+		return Yii::app()->request->getBaseUrl() . '/static/' . $path;
 	}
 	
 	/**

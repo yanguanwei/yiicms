@@ -1,230 +1,165 @@
-<?php
-$this->register_assets(
-	'focusimage/jquery.focusimage.js?20130110123',
-	'focusimage/jquery.focusimage.css',
-	'scrolling/jquery.scrolling.js'
-);
+<!-- banner 最新动态 -->
+<div class="index-column1 clearfix">
+    <div class="index-banner fl">
+        <div id="xxx" class="index-banner-wrap">
+            <script>
+                var box =new PPTBox();
+                box.width = 667; //宽度
+                box.height = 293;//高度
+                box.autoplayer = 5;//自动播放间隔时间
 
-$script = <<<code
-$('#banner .focusimage').focusimage({
-	effects: ['horizontal', 'thumbnail'],
-	direction: 'left',
-	easingImage: 'easeOutExpo',
-	indexOnClick: true,
-	hasCaption: false
-});
-$('#announcement .newslist').scrolling();
-code;
-
-$this->register_script('banner', $script);
-?>
-<div id="banner">
-	<div class="focusimage focusimage-thumbnail">
-		<div class="focusimage-list">
-			<ul>
-<?php
-//焦点图片
-$focusimages = $this->getArchivesByChannelId(61, 5);
-foreach ( $focusimages  as $archive) {
-	echo sprintf('<li><a href="%s" target="_blank"><img src="%s" /></a></li>',
-		$this->createUrl('archive/detail', array('id' => $archive['id'])),
-		$archive['cover']
-	);
-}				
-?>
-			</ul>
-		</div>
-		<div class="focusimage-index">
-			<ul>
-<?php
-foreach ( $focusimages  as $archive) {
-	echo sprintf('<li><div class="activedLayer"></div><div class="thumb"><img src="%s" /></div></li>',
-		$archive['cover']
-	);
-}			
-?>
-			</ul>
-		</div>
-		<div class="focusimage-index-bg"></div>
-	</div>
+                //box.add({"url":"图片地址","title":"悬浮标题","href":"链接地址"})
+                box.add({"url":"<?php echo $this->asset('images/banner1.jpg');?>","href":"###","title":"悬浮提示标题1"})
+                box.add({"url":"<?php echo $this->asset('images/banner2.jpg');?>","href":"###","title":"悬浮提示标题2"})
+                box.add({"url":"<?php echo $this->asset('images/banner3.jpg');?>","href":"###","title":"悬浮提示标题3"})
+                box.show();
+            </script>
+        </div>
+    </div>
+    <div class="index-trends fr">
+        <h4 class="title"><a href="#" class="more fr">更多</a></h4>
+        <div class="trends-wrap">
+            <div class="trends-first clearfix">
+                <img class="fl pic" src="<?php echo $this->asset('images/index-trends-img.png');?>" /><p>品牌促进中心家具品牌专业委员会昨天宣告成立。委员会作为国内首个服务家居生活用品品牌。<a href="#">[详细]</a></p>
+            </div>
+            <ul class="trends-list">
+                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
+                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
+                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
+                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
+                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
-
-<div class="layout">
-
-	<div class="c3l">
-<?php //园区视频
-$this->beginBlock('/blocks/block', array(
-	'image' => $this->asset('images/block_tit_video.jpg'),
-	'more' => $this->createUrl('channel/index', array('cid'=>69))
-));
-$video = $this->getArchive(72);
-?>
-<div style="width:320px; margin:10px auto 0 auto;">
-	
-<?php 
-	$this->renderPartial('/blocks/flv', array(
-		'archive_id' => 72,
-		'width' => 320,
-		'height' => 240,
-		'autoplay' => 1
-	));
-?>
+<!-- 最热购物街 -->
+<div class="index-column2 index-hottest">
+    <h4 class="title"><img src="<?php echo $this->asset('images/index-hottest-title.png');?>" /></h4>
+    <div class="hottest-wrap clearfix">
+        <script>
+            function switchTab(tabid,tabbox,events,effect,num){
+                var n=num;
+                $(tabid+">li").eq(n).attr("class","current").siblings(":not(.none)").attr("class","normal");
+                $(tabbox+">div").eq(n).show().siblings().hide();
+                $(tabid+" li:not(.none)").bind(events,function(){
+                    $(this).attr("class","current").siblings(":not(.none)").attr("class","normal");
+                    $n=$(tabid+">li").index($(this)[0]);
+                    switch(effect){
+                        case "slide":
+                            $(tabbox+">div").eq($n).slideDown().siblings().hide();
+                        case "show":
+                            $(tabbox+">div").eq($n).show().siblings().hide();
+                        case "fadeIn":
+                            $(tabbox+">div").eq($n).fadeIn().siblings().hide();
+                        default:
+                            $(tabbox+">div").eq($n).show().siblings().hide();
+                    }
+                })
+            }
+        </script>
+        <ul class="hottest-tabLi fl" id="hottest-tabLi">
+            <li>国际购物中心</li>
+            <li>鼓楼步行街</li>
+            <li>江北万达广场</li>
+            <li>南部商务区</li>
+            <li>和丰创意广场</li>
+            <li>联盛商业广场</li>
+        </ul>
+        <div class="hottest-changeWrap fl" id="hottest-changeWrap">
+            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
+            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
+            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
+            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
+            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
+            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
+        </div>
+        <script>switchTab("#hottest-tabLi","#hottest-changeWrap","mouseover","fadeIn","0");</script>
+    </div>
 </div>
-<?php $this->endBlock();?>
-
-<?php $this->beginBlock('/blocks/block', array(
-	'tabs' => array(
-		'park' => '园区介绍',
-		'enterprise' => '企业信息',
-		'software' => '软件企业'
-	)
-));?>
-		
-	<div class="tab-content" id="tab-park">
-<?php	//园区介绍
-$archive = $this->getArchive(1);
-?>	
-		<div class="archive">
-			<img src="<?php echo $archive['cover']?>" />
-			<p><?php echo $archive['description']?></p>
-		</div>
-	</div>
-	
-	<div class="tab-content" id="tab-enterprise">
-<?php	//企业信息
-$this->renderPartial('/blocks/linklist', array(
-	'data' => $this->getFriendLinksByChannelId(38, 8)
-));
-?>
-	</div>
-	
-	
-	<div class="tab-content" id="tab-software">
-<?php	//软件企业
-$this->renderPartial('/blocks/linklist', array(
-	'data' => $this->getFriendLinksByChannelId(39, 8)
-));
-?>
-	</div>
-	
-<?php $this->endBlock();?>
-
-	</div>
-	
-	<div class="c3m">
-<?php //宁波智慧园
-$this->beginBlock('/blocks/block', array(
-	'image' => $this->asset('images/block_tit_nbsp.jpg'),
-	'more' => $this->createUrl('archive/detail', array('id' => 76))
-));?>
-
-<div class="img-holder">
-	<a href="<?php echo $this->createUrl('archive/detail', array('id' => 76))?>"><img src="<?php echo $this->asset('img/1.gif')?>" /></a>
-	<a href="<?php echo $this->createUrl('archive/detail', array('id' => 76))?>"><img src="<?php echo $this->asset('img/2.gif')?>" /></a>
+<!-- 快乐购物 -->
+<div class="index-column3 clearfix">
+    <div class="index-happy fl">
+        <h4 class="title"><a href="#" class="more fr">更多</a><img src="<?php echo $this->asset('images/index-happy-title.png'); ?>" /></h4>
+        <div class="happy-wrap">
+            <ul class="clearfix">
+                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img1.jpg')?>" /></a></li>
+                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img2.jpg')?>" /></a></li>
+                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img3.jpg')?>" /></a></li>
+                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img4.jpg')?>" /></a></li>
+                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img5.jpg')?>" /></a></li>
+                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img6.jpg')?>" /></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="index-section fl">
+        <h4 class="title"><img src="<?php echo $this->asset('images/index-section-title.png')?>" /></h4>
+        <div class="section-wrap" id="splitadver_section">
+            <dl>
+                <dt class="t"><a href="#">食品海鲜</a></dt>
+                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
+                <dt class="t"><a href="#">文具礼品</a></dt>
+                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
+                <dt class="t"><a href="#">服饰家纺</a></dt>
+                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
+                <dt class="t"><a href="#">家电数码</a></dt>
+                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
+                <dt class="t"><a href="#">家居日用</a></dt>
+                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
+            </dl>
+            <script type="text/javascript">$('#splitadver_section').AdAdvance();</script>
+        </div>
+    </div>
 </div>
-
-<div class="news-holder">
-	<h3><a href="<?php echo $this->createUrl('archive/detail', array('id' => 76))?>" target="_blank">区位优势</a></h3>
-	<p>智慧园位于宁波国家高新区内，紧邻甬江；距市中心6公里...</p>
-	<h3><a href="<?php echo $this->createUrl('archive/detail', array('id' => 76))?>" target="_blank">生活配套优势</a></h3>
-	<p>商业配套：高富诺城市综合体<br />医疗配套：颐康医院、李惠利医院</p>
-	<h3><a href="<?php echo $this->createUrl('archive/detail', array('id' => 76))?>" target="_blank">人才优势</a></h3>
-	<p>宁波拥有两所国家级软件学院，位于宁波国家高新区内的浙江大学...</p>
-</div>
-
-<?php $this->endBlock();?>
-
-<?php $this->beginBlock('/blocks/block', array(
-	'tabs' => array(
-		'industry' => '产业聚焦',
-		'policy' => '产业政策',
-		'service' => '服务指南'
-	)
-));?>
-		
-	<div class="tab-content" id="tab-industry">
-<?php	//产业聚焦
-$this->renderPartial('/blocks/newslist', array(
-	'data' => $this->getArchivesByChannelId(19, 8)
-));
-?>	
-	</div>
-	
-	
-	<div class="tab-content" id="tab-policy">
-<?php	//产业政策
-$this->renderPartial('/blocks/newslist', array(
-	'data' => $this->getArchivesByTopChannelId(16, 8)
-));
-?>
-	</div>
-	
-	
-	<div class="tab-content" id="tab-service">
-<?php	//服务指南
-$this->renderPartial('/blocks/newslist', array(
-	'data' => $this->getArchivesByTopChannelId(17, 8)
-));
-?>
-	</div>
-	
-<?php $this->endBlock();?>
-
-	</div>
-
-	<div class="c3r">
-<?php 	//网站公告
-$this->beginBlock('/blocks/block', array(
-	'image' => $this->asset('images/block_tit_announcement.jpg'),
-	'id' => 'announcement',
-	'more' => $this->createUrl('channel/index', array('cid' => 66))
-));
-		$this->renderPartial('/blocks/newslist', array(
-			'data' => $this->getArchivesByChannelId(66, 8),
-			'hasPostTime' => true
-		));
-$this->endBlock();
-?>
-
-<?php //新闻中心
-$this->beginBlock('/blocks/block', array(
-	'image' => $this->asset('images/block_tit_news.jpg'),
-	'more' => $this->createUrl('channel/news')
-));
-
-	$this->renderPartial('/blocks/newslist', array(
-			'data' => $this->getArchivesByChannelId(29, 8),
-			'hasPostTime' => true
-		));
-
-$this->endBlock();?>
-
-	</div>
-	
-	<div class="c3l2 clear" id="partners">
-<?php //合作伙伴
-$this->beginBlock('/blocks/block', array(
-	'image' => $this->asset('images/block_tit_partners.jpg')
-));
-	echo '<ul>';
-foreach ($this->getFriendLinksByChannelId(57, 14) as $link) {
-	echo sprintf('<li><a href="%s" target="_blank"><img src="%s" /></a></li>',
-		$link['url'],
-		$link['logo']
-	);
-}
-	echo '</ul>';
-$this->endBlock();
-?>
-		
-	</div>
-	
-	<div class="c3r">
-		<div class="block_btn">
-			<a href="<?php echo $this->createUrl('archive/detail', array('id' => 10));?>" target="_blank"><img src="<?php echo $this->asset('images/btn_telephone.jpg')?>" /></a>
-			<a href="http://rjy.nbhtz.gov.cn:81/abc/Login.aspx" target="_blank"><img src="<?php echo $this->asset('images/btn_login.jpg')?>" /></a>
-			<a href="mailto: yuhj@nbhtz.gov.cn"><img src="<?php echo $this->asset('images/btn_mailbox.jpg')?>" /></a>
-		</div>
-	</div>
-	
+<!-- 支持单位 -->
+<div class="index-column4 clearfix">
+    <div class="index-unit fl">
+        <h4 class="title"><img src="<?php echo $this->asset('images/index-unit-title.png')?>" /></h4>
+        <div class="unit-wrap clearfix">
+            <?php
+            foreach ($this->getFriendLinksByChannelId(7, 7) as $link) {
+                echo sprintf('<span><a href="%s"><img src="%s" alt="%s" /></a></a></span>', $link['url'],$link['logo'], $link['title']);
+            }
+            ?>
+        </div>
+    </div>
+    <div class="index-merchant fl">
+        <h4 class="title">商家展示</h4>
+        <div class="merchant-wrap" id="demo">
+            <div class="merchant-box" id="demo1">
+                <ul>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                    <li><a href="#">史翠英</a></li>
+                </ul>
+            </div>
+            <div id="demo2"></div>
+            <script language="javascript">
+                var speed=30
+                demo2.innerHTML=demo1.innerHTML
+                function Marquee(){
+                    if(demo2.offsetTop-demo.scrollTop<=0)
+                        demo.scrollTop-=demo1.offsetHeight
+                    else{
+                        demo.scrollTop++
+                    }
+                }
+                var MyMar=setInterval(Marquee,speed)
+                demo.onmouseover=function() {clearInterval(MyMar)}
+                demo.onmouseout=function() {MyMar=setInterval(Marquee,speed)}
+            </script>
+        </div>
+    </div>
 </div>

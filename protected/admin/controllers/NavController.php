@@ -8,7 +8,7 @@ class NavController extends AdminController
 		$theme_id = intval($theme_id);
 		
 		if ( !$theme_id ) {
-			$row = Yii::app()->db->createCommand("SE"."LECT id FROM {{theme}} ORDE"."R BY id ASC LIMIT 1")->queryRow();
+			$row = Yii::app()->db->createCommand("SELECT id FROM {{theme}} ORDER BY id ASC LIMIT 1")->queryRow();
 			if ( $row ) {
 				$theme_id = intval($row['id']);
 			}
@@ -20,7 +20,7 @@ class NavController extends AdminController
 		$_GET['type_id'] = $type_id;
 		
 		$conn = Yii::app()->db;
-		$command = $conn->createCommand("SEL"."ECT * FROM {{nav}} WHERE theme_id='{$theme_id}' AND type_id='{$type_id}' ORDE"."R BY sort_id DESC, id ASC");
+		$command = $conn->createCommand("SELECT * FROM {{nav}} WHERE theme_id='{$theme_id}' AND type_id='{$type_id}' ORDER BY sort_id DESC, id ASC");
 		$data = $command->queryAll();
 		
 		foreach ($data as &$row) {
@@ -51,7 +51,7 @@ class NavController extends AdminController
 			
 			if ( $nav->save() ) {
 				$this->setFlashMessage('success', '创建导航成功！点击<a href="'.$this->createUrl('create', array('theme_id'=>$nav->theme_id, 'type_id' => $nav->type_id, 'parent_id'=> $parent_id)).'">继续创建</a>');
-				$this->redirect($this->createUrl('list', array('theme_id' => $nav->theme_id, 'type_id' => $nav->type_id)));
+				$this->redirect($this->createUrl('index', array('theme_id' => $nav->theme_id, 'type_id' => $nav->type_id)));
 			} else {
 				$this->setFlashMessage('error', "创建导航失败！");
 			}

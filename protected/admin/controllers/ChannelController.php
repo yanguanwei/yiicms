@@ -8,7 +8,7 @@ class ChannelController extends AdminController
 		$theme_id = intval($theme_id);
 		
 		if ( !$theme_id ) {
-			$row = Yii::app()->db->createCommand("SE"."LECT id FROM {{theme}} ORD"."ER BY id ASC LIMIT 1")->queryRow();
+			$row = Yii::app()->db->createCommand("SELECT id FROM {{theme}} ORDER BY id ASC LIMIT 1")->queryRow();
 			if ( $row )
 				$theme_id = intval($row['id']);
 			if ( $theme_id )
@@ -16,7 +16,7 @@ class ChannelController extends AdminController
 		}
 		
 		$conn = Yii::app()->db;
-		$command = $conn->createCommand("SE"."LECT c.id, c.sort_id, c.title, c.parent_id, c.visible, c.theme_id, am.title as archive_model FROM {{channel}} c LEFT JOIN {{channel_model}} am ON am.id=c.model_id WHERE theme_id='{$theme_id}' ORD"."ER BY c.sort_id DESC, c.id ASC");
+		$command = $conn->createCommand("SELECT c.id, c.sort_id, c.title, c.parent_id, c.visible, c.theme_id, am.title as archive_model FROM {{channel}} c LEFT JOIN {{channel_model}} am ON am.id=c.model_id WHERE theme_id='{$theme_id}' ORD"."ER BY c.sort_id DESC, c.id ASC");
 	
 		$channels = array();
 		$title = Theme::getThemeTitle($theme_id);
@@ -55,6 +55,8 @@ class ChannelController extends AdminController
 			$model->theme_id = $theme_id;
 			if ( $parent_id )
 				$model->model_id = Channel::getChannelModelId($parent_id);
+
+       $model->tags = array();
 		}
 		
 		$this->render('//form_template', array(
@@ -83,7 +85,12 @@ class ChannelController extends AdminController
 				$alias = ChannelAlias::model()->findByPk($channel->id);
 				if ( $alias )
 					$model->alias = $alias->alias;
-				
+
+          $tags = $model->tags ? explode('|', $model->tags) : array();
+          $model->tags = array();
+          foreach ($tags as $tagTypeName) {
+              $model->tags[$tagTypeName] = '1';
+          }
 			} else {
 				$this->setFlashMessage('error', "没有找到ID为{$id}的栏目！");
 			}

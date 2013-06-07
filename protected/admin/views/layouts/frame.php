@@ -5,7 +5,7 @@
 			<!-- Sidebar with logo and menu -->
 			<h1 id="sidebar-title"><a href="#"><?php echo Yii::app()->name;?></a></h1>
 			<!-- Logo (221px wide) -->
-			<a href="#"><img id="logo" src="<?php echo $this->asset('images/logo.png')?>" alt="<?php echo Yii::app()->name?>" /></a>
+			<a href="<?php echo Yii::app()->getRequest()->getHostInfo();?>"><img id="logo" src="<?php echo $this->asset('images/logo.png')?>" alt="<?php echo Yii::app()->name?>" /></a>
 			<!-- Sidebar Profile links -->
 			<div id="profile-links">你好,&nbsp;
 				<a href="<?php echo $this->createUrl('user/update', array('id'=>Yii::app()->user->getId()))?>">
@@ -65,9 +65,9 @@
 		
 		<div id="footer">
 			<small>
-				&nbsp;&#169;&nbsp;Copyright 2012&nbsp;
+				&nbsp;&#169;&nbsp;Copyright 2013&nbsp;
 				<a href="<?php echo Yii::app()->params['url']?>"><?php echo Yii::app()->params['name']?></a>&nbsp;|&nbsp;
-				Powered by <a href="http://www.zhongsou.net/" target="_blank">浙江中搜在线信息技术有限公司</a>&nbsp;|&nbsp;
+				Powered by <a href="http://www.vanthink.net/" target="_blank">浙江凡想科技有限公司</a>&nbsp;|&nbsp;
 				<a href="#">Top</a>
 			</small>
 		</div>

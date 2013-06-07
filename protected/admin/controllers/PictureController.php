@@ -1,6 +1,15 @@
 <?php
 class PictureController extends AdminController
 {
+  /**
+   * @param $scenario
+   * @return ArchiveForm
+   */
+  protected function getFormModel($scenario)
+  {
+    return new ArchiveForm($scenario);
+  }
+
 	public function actionIndex($cid)
 	{
 		$cid = intval($cid);
@@ -9,11 +18,6 @@ class PictureController extends AdminController
 	
 		if ( !$title )
 			throw new CHttpException(404);
-	
-		$criteria =  new CDbCriteria(array(
-				'alias' => 'archive',
-				'order' => 'archive.update_time DESC, archive.id DESC'
-		));
 	
 		$subs = Channel::getSubChannelTitles($cid);
 	
@@ -74,11 +78,11 @@ class PictureController extends AdminController
 	
 	public function actionCreate($cid)
 	{
-		$form = new ArchiveForm('insert');
+		$form = $this->getFormModel('insert');
 		
 		if ( isset($_POST['ArchiveForm']) ) {
 				
-			if ( $form->post($_POST['ArchiveForm'], true) ) {
+			if ( $form->post($_POST[get_class($form)], true) ) {
 				$this->setFlashMessage('success', '创建成功！点击<a href="'.$this->createUrl('create', array('cid' => $form->cid)).'">继续创建</a>');
 				$this->redirect($this->createUrl('list', array('cid' => $form->cid)));
 			} else {
@@ -101,11 +105,11 @@ class PictureController extends AdminController
 	
 	public function actionUpdate($id)
 	{
-		$form = new ArchiveForm('update');
+		$form = $this->getFormModel('update');
 	
-		if ( isset($_POST['ArchiveForm']) ) {
+		if ( isset($_POST[get_class($form)]) ) {
 				
-			if ( $form->post($_POST['ArchiveForm'], false) ) {
+			if ( $form->post($_POST[get_class($form)], false) ) {
 				$this->setFlashMessage('success', '更新成功！');
 				$this->redirect($this->createUrl('list', array('cid' => $form->cid)));
 			} else {
@@ -118,6 +122,7 @@ class PictureController extends AdminController
 			}
 				
 			$form->setAttributes($model->getAttributes(), false);
+      $form->tags = Archive::getTags($id);
 		}
 	
 		$topid = Channel::getTopChannelId($model->cid);

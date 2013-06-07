@@ -1,0 +1,19 @@
+@CHARSET "UTF-8";
+DIV.tres {
+	PADDING-RIGHT: 7px; PADDING-LEFT: 7px; FONT-WEIGHT: bold; FONT-SIZE: 13.2pt; PADDING-BOTTOM: 7px; MARGIN: 3px; PADDING-TOP: 7px; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-ALIGN: center
+}
+DIV.tres A {
+	BORDER-RIGHT: #d9d300 2px solid; PADDING-RIGHT: 5px; BORDER-TOP: #d9d300 2px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; MARGIN: 2px; BORDER-LEFT: #d9d300 2px solid; COLOR: #fff; PADDING-TOP: 2px; BORDER-BOTTOM: #d9d300 2px solid; BACKGROUND-COLOR: #d90; TEXT-DECORATION: none
+}
+DIV.tres A:hover {
+	BORDER-RIGHT: #ff0 2px solid; BORDER-TOP: #ff0 2px solid; BORDER-LEFT: #ff0 2px solid; COLOR: #000; BORDER-BOTTOM: #ff0 2px solid; BACKGROUND-COLOR: #ff0
+}
+DIV.tres A:active {
+	BORDER-RIGHT: #ff0 2px solid; BORDER-TOP: #ff0 2px solid; BORDER-LEFT: #ff0 2px solid; COLOR: #000; BORDER-BOTTOM: #ff0 2px solid; BACKGROUND-COLOR: #ff0
+}
+DIV.tres SPAN.current {
+	BORDER-RIGHT: #fff 2px solid; PADDING-RIGHT: 5px; BORDER-TOP: #fff 2px solid; PADDING-LEFT: 5px; FONT-WEIGHT: bold; PADDING-BOTTOM: 2px; MARGIN: 2px; BORDER-LEFT: #fff 2px solid; COLOR: #000; PADDING-TOP: 2px; BORDER-BOTTOM: #fff 2px solid
+}
+DIV.tres SPAN.disabled {
+	DISPLAY: none
+}	

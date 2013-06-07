@@ -115,6 +115,12 @@ class AdminController extends YController
 													'config/index' 
 											) 
 									),
+                  'tag' => array(
+                      'label' => '标签管理',
+                      'url' => array(
+                          'tag/index'
+                      )
+                  ),
 									'channel' => array(
 											'label' => '栏目管理',
 											'url' => array(

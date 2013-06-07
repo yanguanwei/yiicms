@@ -7,7 +7,7 @@ class CKFinderThemeButton extends CWidget
 	public static function initCKFinderSession($theme)
 	{
 		// 上传相对URL
-		$uploadPath = Yii::app()->getThemeManager()->getBasePath() . "/{$theme}/assets/";
+		$uploadPath = Yii::app()->getThemeManager()->getBasePath() . "/{$theme}/static/";
 		// 上传相对URL
 		$uploadUrl = THEMES_URL . "/{$theme}/assets/";
 	

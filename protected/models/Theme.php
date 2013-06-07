@@ -249,12 +249,12 @@ CODE;
 			
 	public static function updateThemeScriptFile($name, $script)
 	{
-		file_put_contents(Theme::getThemeBasePath($name) . "/assets/common.js", $script);
+		file_put_contents(Theme::getThemeBasePath($name) . "/static/js/common.js", $script);
 	}
 	
 	public static function updateThemeStyleFile($name, $style)
 	{
-		file_put_contents(Theme::getThemeBasePath($name) . "/assets/common.css", $style);
+		file_put_contents(Theme::getThemeBasePath($name) . "/static/css/common.css", $style);
 	}
 }
 ?>

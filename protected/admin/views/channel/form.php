@@ -5,7 +5,8 @@ $widget = $this->beginWidget('application.widgets.Tabs', array(
 	'title' => $title,
 	'tabs' => array(
 		'base' => array('label' => '栏目信息'),
-		'seo' => array('label' => 'SEO信息')
+		'seo' => array('label' => 'SEO信息'),
+    'tags' => array('label' => '标签信息')
 	),
 	'defaultTab' => 'base'
 ));  ?>
@@ -34,7 +35,9 @@ $widget->beginTab('base');
 	} else {//说明是创建一级栏目操作，可以自由指定模型，但是主题不能指定
 		echo $this->renderRow(
 			$this->renderHiddenDisabledSelectField('theme_id', Theme::getThemeSelectOptions()),
-			$this->renderSelectField('model_id', ChannelModel::getChannelModelSelectOptions())
+			$this->renderSelectField('model_id', ChannelModel::getChannelModelSelectOptions(), null, array(
+          'disabled' => $this->model->getScenario() == 'insert' ? false : 'disabled'
+        ))
 		);
 	}
 	
@@ -70,7 +73,18 @@ $widget->beginTab('seo');
 		$this->renderTextareaField('description', '少于255个字符')
 	);
 
-$widget->endTab();//menuTab
+$widget->endTab();//seoTab
+
+$widget->beginTab('tags');
+
+$tags = array();
+foreach (TagType::getTagTypeTitles() as $name => $title) {
+    $tags[] = $this->form->checkBox($this->model, "tags[{$name}]") . $title;
+}
+
+echo $this->renderRow(implode("\n", $tags));
+
+$widget->endTab();//tagsTab
 
 $this->endWidget(); //contentBox
 

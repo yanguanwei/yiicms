@@ -9,44 +9,29 @@
 if ( !isset($top_id) )
 	$top_id = $this->getTopChannelId($channel_id);
 ?>
-<div class="layout">
 
-	<div class="c2l" id="sidebar">
-		<?php $this->renderPartial('/channel/sidebar', array(
-			'channel_id' => $top_id
-		));?>
-	
-		<?php $this->renderPartial('/sidebars/contactus');?>
-	</div>
-	
-	<div class="c2r" id="mainContent">
-		<div class="ad">
-			<img src="<?php echo $this->asset('images/ad.jpg')?>" />
-		</div>
-		
-		<div class="hd">
-			<div class="position">
-				<label>您当前所在的位置：</label>
-				<a href="<?php echo $this->createUrl('site/index')?>">首页</a>-
-				<a href="<?php echo $this->createChannelUrl($top_id)?>"><?php echo $this->getChannelTitle($top_id)?></a>
-			</div>
-			<div class="tit">
-				<h2><?php echo $this->getChannelTitle($channel_id);?></h2>
-			</div>
-		</div>
-		
-		<div class="bd">		
 <?php
-list( $archives, $total ) = $this->getArchivesForPagerByChannelId($channel_id, 10);
-$this->renderPartial('/blocks/newslist', array(
-	'data' => $archives,
-	'hasPostTime' => true
-));
-
-$this->renderPager($total, 'digg');
+echo $this->renderPartial('/blocks/breadcrumb.php', array(
+        'top_id' => $top_id,
+        'channel_id' => $channel_id
+    ));
 ?>
-		</div>
-		
-	</div>
-	
+
+<div class="news clearfix">
+    <div class="news-wrap fl">
+        <?php
+
+        list($archives, $total) = $this->getArchivesForPagerByChannelId($channel_id, 10);
+
+        echo $this->renderPartial('/blocks/newslist', array(
+            'data' => $archives,
+            'hasPostTime' => true,
+            'class' => 'news-list'
+        ));?>
+
+        $this->renderPager($total, 'digg');
+    </div>
+
+    <?php echo $this->renderPartial('/channel/sidebar', array('top_id' => $top_id, 'channel_id' => $channel_id));?>
+
 </div>

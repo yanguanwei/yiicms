@@ -1,0 +1,19 @@
+@CHARSET "UTF-8";
+DIV.starcraft2 {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; FONT-WEIGHT: bold; FONT-SIZE: 13.5pt; PADDING-BOTTOM: 3px; MARGIN: 3px; COLOR: #fff; PADDING-TOP: 3px; FONT-FAMILY: Arial; BACKGROUND-COLOR: #000; TEXT-ALIGN: center
+}
+DIV.starcraft2 A {
+	MARGIN: 2px; COLOR: #fa0; BACKGROUND-COLOR: #000; TEXT-DECORATION: none
+}
+DIV.starcraft2 A:hover {
+	COLOR: #fff; BACKGROUND-COLOR: #000
+}
+DIV.starcraft2 A:active {
+	COLOR: #fff; BACKGROUND-COLOR: #000
+}
+DIV.starcraft2 SPAN.current {
+	FONT-WEIGHT: bold; MARGIN: 2px; COLOR: #fff; BACKGROUND-COLOR: #000
+}
+DIV.starcraft2 SPAN.disabled {
+	MARGIN: 2px; COLOR: #444; BACKGROUND-COLOR: #000
+}	

@@ -1,0 +1,45 @@
+@charset "utf-8";
+
+.dateTimer-container { position:absolute; font-family:tahoma,Arial,Helvetica,simsun,sans-serif; font-size:14px; border:1px solid #999; background-color:#fff;}
+
+.dateTimer-selects { text-align:center; margin:5px 0 5px 0;}
+.dateTimer-selects select.dateTimer-selects-month { margin-left:5px;}
+
+
+.dateTimer-calendar { float:left; border-left:1px solid #999; border-bottom:1px solid #999;}
+.dateTimer-calendar caption { background-color:#004FB8; color:#fff; font-weight:bold; height:22px; line-height:22px; text-align:center;}
+.dateTimer-calendar-0 { border-left:0;}
+.dateTimer-calendar thead tr { background-color:#ececec;}
+.dateTimer-calendar th,
+.dateTimer-calendar td { height:24px; width:24px; text-align:center; line-height:24px; border:0;  vertical-align:middle;}
+.dateTimer-calendar td,
+.dateTimer-container a { color:#005EAD;}
+.dateTimer-container td { padding:1px;}
+
+.dateTimer-calendar td a.dateTimer-calendar-daylink {  display:block; text-decoration:none;}
+.dateTimer-calendar td a.dateTimer-calendar-daylink:hover { background-color:#E6F4FF; }
+
+.dateTimer-calendar td.dateTimer-calendar-pastday { color:#DBDBDB;}
+.dateTimer-calendar td.dateTimer-calendar-today { border:1px solid #485EAD; padding:0;}
+.dateTimer-calendar td.dateTimer-calendar-active,
+.dateTimer-calendar td.dateTimer-calendar-active a.dateTimer-calendar-daylink,
+ .dateTimer-calendar td.dateTimer-calendar-active a.dateTimer-calendar-daylink:hover{ background-color:#485EAD; color:#fff;}
+
+.dateTimer-calendar td.dateTimer-calendar-pastday a.dateTimer-calendar-daylink { color:#DBDBDB;}
+.dateTimer-calendar td.dateTimer-calendar-pastday a.dateTimer-calendar-daylink:hover { color:#485EAD;}
+
+.dateTimer-timer { clear:both; height:24px; float:right; margin-right:10px;}
+.dateTimer-timer span { display:block; float:left; text-align:center;}
+.dateTimer-timer { height:24px; line-height:24px;}
+.dateTimer-timer .dateTimer-timer-hour,
+.dateTimer-timer .dateTimer-timer-minute { width:20px;}
+.dateTimer-timer .dateTimer-timer-change { width:12px; text-align:center;}
+.dateTimer-timer .dateTimer-timer-splitor { width:15px;}
+.dateTimer-timer .dateTimer-timer-change a { text-decoration:none; display:block; height:12px; line-height:12px;}
+
+.dateTimer-container .dateTimer-prev,
+.dateTimer-container .dateTimer-next {  position:absolute; text-decoration:none; top:2px; color:#fff;}
+.dateTimer-container .dateTimer-prev { left:2px; }
+.dateTimer-container .dateTimer-next { right:2px;}
+
+.dateTimer-container .dateTimer-today { position:absolute; text-decoration:none; bottom:2px; left:10px;}

@@ -1,4 +1,6 @@
-assets/
-protected/admin/runtime/
-protected/frontend/runtime/
-framework/
+/assets/
+/protected/admin/runtime/
+/protected/frontend/runtime/
+/framework/
+/admin/assets/
+.idea

@@ -13,7 +13,8 @@ class ChannelForm extends CFormModel
 	public $keywords;
 	public $description;
 	public $alias;
-	
+  public $tags;
+
 	public function rules()
 	{
 		return array(
@@ -62,7 +63,7 @@ class ChannelForm extends CFormModel
 			$transaction = Yii::app()->db->beginTransaction();
 			
 			try {
-			
+
 			if ($insert) {
 				$channel = new Channel('insert');
 				$channel->setAttributes($this->getAttributes(), false);
@@ -82,7 +83,17 @@ class ChannelForm extends CFormModel
 				$this->theme_id = $channel->theme_id;
 				$channel->setAttributes($this->getAttributes(), false);
 			}
-			
+
+      if (is_array($channel->tags)) {
+          $tags = array();
+          foreach ($channel->tags as $tagTypeName => $checked) {
+              if ($checked) {
+                  $tags[] = $tagTypeName;
+              }
+          }
+          $channel->tags = $tags;
+      }
+
 			if ($channel->save()) {
 				
 				$this->id = $channel->id;

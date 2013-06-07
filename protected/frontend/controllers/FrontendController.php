@@ -7,7 +7,8 @@ class FrontendController extends YController
 	private $_navs = array();
 	private $_blocks = array();
 	private $_channelAlias = array();
-	
+  private $_channelTags = array();
+
 	public function getPageTitle()
 	{
 		$navs = $this->getMainNavigations();
@@ -27,8 +28,8 @@ class FrontendController extends YController
 	{
 		$cs = Yii::app()->getClientScript();
 		
-		$cs->registerCssFile($this->asset('common.css'))
-		->registerScriptFile($this->asset('common.js'));
+		$cs->registerCssFile($this->asset('css/common.css'))
+		->registerScriptFile($this->asset('js/common.js'));
 		
 		return parent::beforeRender($view);
 	}
@@ -69,13 +70,9 @@ class FrontendController extends YController
 	 */
 	public function createChannelUrl($cid, array $params = array())
 	{
-		if ( !isset($this->_channelAlias[$cid]) ) {
-			$alias = ChannelAlias::getChannelAlias($cid);
-			$this->_channelAlias[$cid] = $alias ? $alias : false;
-		}
-		
-		if ( $this->_channelAlias[$cid] ) {
-			$route = "channel/{$this->_channelAlias[$cid]}";
+		$alias = $this->getChannelAlias($cid);
+		if ( $alias ) {
+			$route = "channel/{$alias}";
 		} else {
 			$route = 'channel/index';
 			$params['cid'] = $cid;
@@ -83,6 +80,38 @@ class FrontendController extends YController
 		
 		return $this->createUrl($route, $params);
 	}
+
+  public function createChannelTagUrl($cid, array $params = array())
+  {
+    $tagParams = array();
+    foreach ($this->getChannelTags($cid) as $name) {
+      $tagParams[$name] = isset($_GET[$name]) ? $_GET[$name] : 0;
+    }
+
+    return $this->createChannelUrl($cid, array_merge($params, $tagParams));
+  }
+
+  /**
+   * 根据栏目ID返回栏目别名
+   * @param int $cid 栏目ID
+   * @return string|null
+   */
+  public function getChannelAlias($cid)
+  {
+    if (!isset($this->_channelAlias[$cid])) {
+      $alias = ChannelAlias::getChannelAlias($cid);
+      $this->_channelAlias[$cid] = $alias ? $alias : false;
+    }
+    return $this->_channelAlias[$cid];
+  }
+
+  public function getChannelTags($cid)
+  {
+    if (!isset($this->_channelTags[$cid])) {
+      $this->_channelTags[$cid] = Channel::getChannelTags($cid);
+    }
+    return $this->_channelTags[$cid];
+  }
 
 	/**
 	 * 根据文档ID返回对应的文档记录
@@ -123,7 +152,38 @@ class FrontendController extends YController
 		$subIds[] = $cid;
 		return Archive::getArchivesByChannelId($subIds, $limit);
 	}
-	
+
+  public function getArchivesForPager(array $conditions, $pageSize = 10, $page = null)
+  {
+    if ( null === $page )
+      $page = intval($_GET['page']);
+
+    $page = $page ? $page : 1;
+
+    Yii::import('ext.youngx.SelectSQL');
+
+    $sql = new SelectSQL();
+    $sql->from('{{archive}}', '*');
+
+    foreach ($conditions as $cond => $value) {
+      if (is_string($cond)) {
+        $sql->where($cond, $value);
+      } else {
+        $sql->where($value);
+      }
+    }
+
+    $sql->where('status=?', Archive::STATUS_PUBLISHED)
+      ->limit($pageSize, ($page-1)*$pageSize);
+
+    $db = Yii::app()->db;
+
+    return array(
+      $db->createCommand($sql->toSQL())->queryAll(),
+      $db->createCommand($sql->toTotalCountSQL())->queryColumn()
+    );
+  }
+
 	/**
 	 * 根据栏目ID返回文档分页列表数组
 	 * 
@@ -134,17 +194,27 @@ class FrontendController extends YController
 	 */
 	public function getArchivesForPagerByChannelId($cid, $pageSize = 10, $page = null)
 	{
-		if ( null === $page )
-			$page = intval($_GET['page']);
-		
-		$page = $page ? $page : 1;
-		
-		return array(
-			Archive::getArchivesByChannelId($cid, $pageSize, ($page-1)*$pageSize),
-			Archive::countByChannelId($cid, Archive::STATUS_PUBLISHED)
-		);
+		return $this->getArchivesForPager(array(
+        'cid=?', $cid
+      ), $pageSize, $page);
 	}
-	
+
+  public function getArchivesForPagerByChannelIdWithTags($cid, $pageSize = 10, $page = null)
+  {
+    $conditions = array(
+      'cid=?', $cid
+    );
+
+    foreach ($this->getChannelTags($cid) as $name) {
+      if (isset($_GET[$name]) && $_GET[$name]) {
+        $tid = intval($_GET[$name]);
+        $conditions[] = "id IN (SELECT aid FROM {{archive_tag}} WHERE tid='{$tid}')";
+      }
+    }
+
+    return $this->getArchivesForPager($conditions, $pageSize, $page);
+  }
+
 	/**
 	 * 根据文档ID返回其所对应的模板名称；
 	 * 如果该文档没有设置模板，则返回其对应栏目设置的模板；
@@ -170,16 +240,6 @@ class FrontendController extends YController
 		if ( $channel )
 			return $channel;
 		return array();
-	}
-	
-	/**
-	 * 根据栏目ID返回栏目别名
-	 * @param int $cid 栏目ID
-	 * @return string|null
-	 */
-	public function getChannelAlias($cid)
-	{
-		return ChannelAlias::getChannelAlias($cid);
 	}
 	
 	/**

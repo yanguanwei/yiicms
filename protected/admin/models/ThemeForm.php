@@ -71,7 +71,9 @@ class ThemeForm extends CFormModel
 		$basepath = Theme::getThemeBasePath($name);
 		$paths = array(
 			$basepath,
-			$basepath . '/assets'
+			$basepath . '/static',
+      $basepath . '/static/css',
+      $basepath . '/static/js'
 		);
 			
 		foreach ($paths as $path) {

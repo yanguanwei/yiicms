@@ -108,19 +108,10 @@ code;
 	
 		if ( !\$channels[Yii::app()->params['theme_id']] )
 			throw new CHttpException(404);
-		
-		\$current = \$channels[Yii::app()->params['theme_id']];
-		if ( !\$current['template'] )
-			throw new CHttpException(404);
-			
-		if ( \$current['template'] === '1' )
-			return \$this->redirect(\$this->createChannelUrl(\$this->getFirstSubChannelId(\$current['id'])));
-			
-		\$this->activeNavKey = ChannelAlias::getChannelAlias(Channel::getTopChannelId(\$current['id']));
 
-		return \$this->render(\$current['template'], array(
-				'channel_id' => \$current['id']
-			));
+		\$current = \$channels[Yii::app()->params['theme_id']];
+
+		return \$this->perform(\$current['template'], \$current['id']);
 	}
 
 code;

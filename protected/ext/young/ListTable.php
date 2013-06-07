@@ -171,23 +171,23 @@ code;
 		echo '</td></tr></tfoot>';
 	}
 	
-	public function updateButton()
+	public function updateButton($action = 'update')
 	{
 		$controller = $this->owner;
 		return CHtml::link(
 			CHtml::image($this->asset('update.png'), '更新'),
-			$controller->createUrl('update', array('id' => $this->data[$this->primaryKey])),
+			$controller->createUrl($action, array($this->primaryKey => $this->data[$this->primaryKey])),
 			array('title' => '更新')
 		);
 	}
 	
-	public function deleteButton()
+	public function deleteButton($action = 'delete')
 	{
 		$controller = $this->owner;
 		return CHtml::link(
 				CHtml::image($this->asset('delete.png'), '删除'),
-				$controller->createUrl('delete', array('id' => $this->data[$this->primaryKey])),
-				array('title' => '更新', 'class' => 'delete')
+				$controller->createUrl($action, array($this->primaryKey => $this->data[$this->primaryKey])),
+				array('title' => '删除', 'class' => 'delete')
 		);
 	}
 	

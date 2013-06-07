@@ -30,36 +30,21 @@ $sidebar = isset($sidebar) ? $sidebar : $this->renderPartial('/news/sidebar', ar
 
 //访问计数
 $this->visitArchive($archive_id);
-?>
-<div class="layout">
 
-	<div class="c2l" id="sidebar">
-		<?php echo $sidebar;?>
-		<?php $this->renderPartial('/sidebars/contactus');?>
-	</div>
-	
-	<div class="c2r" id="mainContent">
-		<div class="ad">
-			<img src="<?php echo $this->asset('images/ad.jpg')?>" />
-		</div>
-		
-		<div class="hd">
-			<div class="position">
-				<label>您当前所在的位置：</label>
-				<a href="<?php echo $this->createUrl('site/index')?>">首页</a>-
-				<a href="<?php echo $this->createChannelUrl($channel_id)?>"><?php echo $this->getChannelTitle($top_id)?></a>
-			</div>
-			<div class="tit">
-				<h2><?php echo $this->getChannelTitle($channel_id);?></h2>
-			</div>
-		</div>
-		
-		<div class="bd">
-			<?php $this->renderPartial('/news/content_block', array(
-				'news' => $news,
-				'archive' => $archive
-			))?>
-		</div>
-	</div>
-	
+echo $this->renderPartial('/blocks/breadcrumb.php', array(
+    'top_id' => $top_id,
+    'channel_id' => $channel_id
+));
+?>
+
+
+<div class="news clearfix">
+    <div class="news-wrap fl">
+        <?php $this->renderPartial('/news/content_block', array(
+            'news' => $news,
+            'archive' => $archive
+        ))?>
+    </div>
+
+    <?php echo $this->renderPartial('/channel/sidebar', array('top_id' => $top_id, 'channel_id' => $channel_id));?>
 </div>

@@ -20,6 +20,8 @@ $widget->beginTab('base');
 			Channel::getChannelTreeSelectOptionsForModel($this->model->cid)
 		);
 
+  echo $this->renderChannelTagSelectRow();
+
 	echo $this->renderCKFinderInputRow('cover');
 	
 	

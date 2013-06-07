@@ -121,6 +121,7 @@ class VideoController extends AdminController
 			}
 				
 			$form->setAttributes($model->getAttributes(), false);
+      $form->tags = Archive::getTags($id);
 		}
 	
 		$topid = Channel::getTopChannelId($model->cid);

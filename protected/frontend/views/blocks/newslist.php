@@ -1,6 +1,7 @@
 <?php 
 /**
- * $hasPostTime: bool 是否显示时间
+ * $class 样式
+ * $hasPostTime 是否显示时间
  * $data array 文档列表数组，格式：
  * 	array(
  * 		array(
@@ -11,19 +12,15 @@
  * 	)
  */
 ?>
-<div class="newslist">
-<ul>
+<ul class="<?php echo isset($class) ? $class : '';?>">
 <?php
-foreach ( $data as $row) {
-	echo sprintf('<li class="%s"><p><a href="%s" target="_blank" title="%s" class="%s">%s</a></p>%s</li>',
-		$hasPostTime ? 'time' : '',
+foreach ($data as $row) {
+	echo sprintf('<li><a href="%s" class="%s">%s%s</a></li>',
 		$this->createUrl('archive/detail', array('id' => $row['id'])),
-		$row['title'],
-		$row['is_highlight'] ? 'highlight' : '',
-		$row['title'],
-		$hasPostTime ? sprintf( '<span>%s</span>', date('Y-m-d', $row['update_time']) ) : ''
+    $row['is_highlight'] ? 'highlight' : '',
+    $hasPostTime ? sprintf( '<span class="fr time">%s</span>', date('Y-m-d', $row['update_time']) ) : '',
+		$row['title']
 	);
 }
 ?>
 </ul>
-</div>

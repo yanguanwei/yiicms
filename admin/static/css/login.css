@@ -1,0 +1,21 @@
+body { margin:0; padding:0; border:0; background: #222 url('../images/bg-login.gif');}
+#login-wrapper #login-content .notification {border: 0;background-color: #141414;color: #fff !important;}
+#login { width:100%; height: 100%; overflow:auto; color: #fff; }
+#login-wrapper  { background: url('../images/bg-login-top.png') top left repeat-x;}
+
+#login-wrapper #login-top {width: 500px; margin:0 auto; padding: 120px 0 70px 0;color:#fff;}
+#login-wrapper #login-content {text-align: left;width: 300px;margin: 0 auto;}
+#login-wrapper #login-content label {color: #fff;font-weight: normal;font-size: 14px;font-family: Helvetica, Arial, sans-serif;float: left;width: 70px;padding: 0;}
+#login-wrapper #login-content input {width: 200px;margin: 0 0 20px 0;border: 0;background: #fff;}
+#login-wrapper #login-content p {padding: 0;}
+#login-wrapper #login-content p#remember-password {float: left;}	
+#login-wrapper #login-content p#remember-password input {float: none;width: auto;border: 0;background: none;margin: 0 10px 0 0;}		
+#login-wrapper #login-content { width:500px !important;}
+#login-wrapper #login-content label {line-height:30px;}
+#login-wrapper #login-content .errorMessage { float:left; display:block; padding-top: 5px; background-position: left 5px;}
+#login-wrapper #login-content div.yf {float: left;}
+#login-wrapper #login-content div.yc {float: left;}
+#login-wrapper #login-content div.yc #yw1_button { color:#fff;}
+#login-wrapper #login-content p#remember-password { float:left; margin-right:10px;}
+#login-wrapper #login-content p#remember-password input { float: none; width: auto; border: 0; background: none; margin: 0 10px 0 0;}
+#login-wrapper #login-content #submit .button { width: auto; float:left;}

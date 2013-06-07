@@ -119,6 +119,7 @@ class NewsController extends AdminController
 			
 			$form->setAttributes($news->getAttributes(), false);
 			$form->setAttributes($news->archive->getAttributes(), false);
+      $form->tags = Archive::getTags($id);
 		}
 		
 		$topid = Channel::getTopChannelId($news->archive->cid);

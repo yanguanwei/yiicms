@@ -1,0 +1,62 @@
+@charset "utf-8";
+form .errorMessage { display:inline;}
+form .row {  padding: 5px 0 10px 0; line-height: 1.6em; clear:both; width:99%; overflow:auto;}
+form  span.required { color:#f00;}
+form .row.submit { text-align:left;}
+form .row.submit .button { margin-right:5px;}
+form .preview { margin-top:5px; clear:both; width:96%; overflow:auto;}
+form .preview img { }
+
+#main-content ul li { background:none !important; padding:0 !important;}
+
+.tab-content { overflow:auto;}
+
+.treeTable { margin-bottom:10px;}
+
+.shortcut-button { word-wrap:break-word; word-break:break-all;}
+
+td .top,
+td .cover,
+td .highlight { margin-left :10px; color:#f00;}
+
+th.sort_id-column,
+td.sort_id-column,
+td.sort-column { width:60px; text-align:center; }
+td.checkbox-column { text-align:center;}
+th.id-column, td.id-column { width:50px; text-align:center;}
+
+th.selectable-cell, td.selectable-cell { text-align:center; width:20px;}
+
+th.time-column,
+td.time-column,
+th.update_time-column,
+td.update_time-column
+{ width:120px; text-align:center;}
+
+th.operate-column, td.operate-column { text-align:center; width:80px;}
+td.operate-column a { margin:0 5px;}
+
+.table tfoot .bulk-actions { float:left;}
+.table tfoot .pager { float:right;}
+.button,
+.bulk-actions select,
+.pagination a.number,
+form input.text-input,
+form textarea,
+form select,
+.dp-popup { -moz-border-radius: 4px; -webkit-border-radius: 4px;border-radius: 4px;}
+
+.bulk-actions  select { padding: 4px;background: #fff; border: 1px solid #CCCCCC; padding: 4px; }
+
+.content-box,
+.content-box-header,
+ul.content-box-tabs li a.current,
+.shortcut-button,
+.notification { -moz-border-radius: 6px; -webkit-border-radius: 6px;border-radius: 6px; }
+
+.content-box-header { -moz-border-radius-bottomleft: 0; -moz-border-radius-bottomright: 0;-webkit-border-bottom-left-radius: 0;-webkit-border-bottom-right-radius: 0;border-bottom-left-radius: 0;border-bottom-right-radius: 0;}		
+.closed-box .content-box-header {-moz-border-radius-bottomleft: 6px; -moz-border-radius-bottomright: 6px;-webkit-border-bottom-left-radius: 6px; -webkit-border-bottom-right-radius: 6px;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;}
+ul.content-box-tabs li a.current { -moz-border-radius-bottomleft: 0;-moz-border-radius-bottomright: 0;-webkit-border-bottom-left-radius: 0;-webkit-border-bottom-right-radius: 0;border-bottom-left-radius: 0;border-bottom-right-radius: 0;}
+.shortcut-button span {-moz-border-radius: 7px;-webkit-border-radius: 7px;border-radius: 7px;}
+
+#main-content ul.prompt { list-style:outside; list-style-type:disc; margin:0 0 0 10px; padding:0;}

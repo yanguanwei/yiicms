@@ -13,6 +13,7 @@ class ArchiveForm extends CFormModel
 	public $update_time;
 	public $is_highlight = 0;
 	public $is_top = 0;
+  public $tags = array();
 	
 	public function rules()
 	{
@@ -67,7 +68,7 @@ class ArchiveForm extends CFormModel
 	protected function save(array $data, $insert = true)
 	{
 		$this->setAttributes($data, false);
-		
+
 		if($this->validate()) {
 			$model_id = Channel::getChannelModelId($this->cid);
 			if ( !$model_id ) {
@@ -95,6 +96,9 @@ class ArchiveForm extends CFormModel
 			
 			if ( $archive->save() ) {
 				$this->id = $archive->id;
+
+        $this->updateTags();
+
 				return true;
 			} else {
 				$this->addErrors($archive->getErrors());
@@ -104,5 +108,12 @@ class ArchiveForm extends CFormModel
 		
 		throw new CException("验证失败！");
 	}
+
+  protected function updateTags()
+  {
+    if ($this->tags) {
+      Archive::updateTags($this->id, $this->tags);
+    }
+  }
 }
 ?>

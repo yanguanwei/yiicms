@@ -29,7 +29,7 @@ $widget->beginTab('base');
 			$this->renderTextRow('source', null, array('class' => 'text-input')),
 			$this->renderDateTimerRow('update_time', null, array('class' => 'text-input'))
 		);
-	
+
 	echo $this->renderCKEditorRow('content');
 
 $widget->endTab();//baseTab

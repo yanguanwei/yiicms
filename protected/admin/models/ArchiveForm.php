@@ -1,12 +1,12 @@
 <?php
-class ArchiveForm extends CFormModel
+abstract class ArchiveForm extends CFormModel
 {
     public $id;
     public $title;
     public $cover;
     public $cid;
     public $model_id;
-    public $status;
+    public $status = 1;
     public $template;
     public $keywords;
     public $description;
@@ -30,7 +30,7 @@ class ArchiveForm extends CFormModel
             'id' => 'ID',
             'title' => '标题',
             'cid' => '所属栏目',
-            'cover' => '图片/Flash地址',
+            'cover' => '图片',
             'status' => '状态',
             'template' => '模板名',
             'update_time' => '发布时间',
@@ -41,12 +41,12 @@ class ArchiveForm extends CFormModel
         );
     }
 
-    public function post(array $data, $insert = true)
+    public function save()
     {
         $transaction = Yii::app()->db->beginTransaction();
 
         try {
-            $this->save($data, $insert);
+            $this->doSave();
             $transaction->commit();
         } catch (CException $e) {
             $transaction->rollback();
@@ -60,24 +60,15 @@ class ArchiveForm extends CFormModel
 
     /**
      * 保存文档信息， 通过抛出异常来保证数据的一致性；
-     * 子类覆盖此方法时应该在开始处调用parent::save($data, $insert)
+     * 子类覆盖此方法时应该在开始处调用parent::save()
      *
-     * @param array $data
-     * @param unknown_type $insert
-     * @throws CException 如果出错，抛出异常
+     * @throws CException
+     * @return bool
      */
-    protected function save(array $data, $insert = true)
+    protected function doSave()
     {
-        $this->setAttributes($data, false);
-
         if ($this->validate()) {
-            $model_id = Channel::getChannelModelId($this->cid);
-            if (!$model_id) {
-                $this->addError('cid', '该栏目没有绑定文档模型');
-                throw new CException();
-            }
-
-            if ($insert) {
+            if ($this->getScenario()=='insert') {
                 $archive = new Archive();
                 $this->id = null;
             } else {
@@ -87,7 +78,7 @@ class ArchiveForm extends CFormModel
                 }
             }
 
-            $this->model_id = $model_id;
+            $this->model_id = $this->getChannelModel()->id;
 
             if (!$this->update_time || false === ($update_time = strtotime($this->update_time))) {
                 $this->update_time = time();
@@ -114,9 +105,20 @@ class ArchiveForm extends CFormModel
     protected function updateTags()
     {
         if ($this->tags) {
-            Archive::updateTags($this->id, $this->tags);
+            $tags = array();
+            foreach ($this->tags as $key => $value) {
+                if ($value) {
+                    $tags[$key] = $value;
+                }
+            }
+            if ($tags) {
+                Archive::updateTags($this->id, $tags);
+            }
         }
     }
-}
 
-?>
+    /**
+     * @return ChannelModel
+     */
+    abstract protected function getChannelModel();
+}

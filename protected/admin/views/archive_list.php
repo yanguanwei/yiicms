@@ -22,38 +22,61 @@ code;
 
 Yii::app()->getClientScript()->registerScript('title-column-highlight', $script);
 
-$tabs = array(
-  'base' => array(
-    'label' => '全部列表',
-    'url' => array('index', 'cid' => $channel_topid)
-  )
-);
+if ($isAttach) {
+    $tabs = array(
+        'base' => array(
+            'label' => $model->title . '列表',
+            'url' => array('index', 'cid' => $channel->id)
+        ),
+        'create' => array(
+            'label' => '创建' . $model->title,
+            'url' => array('create', 'cid' => $channel->id)
+        )
+    );
 
-$defaultTab = 'base';
+    $defaultTab = 'base';
 
-foreach ( $channels as $id => $channelname ) {
-  $tab = 'channel_' . $id;
-  $tabs[$tab] = array(
-    'label' => $channelname,
-    'url' => array('list', 'cid' => $id)
-  );
-  if ( $channel_id == $id)
-    $defaultTab = $tab;
+    $title = $channel->title;
+} else {
+    $parent = $channel->getParentChannel();
+    if (!$parent) {
+        $parent = $channel;
+    }
+
+    $tabs = array(
+        'base' => array(
+            'label' => '全部列表',
+            'url' => array('index', 'cid' => $parent->id)
+        )
+    );
+
+    $title = $parent->title;
+    $defaultTab = 'base';
+
+    foreach ($parent->getSubChannels() as $id => $sub) {
+        $tab = 'channel_' . $id;
+        $tabs[$tab] = array(
+            'label' => $sub->title,
+            'url' => array('list', 'cid' => $id)
+        );
+        if ($channel->id == $id)
+            $defaultTab = $tab;
+    }
 }
 
 $widget = $this->beginWidget('application.widgets.Tabs', array(
-    'title' => $title,
-    'tabs' => $tabs,
-    'defaultTab' => $defaultTab
-  ));
+        'title' => $title,
+        'tabs' => $tabs,
+        'defaultTab' => $defaultTab
+    ));
 
 if ($filters) {
     echo '<form class="table-filters" method="get">';
     echo '<input type="hidden" name="r" value="' . $_GET['r'] .'" />';
     echo '<input type="hidden" name="cid" value="' . $_GET['cid'] .'" />';
-    echo '<label>filters: </label>';
+    echo '<label>筛选: </label>';
     echo implode("\n", $filters) . "\n";
-    echo '<input type="submit" value="submit" class="button" /></form>';
+    echo '<input type="submit" value="搜索" class="button" /></form>';
 }
 
 $widget->beginTab($defaultTab);

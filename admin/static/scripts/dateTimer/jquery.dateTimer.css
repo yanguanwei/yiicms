@@ -23,7 +23,7 @@
 .dateTimer-calendar td.dateTimer-calendar-today { border:1px solid #485EAD; padding:0;}
 .dateTimer-calendar td.dateTimer-calendar-active,
 .dateTimer-calendar td.dateTimer-calendar-active a.dateTimer-calendar-daylink,
- .dateTimer-calendar td.dateTimer-calendar-active a.dateTimer-calendar-daylink:hover{ background-color:#485EAD; color:#fff;}
+.dateTimer-calendar td.dateTimer-calendar-active a.dateTimer-calendar-daylink:hover{ background-color:#485EAD; color:#fff;}
 
 .dateTimer-calendar td.dateTimer-calendar-pastday a.dateTimer-calendar-daylink { color:#DBDBDB;}
 .dateTimer-calendar td.dateTimer-calendar-pastday a.dateTimer-calendar-daylink:hover { color:#485EAD;}
@@ -43,3 +43,4 @@
 .dateTimer-container .dateTimer-next { right:2px;}
 
 .dateTimer-container .dateTimer-today { position:absolute; text-decoration:none; bottom:2px; left:10px;}
+.dateTimer-container .dateTimer-close { position:absolute; text-decoration:none; bottom:2px; left:50px;}

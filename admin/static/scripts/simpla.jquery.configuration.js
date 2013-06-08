@@ -122,6 +122,9 @@ $(document).ready(function(){
 		});
 		
 		$('.dateTimer').dateTimer();
+        $('.dateTimerWithoutTime').dateTimer({
+            hasTime: false
+        });
 		
 		$("a[href*='http://']:not([href*='"+location.hostname+"']),[href*='https://']:not([href*='"+location.hostname+"'])").attr("target","_blank");
 });

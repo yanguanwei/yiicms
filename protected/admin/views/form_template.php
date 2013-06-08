@@ -12,10 +12,12 @@ if ( strpos($view, '.') === false ) {
 }
 
 $this->widget('application.widgets.AdminForm', array(
-	'model' => $model,
+	'model' => $form,
 	'view' => $view,
 	'viewOptions' => array(
-		'title' => $title
+		'title' => $title,
+    'channel' => $channel,
+    'model' => $model,
+    'isAttach' => $isAttach
 	)
 ));
-?>

@@ -6,8 +6,8 @@ class FriendLink extends CActiveRecord
 	public $title;
 	public $url;
 	public $logo;
-	public $visible;
-	public $sort_id;
+	public $visible = 1;
+	public $sort_id = 0;
 	public $post_time;
 
 
@@ -66,7 +66,7 @@ class FriendLink extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'title' => '网站名称',
+			'title' => '名称',
 			'url' => '网址',
 			'visible' => '是否可见',
 			'logo' => '网站LOGO',

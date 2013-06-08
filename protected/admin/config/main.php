@@ -4,7 +4,8 @@ return array(
 	'import' => array(
 		'admin.models.*',
 		'admin.components.*',
-		'admin.controllers.AdminController'
+		'admin.controllers.AdminController',
+    'admin.controllers.ChannelModelBaseController'
 	),
 	'components' => array(
 		'user'=>array(

@@ -117,27 +117,44 @@ class FrontendController extends YController
 	 * 根据文档ID返回对应的文档记录
 	 *
 	 * @param int $id 文档ID
-	 * @return array
+	 * @return Archive
 	 */
 	public function getArchive($id)
 	{
-		$archive = Archive::findArchive($id);
-		if ( $archive )
-			return $archive;
-		return array();
+		return Archive::model()->findByPk($id);
 	}
 	
 	/**
 	 * 根据栏目ID返回指定条数的文档数组
 	 * 
 	 * @param int $cid 栏目ID
-	 * @param int $limit 限制条数，0表示不限制
+	 * @param int $limit 限制条数，-1表示不限制
 	 * @return array
 	 */
-	public function getArchivesByChannelId($cid, $limit = 0)
+	public function getArchivesByChannelId($cid, $limit = -1)
 	{
-		return Archive::getArchivesByChannelId($cid, $limit);
+      return Archive::model()->findAll(array(
+         'condition' => 'cid=:cid AND status=:status',
+         'params' => array(':cid' => $cid, ':status' => Archive::STATUS_PUBLISHED),
+         'limit' => $limit
+      ));
 	}
+
+    /**
+     * 根据栏目ID返回指定条数的置顶文档数组
+     *
+     * @param int $cid 栏目ID
+     * @param int $limit 限制条数，-1表示不限制
+     * @return array
+     */
+    public function getTopArchivesByChannelId($cid, $limit = -1)
+    {
+        return Archive::model()->findAll(array(
+            'condition' => "cid=:cid AND is_top='1' AND status=:status",
+            'params' => array(':cid' => $cid, ':status' => Archive::STATUS_PUBLISHED),
+            'limit' => $limit
+        ));
+    }
 	
 	/**
 	 * 根据顶级栏目ID其下所有子栏目的所有文档列表数组

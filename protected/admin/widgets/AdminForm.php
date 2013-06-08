@@ -55,6 +55,13 @@ class AdminForm extends CWidget
         echo CHtml::hiddenField($this->_backurlName, $this->_backurl);
     }
 
+    public function renderArchiveStatusSelectField($node = null, array $htmlOptions = array())
+    {
+        return $this->renderSelectField('status', array(
+                '未发布', '发布'
+            ), $node, $htmlOptions);
+    }
+
     public function renderChannelSelectField($attribute, $parent_id, array $htmlOptions = array())
     {
         $conn = Yii::app()->db;
@@ -132,11 +139,31 @@ class AdminForm extends CWidget
         );
     }
 
-    public function renderDateTimerField($attribute, $note = null, array $htmlOptions = array())
+    public function renderDateField($attribute, $note = null, array $htmlOptions = array())
     {
-        $htmlOptions['class'] .= (isset($htmlOptions['class']) ? ' ' : '') . 'dateTimer';
+        list($model, $name) = $this->parseAttribute($attribute);
 
-        return $this->renderTextField($attribute, $note, $htmlOptions);
+        return $this->renderField(array(
+            'widget' => 'zii.widgets.jui.CJuiDatePicker',
+            'attribute' => $attribute,
+            'note' => $note,
+            'options' => array(
+                'model'=> $model,
+                'attribute'=> $name,
+                'language' => 'zh_cn',
+                'options' => array(
+                    //'showAnim'=>'slideDown', // 'show' (the default), 'slideDown', 'fadeIn', 'fold'
+                    'showOn' => 'focus', // 'focus', 'button', 'both'
+                    //'buttonImage' => Yii::app()->request->baseUrl.'/images/calendar.png',
+                    //'buttonImageOnly'=> true,
+                    //'htmlOptions' => array('readonly'=>"readonly"),
+                    'changeMonth' => true,
+                    'changeYear' => true,
+                    'mode'=>'datetime',
+                    'dateFormat'=>'yy-mm-dd',
+                ),
+                'htmlOptions'=> $htmlOptions
+            )));
     }
 
     public function renderHiddenField($attribute)
@@ -176,6 +203,13 @@ class AdminForm extends CWidget
                 'note' => $note
             )
         );
+    }
+
+    public function renderHiddenDisabledChannelTextField($attribute, $note = null, array $htmlOptions = array())
+    {
+        list($model, $name) = $this->parseAttribute($attribute);
+        $value = CHtml::resolveValue($model, $name);
+        return $this->renderHiddenTextField($attribute, Channel::getChannelTitle($value), $note, $htmlOptions);
     }
 
     public function renderSelectField($attribute, array $data, $note = null, array $htmlOptions = array())
@@ -369,21 +403,23 @@ class AdminForm extends CWidget
 
     public function renderTagSelectField(array $tagTypeNames, $prefixName = null)
     {
-        $selects = array();
-        $tagTypes = TagType::getTagTypeTitles($tagTypeNames);
-        $tagOptions = Tag::getTagOptions($tagTypeNames);
-        foreach ($tagTypes as $name => $typeTitle) {
+        if ($tagTypeNames) {
+          $selects = array();
+          $tagTypes = TagType::getTagTypeTitles($tagTypeNames);
+          $tagOptions = Tag::getTagOptions($tagTypeNames);
+          foreach ($tagTypes as $name => $typeTitle) {
             $options = isset($tagOptions[$name]) ? $tagOptions[$name] : array();
             $attribute = $prefixName === null ? $name : "{$prefixName}[$name]";
             $selects[] = $this->form->dropDownList(
-                $this->model,
-                $attribute,
-                $options,
-                array('empty' => '--' . $tagTypes[$name] . '--')
+              $this->model,
+              $attribute,
+              $options,
+              array('empty' => '--' . $tagTypes[$name] . '--')
             );
-        }
+          }
 
-        return '<label>标签</label>' . implode("\n", $selects);
+          return '<label>标签</label>' . implode("\n", $selects);
+        }
     }
 
     public function renderChannelTagSelectField()

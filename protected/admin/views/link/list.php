@@ -1,28 +1,53 @@
 <?php
-$tabs = array(
-	'base' => array(
-		'label' => '全部列表',
-		'url' => array('index', 'cid' => $channel_topid)
-	)
-);
 
-$defaultTab = 'base';
+if ($isAttach) {
+    $tabs = array(
+        'base' => array(
+            'label' => $model->title . '列表',
+            'url' => array('index', 'cid' => $channel->id)
+        ),
+        'create' => array(
+            'label' => '创建' . $model->title,
+            'url' => array('create', 'cid' => $channel->id)
+        )
+    );
 
-foreach ( $channels as $id => $channelname ) {
-	$tab = 'channel_' . $id;
-	$tabs[$tab] = array(
-		'label' => $channelname,
-		'url' => array('list', 'cid' => $id)		
-	);
-	if ( $channel_id == $id)
-		$defaultTab = $tab;
+    $defaultTab = 'base';
+
+    $title = $channel->title;
+} else {
+
+    $parent = $channel->getParentChannel();
+    if (!$parent) {
+        $parent = $channel;
+    }
+
+    $tabs = array(
+        'base' => array(
+            'label' => '全部列表',
+            'url' => array('index', 'cid' => $parent->id)
+        ),
+    );
+
+    $defaultTab = 'base';
+    $title = $parent->title;
+
+    foreach ($channel->getSubChannels() as $id => $sub) {
+        $tab = 'channel_' . $id;
+        $tabs[$tab] = array(
+            'label' => $sub->title,
+            'url' => array('list', 'cid' => $id)
+        );
+        if ($channel->id == $id)
+            $defaultTab = $tab;
+    }
 }
 
 $widget = $this->beginWidget('application.widgets.Tabs', array(
-	'title' => $title,
-	'tabs' => $tabs,
-	'defaultTab' => $defaultTab
-));
+        'title' => $title,
+        'tabs' => $tabs,
+        'defaultTab' => $defaultTab
+    ));
 
 $widget->beginTab($defaultTab);
 
@@ -33,7 +58,7 @@ $table = $this->beginWidget('apps.ext.young.ListTable', array(
 		'titles' => array(
 				'id' => 'ID',
 				'sort_id' => '排序',
-				'title' => '网站名称',
+				'title' => '名称',
 				'url' => '网址',
 				'update_time' => '更新时间',
 				'operate' => '操作'
@@ -77,4 +102,3 @@ $widget->endTab();//baseTab
 
 $this->endWidget(); //tabs
 
-?>

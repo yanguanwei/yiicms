@@ -17,19 +17,17 @@ $widget->beginTab('base');
 	echo $this->renderTextRow('title', null, array('class' => 'text-input medium-input'));
 	
 	echo $this->renderCheckboxListRow('is_highlight', 'is_top');
-	
-	echo $this->renderTreeSelectRow(
-			'cid', 
-			Channel::getChannelTreeSelectOptionsForModel($this->model->cid)
-		);
+
+
+  echo $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input medium-input'));
 
   echo $this->renderTagSelectRow(array('promotion_type', 'promotion_category','location'));
 
 	echo $this->renderCKFinderInputRow('cover');
 
   echo $this->renderRow(
-    $this->renderDateTimerRow('start_time', null, array('class' => 'text-input')),
-    $this->renderDateTimerRow('end_time', null, array('class' => 'text-input'))
+    $this->renderDateRow('start_time', null, array('class' => 'text-input')),
+    $this->renderDateRow('end_time', null, array('class' => 'text-input'))
   );
 
 	echo $this->renderCKEditorRow('content');
@@ -56,4 +54,3 @@ $widget->endTab();//advanced
 $this->endWidget(); //tabs
 
 echo $this->renderSubmitRow();
-?>

@@ -6,25 +6,28 @@ class PictureController extends ArchiveAdminController
 {
     /**
      * @param $scenario
+     * @param $idOrCid
      * @return ArchiveForm
      */
-    protected function getFormModel($scenario)
+    protected function createFormModel($scenario, $idOrCid)
     {
-        return new ArchiveForm($scenario);
+        return new PictureForm($scenario);
     }
 
-    protected function getModelLabel()
+    protected function onFormUpdate($id, $form)
     {
-        return '图片';
+        $archive = Archive::model()->findByPk($id);
+        if ($archive) {
+            $form->setAttributes($archive->getAttributes(), false);
+            $form->tags = Archive::getTags($id);
+        }
     }
 
-    protected function getShortcutsCreateIcon()
+    /**
+     * @return ChannelModel
+     */
+    protected function getChannelModel()
     {
-        return $this->asset('images/icons/image_add_48.png');
-    }
-
-    protected function getShortcutsListIcon()
-    {
-        return $this->asset('images/icons/picture.png');
+        return ChannelModel::findModel(3);
     }
 }

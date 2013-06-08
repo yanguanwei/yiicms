@@ -4,7 +4,7 @@ Yii::import('admin.controllers.ArchiveAdminController');
 
 class NewsController extends ArchiveAdminController
 {
-    protected function getFormModel($scenario)
+    protected function createFormModel($scenario, $idOrCid)
     {
         return new NewsForm($scenario);
     }
@@ -21,13 +21,16 @@ class NewsController extends ArchiveAdminController
         $form->tags = Archive::getTags($id);
     }
 
-    protected function getModelLabel()
-    {
-        return '新闻';
-    }
-
-    protected function onPrevDelete($id)
+    protected function onPrevDelete(array $id)
     {
         News::deleteNews($id);
+    }
+
+    /**
+     * @return ChannelModel
+     */
+    protected function getChannelModel()
+    {
+        return ChannelModel::findModel(1);
     }
 }

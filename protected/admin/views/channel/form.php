@@ -22,24 +22,26 @@ $widget->beginTab('base');
 		'可直接通过 index.php?r=channel/别名 这样的路径来访问此栏目；<br />如果是一级栏目，此别名可激活与标识符相同的导航', 
 		array('class' => 'text-input medium-input'));
 
-	echo $this->renderHiddenDisabledTreeSelectRow(
+	echo $this->renderRow(
+      $this->renderHiddenDisabledTreeSelectField(
 			'parent_id', Channel::getChannelTreeSelectOptions($this->model->theme_id, $this->model->model_id),
-			null, array('empty' => array(0 => '无（作为一级栏目）'))
+			null, array('empty' => array(0 => '无（作为一级栏目）'))),
+      $this->model->parent_id ?
+        $this->renderHiddenDisabledSelectField('model_id', ChannelModel::getChannelModelSelectOptions()) :
+        $this->renderSelectField('model_id', ChannelModel::getChannelModelSelectOptions(), null, array(
+                'disabled' => $this->model->getScenario() == 'insert' ? false : 'disabled'
+            ))
 		);
-	
-	if ( $this->model->parent_id ) {	//如果指定了父级ID，则主题ID和模型ID都不能更改，包括创建和更新操作
-		echo $this->renderRow(
-			$this->renderHiddenDisabledSelectField('theme_id', Theme::getThemeSelectOptions()),
-			$this->renderHiddenDisabledSelectField('model_id', ChannelModel::getChannelModelSelectOptions())
-		);
-	} else {//说明是创建一级栏目操作，可以自由指定模型，但是主题不能指定
-		echo $this->renderRow(
-			$this->renderHiddenDisabledSelectField('theme_id', Theme::getThemeSelectOptions()),
-			$this->renderSelectField('model_id', ChannelModel::getChannelModelSelectOptions(), null, array(
-          'disabled' => $this->model->getScenario() == 'insert' ? false : 'disabled'
-        ))
-		);
-	}
+
+  echo $this->renderRow(
+        $this->model->parent_id ?
+          $this->renderHiddenDisabledSelectField('theme_id', Theme::getThemeSelectOptions()) :
+          $this->renderHiddenDisabledSelectField('theme_id', Theme::getThemeSelectOptions()),
+      $this->renderSelectField('channel_attach', ChannelModel::getChannelModelSelectOptions(), null, array(
+              'disabled' => $this->model->getScenario() == 'insert' ? false : 'disabled',
+              'empty' => ' '
+          ))
+  );
 	
 	$templates = ThemeTemplate::getTemplateSelectOptions();	
 	echo $this->renderRow(

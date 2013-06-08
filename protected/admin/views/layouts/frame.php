@@ -5,7 +5,7 @@
 			<!-- Sidebar with logo and menu -->
 			<h1 id="sidebar-title"><a href="#"><?php echo Yii::app()->name;?></a></h1>
 			<!-- Logo (221px wide) -->
-			<a href="<?php echo Yii::app()->getRequest()->getHostInfo();?>"><img id="logo" src="<?php echo $this->asset('images/logo.png')?>" alt="<?php echo Yii::app()->name?>" /></a>
+			<a href="<?php echo Yii::app()->getRequest()->getHostInfo();?>" target="_blank"><img id="logo" src="<?php echo $this->asset('images/logo.png')?>" alt="<?php echo Yii::app()->name?>" /></a>
 			<!-- Sidebar Profile links -->
 			<div id="profile-links">你好,&nbsp;
 				<a href="<?php echo $this->createUrl('user/update', array('id'=>Yii::app()->user->getId()))?>">

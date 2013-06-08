@@ -17,17 +17,19 @@ $widget->beginTab('base');
 	echo $this->renderTextRow('title', null, array('class' => 'text-input medium-input'));
 	
 	echo $this->renderCheckboxListRow('is_highlight', 'is_top');
-	
-	echo $this->renderTreeSelectRow(
-			'cid', 
-			Channel::getChannelTreeSelectOptionsForModel($this->model->cid)
-		);
+
+  echo $this->renderRow(
+      $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input')),
+      $this->renderArchiveStatusSelectRow()
+  );
+
+  echo $this->renderChannelTagSelectRow();
 
 	echo $this->renderCKFinderInputRow('cover');
 	
 	echo $this->renderRow(
 			$this->renderTextRow('source', null, array('class' => 'text-input')),
-			$this->renderDateTimerRow('update_time', null, array('class' => 'text-input'))
+			$this->renderDateRow('update_time', null, array('class' => 'text-input'))
 		);
 
 	echo $this->renderCKEditorRow('content');

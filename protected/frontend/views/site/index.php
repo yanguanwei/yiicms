@@ -57,21 +57,20 @@
                 })
             }
         </script>
+
+        <?php
+            $lis = $imgs = array();
+            foreach ($this->getTopArchivesByChannelId(4, 6) as $archive) {
+                $lis[] = sprintf('<li>%s</li>', $archive->title);
+                $imgs[] = sprintf('<div class=""><img src="%s" /></div>', $archive->cover);
+            }
+        ?>
+
         <ul class="hottest-tabLi fl" id="hottest-tabLi">
-            <li>国际购物中心</li>
-            <li>鼓楼步行街</li>
-            <li>江北万达广场</li>
-            <li>南部商务区</li>
-            <li>和丰创意广场</li>
-            <li>联盛商业广场</li>
+            <?php echo implode("\n", $lis)?>
         </ul>
         <div class="hottest-changeWrap fl" id="hottest-changeWrap">
-            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
-            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
-            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
-            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
-            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
-            <div class=""><img src="<?php echo $this->asset('images/index-hottest-img.png')?>" /></div>
+            <?php echo implode("\n", $imgs)?>
         </div>
         <script>switchTab("#hottest-tabLi","#hottest-changeWrap","mouseover","fadeIn","0");</script>
     </div>

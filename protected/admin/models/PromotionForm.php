@@ -26,11 +26,11 @@ class PromotionForm extends ArchiveForm
         );
     }
 
-    protected function save(array $data, $insert = true)
+    protected function doSave()
     {
-        parent::save($data, $insert);
+        parent::doSave();
 
-        if ($insert) {
+        if ($this->getScenario()=='insert') {
             $news = new Promotion();
         } else {
             $news = Promotion::model()->findByPk($this->id);
@@ -43,6 +43,9 @@ class PromotionForm extends ArchiveForm
             throw new CException();
         }
     }
-}
 
-?>
+    protected function getChannelModel()
+    {
+        return ChannelModel::findModel(5);
+    }
+}

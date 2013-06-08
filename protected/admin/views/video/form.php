@@ -1,29 +1,35 @@
 <?php 
 echo $this->renderErrorSummary();
 
+$tabs = array();
+
+if ($isAttach) {
+    $tabs['index'] = array(
+        'label' => $model->title . '列表',
+        'url' => array('index', 'cid' => $channel->id)
+    );
+}
+
+$tabs['base'] = array('label' => '基本信息');
+$tabs['advanced'] = array('label' => '高级设置');
+
 $widget = $this->beginWidget('application.widgets.Tabs', array(
 	'title' => $title,
-	'tabs' => array(
-		'base' => array('label' => '基本信息'),
-		'advanced' => array('label' => '高级设置')
-	),
+	'tabs' => $tabs,
 	'defaultTab' => 'base'
-));  
+));
 
 echo $this->renderHiddenField('id');
 
 $widget->beginTab('base');
 
 	echo $this->renderTextRow('title', null, array('class' => 'text-input medium-input'));
-	
-	echo $this->renderTreeSelectRow(
-			'cid', 
-			Channel::getChannelTreeSelectOptionsForModel($this->model->cid)
-		);
+
+  echo $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input medium-input'));
 
 	echo $this->renderCKFinderInputRow('cover', null, false);
 	
-	echo $this->renderDateTimerRow('update_time', null, array('class' => 'text-input'));
+	echo $this->renderDateRow('update_time', null, array('class' => 'text-input'));
 
 $widget->endTab();//baseTab
 

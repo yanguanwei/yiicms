@@ -5,20 +5,10 @@ Yii::import('admin.controllers.ArchiveAdminController');
 class PromotionController extends ArchiveAdminController
 {
 
-    protected function getFormModel($scenario)
-    {
-        return new PromotionForm($scenario);
-    }
-
-    protected function getModelLabel()
-    {
-        return '促销';
-    }
-	
-	protected function onFormUpdate($id, $form)
+    protected function onFormUpdate($id, $form)
     {
         $model = Promotion::model()->with('archive')->findByPk($id);
-        if ( !$model ) {
+        if (!$model) {
             $this->setFlashMessage('error', "没有找到ID为{$id}的记录！");
         }
 
@@ -26,12 +16,12 @@ class PromotionController extends ArchiveAdminController
         $form->setAttributes($model->archive->getAttributes(), false);
     }
 
-    protected function onPrevDelete($id)
+    protected function onPrevDelete(array $ids)
     {
-        Promotion::deletePromotion($id);
+        Promotion::deletePromotion($ids);
     }
 
-    protected function onListFilter(SelectSQL $sql)
+    protected function prepareListSQL(SelectSQL $sql)
     {
         $hasFilter = false;
         foreach (array('promotion_type', 'location', 'promotion_category') as $key) {
@@ -43,5 +33,23 @@ class PromotionController extends ArchiveAdminController
         if ($hasFilter) {
             $sql->leftJoin(array('{{promotion}}', 'p'), null, 'p.id=a.id');
         }
+    }
+
+    /**
+     * @return ChannelModel
+     */
+    protected function getChannelModel()
+    {
+        return ChannelModel::findModel(5);
+    }
+
+    /**
+     * @param $scenario
+     * @param $idOrCid
+     * @return CModel
+     */
+    protected function createFormModel($scenario, $idOrCid)
+    {
+        return new PromotionForm($scenario);
     }
 }

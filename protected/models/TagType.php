@@ -37,7 +37,7 @@ class TagType extends CActiveRecord
             'pattern'=>'/^[a-zA-Z0-9_]{0,}$/',
             'message'=>'类型名必须为字母、数字、下划线'
           ),
-            array('title', 'required')
+            array('name, title', 'required')
         );
     }
 

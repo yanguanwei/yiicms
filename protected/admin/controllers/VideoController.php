@@ -6,26 +6,36 @@ class VideoController extends ArchiveAdminController
 {
     /**
      * @param $scenario
+     * @param $idOrCid
      * @return ArchiveForm
      */
-    protected function getFormModel($scenario)
+    protected function createFormModel($scenario, $idOrCid)
     {
-        return new ArchiveForm($scenario);
+        return new VideoForm($scenario);
     }
 
-    protected function getModelLabel()
+    protected function onFormUpdate($id, $form)
     {
-        return '视频';
+        $archive = Archive::model()->findByPk($id);
+        if ($archive) {
+            $form->setAttributes($archive->getAttributes(), false);
+            $form->tags = Archive::getTags($id);
+        }
     }
 
-    protected function getShortcutsCreateIcon()
+    public function attributeLabels()
     {
-        return $this->asset('images/icons/video.png');
+        return array_merge(parent::attributeLabels(), array(
+                'cover' => '视频地址'
+            ));
     }
 
-    protected function getShortcutsListIcon()
+    /**
+     * @return ChannelModel
+     */
+    protected function getChannelModel()
     {
-        $this->asset('images/icons/video_list.png');
+        return ChannelModel::findModel(4);
     }
 }
 

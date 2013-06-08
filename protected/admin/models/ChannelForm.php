@@ -4,7 +4,7 @@ class ChannelForm extends CFormModel
     public $id;
     public $title;
     public $parent_id = 0;
-    public $model_id = 0;
+    public $model_name;
     public $theme_id;
     public $visible = 1;
     public $sort_id = 0;
@@ -20,7 +20,8 @@ class ChannelForm extends CFormModel
     {
         return array(
             array('id', 'required', 'on' => 'update'),
-            array('title, model_id, parent_id, theme_id', 'required'),
+            array('title, ', 'required'),
+            array('model_name, parent_id, theme_id', 'required','on' => 'insert'),
             array(
                 'alias',
                 'match',
@@ -39,7 +40,7 @@ class ChannelForm extends CFormModel
             'id' => 'ID',
             'title' => '分类名称',
             'parent_id' => '所属父分类',
-            'model_id' => '模型',
+            'model_name' => '模型',
             'sort_id' => '排序',
             'visible' => '是否可见',
             'keywords' => '关键字',
@@ -61,34 +62,29 @@ class ChannelForm extends CFormModel
     {
         $this->setAttributes($data, false);
 
-        if ($this->validate()) {
+        if ($insert) {
+            $channel = new Channel('insert');
+            $channel->id = $this->id = null;
+            if ($this->parent_id) {
+                //model_name、theme_id只能继承自父栏目
+                $this->model_name = Channel::findChannelModelName($this->parent_id);
+                $this->theme_id = Channel::findChannelThemeId($this->parent_id);
+            }
+        } else {
+            $channel = Channel::model()->findByPk($this->id);
+            //model_name、parent_id、$theme_id不能更改
+            $this->model_name = $channel->model_name;
+            $this->parent_id = $channel->parent_id;
+            $this->theme_id = $channel->theme_id;
+            $this->channel_attach = $channel->channel_attach;
+        }
 
+        if ($this->validate()) {
             //通过事务来达到栏目表与栏目别名表数据同步
             $transaction = Yii::app()->db->beginTransaction();
 
             try {
-
-                if ($insert) {
-                    $channel = new Channel('insert');
-                    $channel->setAttributes($this->getAttributes(), false);
-                    $channel->id = null;
-                    if ($this->parent_id) {
-                        //model_id、theme_id只能继承自父栏目
-                        $channel->model_id = Channel::getChannelModelId($this->parent_id);
-                        $channel->theme_id = Channel::getChannelThemeId($this->parent_id);
-                    }
-                } else {
-                    $channel = Channel::model()->findByPk($this->id);
-                    if ($channel->parent_id && !$channel->model_id) {
-                        $channel->model_id = Channel::getChannelModelId($channel->parent_id);
-                    }
-                    //model_id、parent_id、$theme_id不能更改
-                    $this->model_id = $channel->model_id;
-                    $this->parent_id = $channel->parent_id;
-                    $this->theme_id = $channel->theme_id;
-                    $this->channel_attach = $channel->channel_attach;
-                    $channel->setAttributes($this->getAttributes(), false);
-                }
+                $channel->setAttributes($this->getAttributes(), false);
 
                 if (is_array($channel->tags)) {
                     $tags = array();
@@ -112,7 +108,6 @@ class ChannelForm extends CFormModel
                             $alias->id = $channel->id;
                         }
                         $alias->alias = $this->alias;
-                        $alias->identifier = ChannelAlias::generateIdentifier($channel->theme_id, $this->alias);
 
                         if (!$alias->save()) {
                             $this->addErrors($alias->getErrors());

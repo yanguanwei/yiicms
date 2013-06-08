@@ -6,7 +6,7 @@ class LinkController extends ChannelModelBaseController
 {
     protected function getChannelModel()
     {
-        return ChannelModel::findModel(2);
+        return ChannelModel::findModel('link');
     }
 
     protected function createFormModel($scenario, $idOrCid)

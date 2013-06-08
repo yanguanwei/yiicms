@@ -33,32 +33,7 @@ class FrontendController extends YController
 		
 		return parent::beforeRender($view);
 	}
-	
-	/**
-	 * 开始一个HTML代码块，需要再次调用$this->endBlock()来结束；
-	 * 如果没有结束的代码，直接使用$this->renderPartial()比较合适
-	 * 
-	 * @param string $path
-	 * @param array $data
-	 * @return string
-	 */
-	public function beginBlock($path, array $data = null)
-	{
-		$this->_blocks[] = $path;
-		return $this->renderPartial($path, $data);
-	}
-	
-	/**
-	 * 与$this->beginBlock()成对出现
-	 * 
-	 * @return string
-	 */
-	public function endBlock()
-	{
-		$path = array_pop($this->_blocks) . '_end';
-		return $this->renderPartial($path);
-	}
-	
+
 	/**
 	 * 创建栏目对应的URL；
 	 * 栏目如果设置了别名，则会生成“channel/别名”这种形式的URL；

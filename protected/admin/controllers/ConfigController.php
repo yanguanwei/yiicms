@@ -32,14 +32,14 @@ class ConfigController extends AdminController
 			
 			if ( $model->save() ) {
 				$this->setFlashMessage('success', '创建成功！点击<a href="'.$this->createUrl('create').'">继续创建</a>');
-				return $this->redirect($this->createUrl('update', array('id' => $model->id)));
+				return $this->redirect($this->createUrl('index'));
 			} else {
 				$this->setFlashMessage('error', '创建失败！');
 			}
 		}
 		
 		return $this->render('//form_template', array(
-				'model' => $model,
+				'form' => $model,
 				'title' => '创建配置'	
 			));
 	}
@@ -56,14 +56,14 @@ class ConfigController extends AdminController
 				
 			if ( $model->save() ) {
 				$this->setFlashMessage('success', '更新成功！');
-				return $this->redirect($this->createUrl('update', array('id' => $model->id)));
+				return $this->redirect($this->createUrl('index'));
 			} else {
 				$this->setFlashMessage('error', '更新失败！');
 					
 			}
 		}
 		return $this->render('//form_template', array(
-			'model' => $model,
+			'form' => $model,
 			'title' => '更新配置'
 		));
 	}
@@ -90,8 +90,8 @@ class ConfigController extends AdminController
 		
 		return $this->render('//form_template', array(
 			'view' => 'theme',
-			'model' => $form,
-			'title' => Theme::getThemeTitle($id) . '配置'		
+			'form' => $form,
+			'title' => Theme::findThemeTitle($id) . '配置'
 		));
 		
 	}
@@ -130,4 +130,3 @@ class ConfigController extends AdminController
 		return $this->doUpdateSort('config_type');
 	}
 }
-?>

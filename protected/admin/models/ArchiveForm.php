@@ -5,7 +5,7 @@ abstract class ArchiveForm extends CFormModel
     public $title;
     public $cover;
     public $cid;
-    public $model_id;
+    public $model_name;
     public $status = 1;
     public $template;
     public $keywords;
@@ -78,7 +78,7 @@ abstract class ArchiveForm extends CFormModel
                 }
             }
 
-            $this->model_id = $this->getChannelModel()->id;
+            $this->model_name = $this->getChannelModel()->name;
 
             if (!$this->update_time || false === ($update_time = strtotime($this->update_time))) {
                 $this->update_time = time();

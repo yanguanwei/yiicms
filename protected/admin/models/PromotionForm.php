@@ -46,6 +46,6 @@ class PromotionForm extends ArchiveForm
 
     protected function getChannelModel()
     {
-        return ChannelModel::findModel(5);
+        return ChannelModel::findModel('promotion');
     }
 }

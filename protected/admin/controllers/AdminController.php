@@ -191,7 +191,7 @@ class AdminController extends YController
 
         $items = array();
 
-        $themes = Theme::getThemeSelectOptions();
+        $themes = Theme::fetchThemeSelectOptions();
         foreach ($themes as $theme_id => $theme_name) {
             $items['theme_' . $theme_id] = array(
                 'label' => $theme_name,
@@ -213,18 +213,18 @@ class AdminController extends YController
     {
 
         $navs = array();
-        $themes = Theme::getThemeSelectOptions();
+        $themes = Theme::fetchThemeSelectOptions();
         foreach ($themes as $theme_id => $theme_name) {
             $navs['theme_' . $theme_id] = array(
                 'label' => $theme_name
             );
         }
 
-        foreach (Channel::getTopChannels() as $row) {
+        foreach (Channel::fetchTopChannelsForNavigation() as $row) {
             $navs['theme_' . $row['theme_id']]['items'][$row ['id']] = array(
                 'label' => $row ['title'],
                 'url' => array(
-                    $row ['model_alias'] . '/index',
+                    $row ['controller'] . '/index',
                     'cid' => $row ['id']
                 )
             );

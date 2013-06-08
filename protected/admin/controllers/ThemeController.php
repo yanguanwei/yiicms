@@ -31,7 +31,7 @@ class ThemeController extends AdminController
 		}
 		
 		return $this->render('//form_template', array(
-				'model' => $form,
+				'form' => $form,
 				'title' => '创建主题'	
 			));
 	}
@@ -56,7 +56,7 @@ class ThemeController extends AdminController
 		}
 	
 		return $this->render('//form_template', array(
-				'model' => $form,
+				'form' => $form,
 				'title' => '更新主题'
 		));
 	}
@@ -78,7 +78,7 @@ class ThemeController extends AdminController
 		}
 		
 		return $this->render('//form_template', array(
-				'model' => $form,
+				'form' => $form,
 				'view' => 'style'	
 			));
 		
@@ -101,7 +101,7 @@ class ThemeController extends AdminController
 		}
 		
 		return $this->render('//form_template', array(
-				'model' => $form,
+				'form' => $form,
 				'view' => 'script'	
 			));
 		
@@ -244,4 +244,3 @@ class ThemeController extends AdminController
 		}
 	}
 }
-?>

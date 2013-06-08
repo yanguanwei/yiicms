@@ -2,7 +2,6 @@
 class ChannelAlias extends CActiveRecord
 {
     public $id;
-    public $identifier;
     public $alias;
 
     /**
@@ -30,7 +29,7 @@ class ChannelAlias extends CActiveRecord
     public function rules()
     {
         return array(
-            array('id, identifier, alias', 'required')
+            array('id, alias', 'required')
         );
     }
 
@@ -51,8 +50,8 @@ class ChannelAlias extends CActiveRecord
         }
 
         if ($this->exists(
-            'id<>:id AND identifier=:identifier',
-            array('id' => $this->id, 'identifier' => $this->identifier)
+            'id<>:id AND alias=:alias',
+            array('id' => $this->id, 'alias' => $this->alias)
         )
         ) {
             $this->addError('alias', '栏目别名已经存在！');

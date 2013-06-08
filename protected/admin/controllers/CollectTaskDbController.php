@@ -51,7 +51,7 @@ class CollectTaskDbController extends AdminController
 		}
 		
 		return $this->render('//form_template', array(
-				'model' => $form,
+				'form' => $form,
 				'title' => '创建数据库采集任务',
 				'view' => $form->getFormView()
 			));
@@ -79,7 +79,7 @@ class CollectTaskDbController extends AdminController
 		}
 		
 		return $this->render('//form_template', array(
-				'model' => $form,
+				'form' => $form,
 				'title' => '更新数据库采集任务',
 				'view' => $form->getFormView()
 		));

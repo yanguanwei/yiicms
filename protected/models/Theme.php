@@ -70,15 +70,17 @@ class Theme extends CActiveRecord
 		return parent::beforeSave();
 	}
 	
-	
-	
-	public static function getThemeSelectOptions()
+	public static function fetchThemeSelectOptions()
 	{
-		$sql = "SELECT id, title FROM {{theme}} ORDER BY id ASC";
-		$options = array();
-		foreach ( Yii::app()->db->createCommand($sql)->queryAll() as $row ) {
-			$options[$row['id']] = $row['title'];
-		}
+        static $options;
+
+        if (null===$options) {
+            $sql = "SELECT id, title FROM {{theme}} ORDER BY id ASC";
+            $options = array();
+            foreach (Yii::app()->db->createCommand($sql)->queryAll() as $row) {
+                $options[$row['id']] = $row['title'];
+            }
+        }
 		return $options;
 	}
 	
@@ -102,7 +104,7 @@ class Theme extends CActiveRecord
 	 * @param int $id
 	 * @return string|null
 	 */
-	public static function getThemeTitle($id)
+	public static function findThemeTitle($id)
 	{
 		$sql = "SELECT title FROM {{theme}} WHERE id='{$id}'";
 		$row = Yii::app()->db->createCommand($sql)->queryRow();

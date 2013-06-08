@@ -118,13 +118,7 @@ $table->beginFoot();
 
   $this->renderPartial('/blocks/bulk_action', array(
       'name' => 'id',
-      'options' => array(
-        '批量删除' => $this->createUrl('delete'),
-        '批量置顶' => $this->createUrl('ding'),
-        '取消置顶' => $this->createUrl('ding', array('disabled' => 1)),
-        '批量高亮' => $this->createUrl('highlight'),
-        '取消高亮' => $this->createUrl('highlight', array('disabled' => 1))
-      )
+      'options' => $this->getBulkActions()
     ));
 $table->renderPager();
 $table->endFoot();

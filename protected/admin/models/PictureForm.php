@@ -4,6 +4,6 @@ class PictureForm extends ArchiveForm
 {
     protected function getChannelModel()
     {
-        return ChannelModel::findModel(3);
+        return ChannelModel::findModel('picture');
     }
 }

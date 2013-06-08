@@ -17,14 +17,9 @@ class ChannelController extends AdminController
             }
         }
 
-        $conn = Yii::app()->db;
-        $command = $conn->createCommand(
-            "SELECT c.id, c.sort_id, c.title, c.parent_id, c.visible, c.theme_id, am.title as archive_model FROM {{channel}} c LEFT JOIN {{channel_model}} am ON am.id=c.model_id WHERE theme_id='{$theme_id}' ORD" . "ER BY c.sort_id DESC, c.id ASC"
-        );
-
         $channels = array();
-        $title = Theme::getThemeTitle($theme_id);
-        foreach ($command->queryAll() as $row) {
+        $title = Theme::findThemeTitle($theme_id);
+        foreach (Channel::fetchChannelsForList($theme_id) as $row) {
             $row['visible'] = $this->getSelected($row['visible']);
             $channels[] = $row;
         }
@@ -49,11 +44,11 @@ class ChannelController extends AdminController
         $parent_id = intval($parent_id);
         $theme_id = intval($theme_id);
 
-        $model = new ChannelForm('insert');
+        $form = new ChannelForm('insert');
 
         if (isset($_POST['ChannelForm'])) {
-            $model->setAttributes($_POST['ChannelForm'], false);
-            if ($model->post($_POST['ChannelForm'], true)) {
+            $form->setAttributes($_POST['ChannelForm'], false);
+            if ($form->post($_POST['ChannelForm'], true)) {
                 $this->setFlashMessage(
                     'success',
                   '栏目创建成功！点击<a href="' . $this->createUrl(
@@ -65,19 +60,19 @@ class ChannelController extends AdminController
                 return $this->redirect($this->createUrl('index', array('theme_id' => $model->theme_id)));
             }
         } else {
-            $model->parent_id = $parent_id;
-            $model->theme_id = $theme_id;
+            $form->parent_id = $parent_id;
+            $form->theme_id = $theme_id;
             if ($parent_id) {
-                $model->model_id = Channel::getChannelModelId($parent_id);
+                $form->model_name = Channel::findChannelModelName($parent_id);
             }
 
-            $model->tags = array();
+            $form->tags = array();
         }
 
         $this->render(
             '//form_template',
             array(
-                'form' => $model,
+                'form' => $form,
                 'title' => '创建栏目'
             )
         );
@@ -135,7 +130,7 @@ class ChannelController extends AdminController
                 $channel = Channel::model()->findByPk($id);
                 if ($channel) {
                     $has = false;
-                    $models = array(ChannelModel::findModel($channel->model_id));
+                    $models = array(ChannelModel::findModel($channel->model_name));
                     if ($channel->channel_attach) {
                         $models[] = ChannelModel::findModel($channel->channel_attach);
                     }
@@ -168,7 +163,7 @@ class ChannelController extends AdminController
     {
         $buttons = array();
 
-        foreach (Theme::getThemeSelectOptions() as $id => $title) {
+        foreach (Theme::fetchThemeSelectOptions() as $id => $title) {
             $buttons[] = array(
                 'shortcut' => $this->asset('images/icons/folder_empty.png'),
                 'label' => $title,

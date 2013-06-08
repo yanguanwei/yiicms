@@ -21,7 +21,7 @@ class PromotionController extends ArchiveAdminController
         Promotion::deletePromotion($ids);
     }
 
-    protected function prepareListSQL(SelectSQL $sql)
+    protected function prepareListSQLForTagsFilter(SelectSQL $sql)
     {
         $hasFilter = false;
         foreach (array('promotion_type', 'location', 'promotion_category') as $key) {
@@ -31,7 +31,7 @@ class PromotionController extends ArchiveAdminController
             }
         }
         if ($hasFilter) {
-            $sql->leftJoin(array('{{promotion}}', 'p'), null, 'p.id=a.id');
+            $sql->leftJoin(array('{{promotion}}', 'p'), null, 'p.id=base.id');
         }
     }
 
@@ -40,7 +40,7 @@ class PromotionController extends ArchiveAdminController
      */
     protected function getChannelModel()
     {
-        return ChannelModel::findModel(5);
+        return ChannelModel::findModel('promotion');
     }
 
     /**

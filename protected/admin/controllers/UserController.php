@@ -29,7 +29,7 @@ class UserController extends AdminController
 		}
 	
 		$this->render('//form_template', array(
-			'model' => $model,
+			'form' => $model,
 			'title' => '创建用户'
 		));
 	}
@@ -58,7 +58,7 @@ class UserController extends AdminController
 		}
 		
 		$this->render('//form_template', array(
-			'model' => $model,
+			'form' => $model,
 			'title' => '更新用户'
 		));
 	}
@@ -96,4 +96,3 @@ class UserController extends AdminController
 		);
 	}
 }
-?>

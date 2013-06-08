@@ -6,15 +6,16 @@
  */
 class ChannelModel extends CActiveRecord
 {
-    public $id;
+    public $name;
     public $title;
     public $table_name;
-    public $alias;
+    public $controller;
 
     private static $channelModels = array();
 
     /**
      * Returns the static model of the specified AR class.
+     * @param string $className
      * @return CActiveRecord the static model class
      */
     public static function model($className = __CLASS__)
@@ -32,7 +33,7 @@ class ChannelModel extends CActiveRecord
 
     public function primaryKey()
     {
-        return 'id';
+        return 'name';
     }
 
     /**
@@ -41,22 +42,19 @@ class ChannelModel extends CActiveRecord
     public function rules()
     {
         return array(
-            array('title, table_name, alias', 'required'),
-            array('id', 'required', 'on' => 'update')
+            array('name', 'match',
+                'pattern'=>'/^[a-zA-Z0-9_]{0,}$/',
+                'message'=>'模型名必须为字母、数字、下划线'
+            ),
+            array('name, title, table_name, controller', 'required')
         );
     }
 
     protected function beforeSave()
     {
         if ($this->getIsNewRecord()) {
-            if ($this->exists('alias=:alias', array(':alias' => $this->alias))) {
-                $this->addError('alias', '已经存在的控制器名称！');
-
-                return false;
-            }
-        } else {
-            if ($this->exists('id<>:id AND alias=:alias', array(':id' => $this->id, ':alias' => $this->alias))) {
-                $this->addError('alias', '已经存在的控制器名称！');
+            if ($this->exists('name=:name', array(':name' => $this->name))) {
+                $this->addError('alias', '已经存在的模型！');
 
                 return false;
             }
@@ -71,41 +69,40 @@ class ChannelModel extends CActiveRecord
     public function attributeLabels()
     {
         return array(
-            'id' => 'ID',
-            'title' => '模型名称',
+            'name' => '模型名',
+            'title' => '显示名称',
             'table_name' => '数据库表名',
-            'alias' => '控制器名称'
+            'controller' => '控制器名称'
         );
     }
 
-    public static function getChannelModelSelectOptions()
+    public static function fetchChannelModelSelectOptions()
     {
-        $sql = "SELECT id, title FROM {{channel_model}} ORDER BY id ASC";
+        $sql = "SELECT name, title FROM {{channel_model}} ORDER BY name ASC";
         $options = array();
         foreach (Yii::app()->db->createCommand($sql)->queryAll() as $row) {
-            $options[$row['id']] = $row['title'];
+            $options[$row['name']] = $row['title'];
         }
-
         return $options;
     }
 
-    public static function getTableName($id)
+    public static function getTableName($name)
     {
-        $sql = "SELECT table_name FROM {{channel_model}} WHERE id='{$id}'";
+        $sql = "SELECT table_name FROM {{channel_model}} WHERE name='{$name}'";
         if (false !== $row = Yii::app()->db->createCommand($sql)->queryRow()) {
             return $row['table_name'];
         }
     }
 
     /**
-     * @param $id
+     * @param $name
      * @return ChannelModel
      */
-    public static function findModel($id)
+    public static function findModel($name)
     {
-        if (!isset(self::$channelModels[$id])) {
-            self::$channelModels[$id] = self::model()->findByPk($id);
+        if (!isset(self::$channelModels[$name])) {
+            self::$channelModels[$name] = self::model()->findByPk($name);
         }
-        return self::$channelModels[$id];
+        return self::$channelModels[$name];
     }
 }

@@ -44,7 +44,7 @@ class TemplateController extends AdminController
 		$this->layout = '//layouts/iframe';
 		
 		return $this->render('//form_template', array(
-			'model' => $form,
+			'form' => $form,
 			'title' => '创建模板'
 		));
 		
@@ -70,7 +70,7 @@ class TemplateController extends AdminController
 		
 		$this->layout = '//layouts/iframe';
 		return $this->render('//form_template', array(
-			'model' => $form,
+			'form' => $form,
 			'title' => '更新模板'
 		));
 	}
@@ -163,4 +163,3 @@ class TemplateController extends AdminController
 		return $buttons;
 	}
 }
-?>

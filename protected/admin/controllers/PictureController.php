@@ -28,6 +28,6 @@ class PictureController extends ArchiveAdminController
      */
     protected function getChannelModel()
     {
-        return ChannelModel::findModel(3);
+        return ChannelModel::findModel('picture');
     }
 }

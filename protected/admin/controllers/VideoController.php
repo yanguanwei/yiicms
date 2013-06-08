@@ -35,7 +35,7 @@ class VideoController extends ArchiveAdminController
      */
     protected function getChannelModel()
     {
-        return ChannelModel::findModel(4);
+        return ChannelModel::findModel('video');
     }
 }
 

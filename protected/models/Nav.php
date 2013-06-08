@@ -46,7 +46,9 @@ class Nav extends CActiveRecord
 	{
 		return array(
 			array('id', 'required', 'on' => 'update'),
-			array('identifier, theme_id, type_id, title, url', 'required')
+            array('theme_id, type_id, parent_id', 'required', 'on' => 'insert'),
+			array('identifier, title, url', 'required'),
+            array('sort_id, enabled', 'safe')
 		);
 	}
 	
@@ -54,7 +56,7 @@ class Nav extends CActiveRecord
 	{
 		$this->identifier = trim($this->identifier);
 		
-		if ( $this->getScenario() === 'insert' ) {
+		if ($this->getScenario() === 'insert') {
 			if ( $this->exists("type_id=:type_id AND identifier=:identifier", array(
 					':type_id' => $this->type_id,
 					':identifier' => $this->identifier	
@@ -62,7 +64,7 @@ class Nav extends CActiveRecord
 				$this->addError('identifier', '已经存在的标识符！');
 				return false;
 			}
-		} else if ( $this->getScenario() === 'update' ) {
+		} else if ($this->getScenario() === 'update') {
 			if ( $this->exists("id<>:id AND type_id=:type_id AND identifier=:identifier", array(
 					':id' => $this->id,
 					':type_id' => $this->type_id,
@@ -104,7 +106,7 @@ class Nav extends CActiveRecord
 		);
 	}
 	
-	public static function getAllNavsForTreeSelect($theme_id, $type_id)
+	public static function fetchAllNavsForTreeSelect($theme_id, $type_id)
 	{
 		$conn = Yii::app()->db;
 		$theme_id = intval($theme_id);
@@ -120,12 +122,18 @@ class Nav extends CActiveRecord
 		return Yii::app()->db->createCommand($sql)->queryAll();
 	}
 	
-	public static function getNavTypeSelectOptions()
+	public static function fetchNavTypeSelectOptions($id = null)
 	{
-		return array(
+		$types = array(
 			0 => '主导航',
 			1 => '底部导航'	
 		);
+
+        if (null === $id) {
+            return $types;
+        }
+
+        return $types[$id];
 	}
 	
 	/**

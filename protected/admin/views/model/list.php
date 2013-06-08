@@ -17,10 +17,10 @@
 $this->widget('zii.widgets.grid.CGridView', array(
     'dataProvider'=>$dataProvider,
     'columns'=>array(
-    	'id',
+    	'name',
         'title',
         'table_name',
-    	'alias',
+    	'controller',
         array(
             'class'=>'CButtonColumn',
         	'template'=>'{update} {delete}'

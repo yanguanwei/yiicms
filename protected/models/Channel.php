@@ -18,11 +18,11 @@ class Channel extends CActiveRecord
     public $theme_id;
 
     /**
-     * 文档模型ID
+     * 文档模型名
      *
-     * @var int
+     * @var string
      */
-    public $model_id;
+    public $model_name;
 
     /**
      * 排序，越大越靠前
@@ -44,6 +44,8 @@ class Channel extends CActiveRecord
     public $channel_attach = 0;
 
     public $tags;
+
+    public $post_time;
 
     private $topChannel;
     private $channelAttachModel;
@@ -127,8 +129,8 @@ class Channel extends CActiveRecord
      */
     public function getChannelModel()
     {
-        if ($this->model_id && null === $this->channelModel) {
-            $this->channelModel = ChannelModel::findModel($this->model_id);
+        if ($this->model_name && null === $this->channelModel) {
+            $this->channelModel = ChannelModel::findModel($this->model_name);
         }
         return $this->channelModel;
     }
@@ -146,7 +148,8 @@ class Channel extends CActiveRecord
 
     /**
      * Returns the static model of the specified AR class.
-     * @return CActiveRecord the static model class
+     * @param string $className
+     * @return Channel
      */
     public static function model($className = __CLASS__)
     {
@@ -171,7 +174,7 @@ class Channel extends CActiveRecord
         return array(
             array('id', 'required', 'on' => 'update'),
             array('parent_id', 'required', 'on' => 'insert'),
-            array('title, model_id, theme_id', 'required')
+            array('title, model_name, theme_id', 'required')
         );
     }
 
@@ -202,7 +205,7 @@ class Channel extends CActiveRecord
         return array(
             'archive' => array(self::HAS_MANY, 'Archive', 'cid'),
             'counts' => array(self::STAT, 'Archive', 'cid'),
-            'childrens' => array(self::STAT, 'Category', 'parent_id')
+            'model' => array(self::BELONGS_TO, 'ChannelModel', 'model_name')
         );
     }
 
@@ -254,7 +257,7 @@ class Channel extends CActiveRecord
      * 返回指定栏目下所有子栏目ID
      *
      * @param int $parent_id
-     * @param boolean $hasModel 是否是指定了文档模型的栏目
+     * @internal param bool $hasModel 是否是指定了文档模型的栏目
      * @return multitype:number
      */
     public static function getSubChannelIds($parent_id)
@@ -309,11 +312,18 @@ class Channel extends CActiveRecord
      *
      * @return array
      */
-    public static function getTopChannels()
+    public static function fetchTopChannelsForNavigation()
     {
-        $sql = "SELECT c.id, c.title, c.theme_id, am.table_name, am.alias as model_alias From {{channel}} c LEFT JOIN {{channel_model}} am ON c.model_id=am.id WHERE c.parent_id='0' AND visible='1' ORDER BY c.sort_id DESC, c.id ASC";
+        $sql = "SELECT c.id, c.title, c.theme_id, am.table_name, am.controller From {{channel}} c LEFT JOIN {{channel_model}} am ON c.model_name=am.name WHERE c.parent_id='0' AND visible='1' ORDER BY c.sort_id DESC, c.id ASC";
 
         return Yii::app()->db->createCommand($sql)->queryAll();
+    }
+
+    public static function fetchChannelsForList($theme_id)
+    {
+        return Yii::app()->db->createCommand(
+            "SELECT c.id, c.sort_id, c.title, c.parent_id, c.visible, c.theme_id, am.title as archive_model FROM {{channel}} c LEFT JOIN {{channel_model}} am ON am.name=c.model_name WHERE theme_id='{$theme_id}' ORD" . "ER BY c.sort_id DESC, c.id ASC"
+        )->queryAll();
     }
 
     /**
@@ -322,14 +332,23 @@ class Channel extends CActiveRecord
      * @param int $id
      * @return string|null
      */
-    public static function getChannelTitle($id)
+    public static function findChannelTitle($id)
+    {
+        return self::findAttribute($id, 'title');
+    }
+
+    public static function findChannelModelName($id)
+    {
+        return self::findAttribute($id, 'model_name');
+    }
+
+    public static function findAttribute($id, $attribute)
     {
         $id = intval($id);
-        $sql = "SELECT title FROM {{channel}} WHERE id='{$id}'";
-        $row = Yii::app()->db->createCommand($sql)->queryRow();
-
+        $sql = "SELECT {$attribute} FROM {{channel}} WHERE id='{$id}'";
+        $row = Yii::app()->db->createCommand($sql)->queryRow(false);
         if ($row) {
-            return $row['title'];
+            return $row[0];
         }
     }
 
@@ -382,18 +401,6 @@ class Channel extends CActiveRecord
         return $rootId;
     }
 
-    public static function getThemeId($id)
-    {
-        $id = intval($id);
-        $sql = "SELECT theme_id From {{channel}} WHERE id='{$id}'";
-        $row = Yii::app()->db->createCommand($sql)->queryRow();
-        if ($row) {
-            return intval($row['theme_id']);
-        }
-
-        return 0;
-    }
-
     /**
      * 根据栏目ID返回其绑定的模型名
      *
@@ -402,28 +409,11 @@ class Channel extends CActiveRecord
      */
     public static function findChannelModel($id)
     {
-        $sql = "SELECT cm.table_name From {{channel}} c LEFT JOIN {{channel_model}} cm ON cm.id=c.model_id WHERE c.id='{$id}'";
+        $sql = "SELECT cm.table_name From {{channel}} c LEFT JOIN {{channel_model}} cm ON cm.name=c.model_name WHERE c.id='{$id}'";
         $row = Yii::app()->db->createCommand($sql)->queryRow();
         if ($row) {
             return $row['table_name'];
         }
-    }
-
-    /**
-     * 返回该栏目绑定的模型ID，没有绑定返回0
-     *
-     * @param int $id
-     * @return int
-     */
-    public static function getChannelModelId($id)
-    {
-        $sql = "SELECT model_id FROM {{channel}} WHERE id='{$id}'";
-        $row = Yii::app()->db->createCommand($sql)->queryRow();
-        if ($row) {
-            return intval($row['model_id']);
-        }
-
-        return 0;
     }
 
     /**
@@ -432,45 +422,9 @@ class Channel extends CActiveRecord
      * @param int $id
      * @return number
      */
-    public static function getChannelThemeId($id)
+    public static function findChannelThemeId($id)
     {
-        $sql = "SELECT theme_id FROM {{channel}} WHERE id='{$id}'";
-        $row = Yii::app()->db->createCommand($sql)->queryRow();
-        if ($row) {
-            return intval($row['theme_id']);
-        }
-
-        return 0;
-    }
-
-    public static function getChannelSelectOptions($theme_id, $model_id)
-    {
-        $theme_id = intval($theme_id);
-        $model_id = intval($model_id);
-
-        $conn = Yii::app()->db;
-        $command = $conn->createCommand(
-            "SELECT id, title FROM {{channel}} WHERE theme_id='{$theme_id}' AND `model_id`='{$model_id}' AND `visible`='1' ORDER BY sort_id DESC, id ASC"
-        );
-
-        $options = array();
-
-        foreach ($command->queryAll() as $row) {
-            $options[$row['id']] = $row['title'];
-        }
-
-        return $options;
-    }
-
-    public static function getChannelTreeSelectOptions($theme_id, $model_id)
-    {
-        $theme_id = intval($theme_id);
-        $model_id = intval($model_id);
-
-        $conn = Yii::app()->db;
-        $sql = "SELECT id, title, parent_id FROM {{channel}} WHERE theme_id='{$theme_id}' AND `model_id`='{$model_id}' ORDER BY sort_id DESC, id ASC";
-
-        return $conn->createCommand($sql)->queryAll();
+        return intval(self::findAttribute($id, 'theme_id'));
     }
 
     /**

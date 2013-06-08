@@ -31,6 +31,6 @@ class NewsController extends ArchiveAdminController
      */
     protected function getChannelModel()
     {
-        return ChannelModel::findModel(1);
+        return ChannelModel::findModel('news');
     }
 }

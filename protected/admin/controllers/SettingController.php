@@ -24,7 +24,7 @@ class SettingController extends AdminController
 		//$model->attributes = Yii::app()->params->site;
 		
 		$this->render($key, array(
-			'model' => $model
+			'form' => $model
 		));
 	}
 }

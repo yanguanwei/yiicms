@@ -39,6 +39,6 @@ class NewsForm extends ArchiveForm
 
     protected function getChannelModel()
     {
-        return ChannelModel::findModel(1);
+        return ChannelModel::findModel('news');
     }
 }

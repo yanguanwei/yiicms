@@ -18,6 +18,8 @@ $config['params'] = array (
   'hotline' => '0574-87903707',
   'keywords' => '宁波,软件',
   'description' => '宁波软件园，宁波智慧园',
+  'aaa' => '/uploads/images/index-hottest-img.png',
+  'sadfasd' => 'asdfsdf',
   'theme_id' => 1,
 );
 Yii::createWebApplication(CMap::mergeArray($main, $config))->run();	

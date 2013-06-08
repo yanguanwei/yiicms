@@ -25,7 +25,7 @@ class Archive extends CActiveRecord
     public $cover;
     public $cid;
     public $uid;
-    public $model_id;
+    public $model_name;
     public $template;
     public $status;
     public $is_highlight;
@@ -72,7 +72,7 @@ class Archive extends CActiveRecord
     public function rules()
     {
         return array(
-            array('cid, title, model_id', 'required', 'on' => 'insert'),
+            array('cid, title, model_name', 'required', 'on' => 'insert'),
             array('id', 'required', 'on' => 'update')
         );
     }
@@ -307,32 +307,6 @@ class Archive extends CActiveRecord
         $sql = "SELECT * FROM `{{archive}}` WHERE `id`='{$id}'";
 
         return Yii::app()->db->createCommand($sql)->queryRow();
-    }
-
-    public static function dingArchives($ids, $disabled = false)
-    {
-        $ding = $disabled ? 0 : 1;
-        $sql = "UPDATE {{archive}} SET `is_top`='{$ding}' WHERE `id`";
-        if (is_array($ids)) {
-            $sql .= " IN ('" . implode("', '", $ids) . "')";
-        } else {
-            $sql .= "='{$ids}'";
-        }
-
-        return Yii::app()->db->createCommand($sql)->execute();
-    }
-
-    public static function highlightArchives($ids, $disabled = false)
-    {
-        $highlight = $disabled ? 0 : 1;
-        $sql = "UPDATE {{archive}} SET `is_highlight`='{$highlight}' WHERE `id`";
-        if (is_array($ids)) {
-            $sql .= " IN ('" . implode("', '", $ids) . "')";
-        } else {
-            $sql .= "='{$ids}'";
-        }
-
-        return Yii::app()->db->createCommand($sql)->execute();
     }
 
     public static function updateTags($aid, $tags)

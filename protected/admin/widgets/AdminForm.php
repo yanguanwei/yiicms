@@ -209,7 +209,7 @@ class AdminForm extends CWidget
     {
         list($model, $name) = $this->parseAttribute($attribute);
         $value = CHtml::resolveValue($model, $name);
-        return $this->renderHiddenTextField($attribute, Channel::getChannelTitle($value), $note, $htmlOptions);
+        return $this->renderHiddenTextField($attribute, Channel::findChannelTitle($value), $note, $htmlOptions);
     }
 
     public function renderSelectField($attribute, array $data, $note = null, array $htmlOptions = array())
@@ -238,43 +238,6 @@ class AdminForm extends CWidget
             array(
                 'attribute' => $attribute,
                 'field' => $this->treeSelect($attribute, $data, $rootId, $htmlOptions),
-                'note' => $note
-            )
-        );
-    }
-
-    public function renderHiddenDisabledSelectField($attribute, array $data, $note = null, array $htmlOptions = array())
-    {
-        $field = $this->renderHiddenField($attribute);
-
-        $htmlOptions['disabled'] = 'disabled';
-        list($model, $attr) = $this->parseAttribute($attribute);
-        $field .= $this->form->dropDownList($model, $attr, $data, $htmlOptions);
-
-        return $this->renderField(
-            array(
-                'attribute' => $attribute,
-                'field' => $field,
-                'note' => $note
-            )
-        );
-    }
-
-    public function renderHiddenDisabledTreeSelectField(
-        $attribute,
-        array $data,
-        $note = null,
-        array $htmlOptions = array()
-    ) {
-        $field = $this->renderHiddenField($attribute);
-
-        $htmlOptions['disabled'] = 'disabled';
-        $field .= $this->treeSelect($attribute, $data, 0, $htmlOptions);
-
-        return $this->renderField(
-            array(
-                'attribute' => $attribute,
-                'field' => $field,
                 'note' => $note
             )
         );

@@ -35,7 +35,7 @@ class TagController extends AdminController
         }
 
         $this->render('//form_template', array(
-            'model' => $form,
+            'form' => $form,
             'title' => '创建标签类型',
             'view' => 'type_form'
         ));
@@ -59,7 +59,7 @@ class TagController extends AdminController
         }
 
         $this->render('//form_template', array(
-            'model' => $form,
+            'form' => $form,
             'title' => '更新标签类型',
             'view' => 'type_form'
         ));
@@ -123,7 +123,7 @@ class TagController extends AdminController
         $this->layout = '/layouts/iframe';
 
         $this->render('//form_template', array(
-            'model' => $form,
+            'form' => $form,
             'title' => '创建标签'
         ));
     }
@@ -148,7 +148,7 @@ class TagController extends AdminController
         $this->layout = '/layouts/iframe';
 
         $this->render('//form_template', array(
-            'model' => $form,
+            'form' => $form,
             'title' => '更新标签'
         ));
     }

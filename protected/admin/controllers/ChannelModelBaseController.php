@@ -33,8 +33,8 @@ abstract class ChannelModelBaseController extends AdminController
 
         $parentChannel = $channel->getParentChannel();
 
-        if ($parentChannel && $parentChannel->id == $cid) {
-            return $this->redirect(array('index', 'cid' => $parentChannel->id));
+        if (!$parentChannel) {
+            return $this->redirect(array('index', 'cid' => $cid));
         }
 
         if ($parentChannel) {
@@ -254,12 +254,12 @@ abstract class ChannelModelBaseController extends AdminController
 
     protected function getListTemplate()
     {
-        return '/' . $this->getChannelModel()->alias . '/list';
+        return '/' . $this->getChannelModel()->controller . '/list';
     }
 
     protected function getFormTemplate()
     {
-        return '/' . $this->getChannelModel()->alias . '/form';
+        return '/' . $this->getChannelModel()->controller . '/form';
     }
 
     public function getShortcuts()
@@ -270,13 +270,13 @@ abstract class ChannelModelBaseController extends AdminController
             $model = $this->getChannelModel();
             $shortcuts = array(
                 array(
-                    'shortcut' => $this->getChannelModelIcon($model->id, 'list'),
+                    'shortcut' => $this->getChannelModelIcon($model->name, 'list'),
                     'label' => $this->getChannel()->title,
                     'url' => $this->createUrl('list', array('cid' => $this->cid))
                 ),
                 array(
-                    'shortcut' => $this->getChannelModelIcon($model->id, 'create'),
-                    'label' => '创建' . $model->title,
+                    'shortcut' => $this->getChannelModelIcon($model->name, 'create'),
+                    'label' => '创建' . $this->getChannel()->title,
                     'url' => $this->createUrl('create', array('cid' => $this->cid))
                 )
             );
@@ -293,15 +293,15 @@ abstract class ChannelModelBaseController extends AdminController
         );
 
         $icons = array(
-            2 => array(
+            'link' => array(
                 'list' => $this->asset('images/icons/favorite.png'),
                 'create' => $this->asset('images/icons/add.png')
             ),
-            3 => array(
+            'picture' => array(
                 'list' => $this->asset('images/icons/picture.png'),
                 'create' => $this->asset('images/icons/image_add_48.png')
             ),
-            4 => array(
+            'video' => array(
                 'list' => $this->asset('images/icons/video_list.png'),
                 'create' => $this->asset('images/icons/video.png')
             )

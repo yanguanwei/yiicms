@@ -1,8 +1,3 @@
-<style type="text/css">
-    .table-filters { border-bottom: 1px solid #CCCCCC; padding: 5px 0; margin: 0 0 10px 0;}
-    .table-filters label { font-size: bold; display: inline-block; margin-right: 10px;}
-
-</style>
 <?php
 $script = <<<code
 $('td.title-column').each(function() {
@@ -70,14 +65,9 @@ $widget = $this->beginWidget('application.widgets.Tabs', array(
         'defaultTab' => $defaultTab
     ));
 
-if ($filters) {
-    echo '<form class="table-filters" method="get">';
-    echo '<input type="hidden" name="r" value="' . $_GET['r'] .'" />';
-    echo '<input type="hidden" name="cid" value="' . $_GET['cid'] .'" />';
-    echo '<label>筛选: </label>';
-    echo implode("\n", $filters) . "\n";
-    echo '<input type="submit" value="搜索" class="button" /></form>';
-}
+$this->renderPartial('/blocks/filters', array(
+    'filters' => $filters
+));
 
 $widget->beginTab($defaultTab);
 
@@ -88,6 +78,7 @@ $table = $this->beginWidget('apps.ext.young.ListTable', array(
     'titles' => array(
       'id' => 'ID',
       'title' => '标题',
+      'status' => '状态',
       'update_time' => '更新时间',
       'operate' => '操作'
     )
@@ -108,6 +99,7 @@ while( $table->nextRow() ) {
         'cover' => $table->data['cover'] ? 1 : 0
       )
     ),
+    $table->cell('status', Archive::fetchArchiveStatusOptions($table->data['status'])),
     $table->cell('update_time', array('type' => 'dateTime')),
     $table->cell('operate', $table->updateButton() . $table->deleteButton())
   );

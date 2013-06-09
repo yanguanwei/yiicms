@@ -89,9 +89,6 @@ abstract class ArchiveForm extends CFormModel
 
             if ($archive->save()) {
                 $this->id = $archive->id;
-
-                $this->updateTags();
-
                 return true;
             } else {
                 $this->addErrors($archive->getErrors());
@@ -100,21 +97,6 @@ abstract class ArchiveForm extends CFormModel
         }
 
         throw new CException("验证失败！");
-    }
-
-    protected function updateTags()
-    {
-        if ($this->tags) {
-            $tags = array();
-            foreach ($this->tags as $key => $value) {
-                if ($value) {
-                    $tags[$key] = $value;
-                }
-            }
-            if ($tags) {
-                Archive::updateTags($this->id, $tags);
-            }
-        }
     }
 
     /**

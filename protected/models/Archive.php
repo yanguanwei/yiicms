@@ -36,17 +36,24 @@ class Archive extends CActiveRecord
     public $update_time;
     public $visits = 0;
 
-    public static function getStatusOptions()
+    public static function fetchArchiveStatusOptions($status = null)
     {
-          return array(
-              self::STATUS_DRAFT => '未发布',
-              self::STATUS_PUBLISHED => '已发布'
-          );
+        $array = array(
+            self::STATUS_DRAFT => '未发布',
+            self::STATUS_PUBLISHED => '已发布'
+        );
+
+        if ($status === null) {
+            return $array;
+        }
+
+        return $array[$status];
     }
 
     /**
      * Returns the static model of the specified AR class.
-     * @return CActiveRecord the static model class
+     * @param string $className
+     * @return Archive the static model class
      */
     public static function model($className = __CLASS__)
     {
@@ -147,25 +154,42 @@ class Archive extends CActiveRecord
         );
     }
 
-    public function scopes()
+    public function published()
     {
-        return array(
-            'published' => array(
-                'condition' => "status='" . self::STATUS_PUBLISHED . "'"
-            )
-        );
+        $this->getDbCriteria()->addCondition("status='" . self::STATUS_PUBLISHED . "'");
+
+        return $this;
+    }
+
+    public function top()
+    {
+        $this->getDbCriteria()->addCondition("is_top='1'");
+
+        return $this;
     }
 
     public function recently($limit = 5)
     {
         $this->getDbCriteria()->mergeWith(
             array(
-                'order' => 'update_time DESC',
+                'order' => 'is_top DESC, update_time DESC',
                 'limit' => $limit,
             )
         );
 
         return $this;
+    }
+
+    public function inChannels($cid)
+    {
+        $this->getDbCriteria()->compare('cid', $cid);
+
+        return $this;
+    }
+
+    public function getViewUrl()
+    {
+        return Yii::app()->controller->createUrl('archive/detail', array('id' => $this->id));
     }
 
     /**
@@ -203,27 +227,6 @@ class Archive extends CActiveRecord
         }
 
         return 0;
-    }
-
-    /**
-     * 指删除
-     * @param int|array $ids
-     * @return number
-     */
-    public static function deleteArchives($ids)
-    {
-        if (!is_array($ids)) {
-            $ids = array($ids);
-        }
-
-        Yii::app()->db->createCommand(
-            "DELETE FROM {{archive_tag}} WHERE aid IN('" . implode("', '", $ids) . "')"
-        )->execute();
-
-        $criteria = new CDbCriteria();
-        $criteria->addInCondition('id', $ids);
-
-        return self::model()->deleteAll($criteria);
     }
 
     /**
@@ -308,39 +311,4 @@ class Archive extends CActiveRecord
 
         return Yii::app()->db->createCommand($sql)->queryRow();
     }
-
-    public static function updateTags($aid, $tags)
-    {
-        $aid = intval($aid);
-        $db = Yii::app()->db;
-        $db->createCommand("DELETE FROM {{archive_tag}} WHERE aid='{$aid}'")->execute();
-
-        if ($tags) {
-            $sql = "INSERT INTO {{archive_tag}} (aid, tid, type_name) VALUES";
-            $values = array();
-            foreach ($tags as $type_name => $tid) {
-                $tid = intval($tid);
-                if ($tid) {
-                    $values[] = "({$aid}, {$tid}, '{$type_name}')";
-                }
-            }
-            $sql .= implode(', ', $values);
-
-            return $db->createCommand($sql)->execute();
-        }
-    }
-
-    public static function getTags($aid)
-    {
-        $aid = intval($aid);
-        $tags = array();
-        $sql = "SELECT aid, tid, type_name FROM {{archive_tag}} WHERE aid='{$aid}'";
-        foreach (Yii::app()->db->createCommand($sql)->queryAll() as $row) {
-            $tags[$row['type_name']] = $row['tid'];
-        }
-
-        return $tags;
-    }
 }
-
-?>

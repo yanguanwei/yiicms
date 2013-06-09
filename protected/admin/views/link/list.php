@@ -49,6 +49,10 @@ $widget = $this->beginWidget('application.widgets.Tabs', array(
         'defaultTab' => $defaultTab
     ));
 
+$this->renderPartial('/blocks/filters', array(
+    'filters' => $filters
+));
+
 $widget->beginTab($defaultTab);
 
 $table = $this->beginWidget('apps.ext.young.ListTable', array(

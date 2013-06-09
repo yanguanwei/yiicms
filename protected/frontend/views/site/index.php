@@ -7,11 +7,19 @@
                 box.width = 667; //宽度
                 box.height = 293;//高度
                 box.autoplayer = 5;//自动播放间隔时间
-
                 //box.add({"url":"图片地址","title":"悬浮标题","href":"链接地址"})
-                box.add({"url":"<?php echo $this->asset('images/banner1.jpg');?>","href":"###","title":"悬浮提示标题1"})
-                box.add({"url":"<?php echo $this->asset('images/banner2.jpg');?>","href":"###","title":"悬浮提示标题2"})
-                box.add({"url":"<?php echo $this->asset('images/banner3.jpg');?>","href":"###","title":"悬浮提示标题3"})
+
+<?php
+//幻灯片
+foreach ($this->getTopArchivesByChannelId(20) as $archive) {
+    echo sprintf(
+        'box.add({"url":"%s","href":"%s","title":"%s"});',
+        $archive->cover,
+        $archive->getViewUrl(),
+        $archive->title
+    );
+}
+?>
                 box.show();
             </script>
         </div>
@@ -19,15 +27,23 @@
     <div class="index-trends fr">
         <h4 class="title"><a href="#" class="more fr">更多</a></h4>
         <div class="trends-wrap">
-            <div class="trends-first clearfix">
-                <img class="fl pic" src="<?php echo $this->asset('images/index-trends-img.png');?>" /><p>品牌促进中心家具品牌专业委员会昨天宣告成立。委员会作为国内首个服务家居生活用品品牌。<a href="#">[详细]</a></p>
-            </div>
+<?php
+$ul = array();
+foreach ($this->getArchivesByChannelId(array(17, 18), 6) as $i => $archive) {
+    if ($i==0) {
+        echo sprintf(
+            '<div class="trends-first clearfix"><img class="fl pic" src="%s" /><p>%s<a href="%s">[详细]</a></p></div>',
+            $archive->cover,
+            $archive->description,
+            $archive->getViewUrl()
+        );
+    } else {
+        $ul[] = sprintf('<li><a href="%s">%s</a></li>', $archive->getViewUrl(), $archive->title);
+    }
+}
+?>
             <ul class="trends-list">
-                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
-                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
-                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
-                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
-                <li><a href="#">中国（上海）包子文化节隆重举行</a></li>
+                <?php echo implode("\n", $ul)?>
             </ul>
         </div>
     </div>
@@ -58,13 +74,14 @@
             }
         </script>
 
-        <?php
-            $lis = $imgs = array();
-            foreach ($this->getTopArchivesByChannelId(4, 6) as $archive) {
-                $lis[] = sprintf('<li>%s</li>', $archive->title);
-                $imgs[] = sprintf('<div class=""><img src="%s" /></div>', $archive->cover);
-            }
-        ?>
+<?php
+//最热购物街
+$lis = $imgs = array();
+foreach ($this->getTopArchivesByChannelId(4, 6) as $archive) {
+    $lis[] = sprintf('<li>%s</li>', $archive->title);
+    $imgs[] = sprintf('<div class=""><img src="%s" /></div>', $archive->cover);
+}
+?>
 
         <ul class="hottest-tabLi fl" id="hottest-tabLi">
             <?php echo implode("\n", $lis)?>

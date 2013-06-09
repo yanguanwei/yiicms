@@ -22,7 +22,8 @@ class Promotion extends CActiveRecord
 
     /**
      * Returns the static model of the specified AR class.
-     * @return CActiveRecord the static model class
+     * @param string $className
+     * @return Promotion the static model class
      */
     public static function model($className = __CLASS__)
     {
@@ -104,17 +105,5 @@ class Promotion extends CActiveRecord
         $this->end_time = date('Y-m-d', $this->end_time);
 
         return parent::afterFind();
-    }
-
-    public static function deletePromotion($ids)
-    {
-        if (!is_array($ids)) {
-            $ids = array($ids);
-        }
-
-        $criteria = new CDbCriteria();
-        $criteria->addInCondition('id', $ids);
-
-        return self::model()->deleteAll($criteria);
     }
 }

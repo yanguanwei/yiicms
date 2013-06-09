@@ -29,6 +29,8 @@ echo $this->renderTextRow('title', null, array('class' => 'text-input medium-inp
 
 echo $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input medium-input'));
 
+echo $this->renderChannelTagSelectRow();
+
 echo $this->renderTextRow(
     'url',
     "以http://开头",

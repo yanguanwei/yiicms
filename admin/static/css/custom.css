@@ -36,6 +36,8 @@ td.update_time-column
 th.operate-column, td.operate-column { text-align:center; width:80px;}
 td.operate-column a { margin:0 5px;}
 
+th.status-column, td.status-column { text-align: center; width: 80px;}
+
 .table tfoot .bulk-actions { float:left;}
 .table tfoot .pager { float:right;}
 .button,

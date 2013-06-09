@@ -57,9 +57,7 @@ class AdminForm extends CWidget
 
     public function renderArchiveStatusSelectField($node = null, array $htmlOptions = array())
     {
-        return $this->renderSelectField('status', array(
-                '未发布', '发布'
-            ), $node, $htmlOptions);
+        return $this->renderSelectField('status', Archive::fetchArchiveStatusOptions(), $node, $htmlOptions);
     }
 
     public function renderChannelSelectField($attribute, $parent_id, array $htmlOptions = array())

@@ -18,12 +18,18 @@ class NewsController extends ArchiveAdminController
 
         $form->setAttributes($news->getAttributes(), false);
         $form->setAttributes($news->archive->getAttributes(), false);
-        $form->tags = Archive::getTags($id);
+
+        parent::onFormUpdate($id, $form);
     }
 
-    protected function onPrevDelete(array $id)
+    protected function deleteModel(array $ids)
     {
-        News::deleteNews($id);
+        parent::deleteModel($ids);
+
+        $criteria = new CDbCriteria();
+        $criteria->addInCondition('id', $ids);
+
+        return News::model()->deleteAll($criteria);
     }
 
     /**

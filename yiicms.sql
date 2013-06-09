@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2013 年 06 月 07 日 17:23
+-- 生成日期: 2013 年 06 月 09 日 14:22
 -- 服务器版本: 5.5.31
 -- PHP 版本: 5.4.15-1~precise+1
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `y_archive` (
   `cover` varchar(100) NOT NULL,
   `cid` int(10) unsigned NOT NULL DEFAULT '0',
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
-  `model_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `model_name` varchar(32) NOT NULL,
   `template` varchar(100) NOT NULL,
   `visits` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -43,34 +43,31 @@ CREATE TABLE IF NOT EXISTS `y_archive` (
   `post_time` int(10) unsigned NOT NULL,
   `update_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `archive_cid_fpk` (`cid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  KEY `archive_cid_fpk` (`cid`),
+  KEY `model_name` (`model_name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 --
 -- 转存表中的数据 `y_archive`
 --
 
-
--- --------------------------------------------------------
-
---
--- 表的结构 `y_archive_tag`
---
-
-CREATE TABLE IF NOT EXISTS `y_archive_tag` (
-  `aid` int(10) unsigned NOT NULL DEFAULT '0',
-  `tid` int(10) unsigned NOT NULL DEFAULT '0',
-  `type_name` varchar(32) NOT NULL,
-  KEY `aid` (`aid`),
-  KEY `tid` (`tid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- 转存表中的数据 `y_archive_tag`
---
-
-INSERT INTO `y_archive_tag` (`aid`, `tid`, `type_name`) VALUES
-(3, 8, 'location');
+INSERT INTO `y_archive` (`id`, `title`, `cover`, `cid`, `uid`, `model_name`, `template`, `visits`, `status`, `is_highlight`, `is_top`, `keywords`, `description`, `post_time`, `update_time`) VALUES
+(5, 'sdfgsdfg43534', '', 5, 1, 'promotion', '0', 0, 1, 1, 1, '', '', 1370672555, 1370749182),
+(10, '天一广场', '/uploads/images/index-hottest-img.png', 4, 1, 'picture', '0', 0, 1, 0, 1, '', '', 1370681204, 1370681160),
+(11, '鼓楼商业步行街', '/uploads/images/index-hottest-img.png', 4, 1, 'picture', '0', 0, 1, 0, 1, '', '', 1370681250, 1370681160),
+(12, '江北万达广场', '/uploads/images/index-hottest-img.png', 4, 1, 'picture', '0', 0, 1, 0, 1, '', '', 1370681304, 1370681220),
+(13, '南部商务区', '/uploads/images/index-hottest-img.png', 4, 1, 'picture', '0', 0, 1, 0, 1, '', '', 1370681326, 1370681280),
+(14, '联盛商业广场', '/uploads/images/index-hottest-img.png', 4, 1, 'picture', '0', 0, 1, 0, 1, '', '', 1370681867, 1370681760),
+(15, '万达广场', '/uploads/images/index-hottest-img.png', 4, 1, 'picture', '0', 0, 1, 0, 1, '', '', 1370681984, 1370681940),
+(16, 'banner1', '/uploads/images/banner1.jpg', 20, 1, 'news', '0', 0, 1, 0, 1, '', '', 1370740714, 1370740620),
+(17, 'banner2', '/uploads/images/banner2.jpg', 20, 1, 'news', '0', 0, 1, 0, 1, '', '', 1370740738, 1370740680),
+(18, 'banner3', '/uploads/images/banner3.jpg', 20, 1, 'news', '0', 0, 1, 0, 1, '', '', 1370740757, 1370740740),
+(19, '品牌促进中心家具品牌专业委员会昨天宣告成立', '/uploads/images/index-trends-img.png', 17, 1, 'news', '0', 0, 1, 0, 1, '', '品牌促进中心家具品牌专业委员会昨天宣告成立。委员会作为国内首个服务家居生活用品品牌', 1370742958, 1370742840),
+(20, '中国（上海）包子文化节隆重举行', '', 18, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743003, 1370742960),
+(21, '中国（上海）包子文化节隆重举行', '', 18, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743020, 1370742960),
+(22, '中国（上海）包子文化节隆重举行', '', 18, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743029, 1370743020),
+(23, '中国（上海）包子文化节隆重举行', '', 17, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743039, 1370743020),
+(24, '中国（上海）包子文化节隆重举行', '', 17, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743056, 1370743020);
 
 -- --------------------------------------------------------
 
@@ -83,7 +80,8 @@ CREATE TABLE IF NOT EXISTS `y_channel` (
   `title` varchar(50) NOT NULL,
   `parent_id` int(10) unsigned NOT NULL DEFAULT '0',
   `theme_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `model_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `model_name` varchar(32) NOT NULL,
+  `channel_attach` varchar(32) NOT NULL,
   `channel_template` varchar(100) NOT NULL,
   `archive_template` varchar(100) NOT NULL,
   `visible` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -92,21 +90,29 @@ CREATE TABLE IF NOT EXISTS `y_channel` (
   `description` varchar(255) NOT NULL,
   `post_time` int(10) unsigned NOT NULL DEFAULT '0',
   `tags` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+  PRIMARY KEY (`id`),
+  KEY `model_name` (`model_name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- 转存表中的数据 `y_channel`
 --
 
-INSERT INTO `y_channel` (`id`, `title`, `parent_id`, `theme_id`, `model_id`, `channel_template`, `archive_template`, `visible`, `sort_id`, `keywords`, `description`, `post_time`, `tags`) VALUES
-(1, '主题活动', 0, 1, 1, '', '', 1, 0, '', '', 1370491136, ''),
-(2, '购物街图片', 0, 1, 3, '', '', 1, 0, '', '', 1370593976, 'location'),
-(3, '商家', 0, 1, 1, '', '', 1, 0, '', '', 1370491183, ''),
-(4, '旅游购物', 0, 1, 1, '', '', 1, 0, '', '', 1370491202, ''),
-(5, '促销信息', 0, 1, 5, '', '', 1, 0, '', '', 1370589500, ''),
-(6, '精彩瞬间', 0, 1, 1, '', '', 1, 0, '', '', 1370491236, ''),
-(7, '支持单位', 0, 1, 2, '', '', 1, 0, '', '', 1370491272, '');
+INSERT INTO `y_channel` (`id`, `title`, `parent_id`, `theme_id`, `model_name`, `channel_attach`, `channel_template`, `archive_template`, `visible`, `sort_id`, `keywords`, `description`, `post_time`, `tags`) VALUES
+(1, '主题活动', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370491136, ''),
+(3, '商家', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370491183, ''),
+(4, '旅游购物', 0, 1, 'picture', 'picture', '', '', 1, 0, '', '', 1370491202, ''),
+(5, '促销信息', 0, 1, 'promotion', '', '', '', 1, 0, '', '', 1370652010, 'location|promotion_category|promotion_type'),
+(6, '精彩瞬间', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370491236, ''),
+(7, '支持单位', 0, 1, 'link', '', '', '', 1, 0, '', '', 1370491272, ''),
+(13, '快乐购物', 1, 1, 'news', 'link', '', '', 1, 0, '', '', 1370652740, 'happy_shopping'),
+(14, '时尚生活', 1, 1, 'news', 'link', '', '', 1, 0, '', '', 1370657341, ''),
+(15, '满意消费', 1, 1, 'news', 'link', '', '', 1, 0, '', '', 1370657363, ''),
+(16, '购物节动态', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370740361, ''),
+(17, '最新资讯', 16, 1, 'news', '', '', '', 1, 0, '', '', 1370740390, ''),
+(18, '活动预告', 16, 1, 'news', '', '', '', 1, 0, '', '', 1370740424, ''),
+(19, '媒体报道', 16, 1, 'news', '', '', '', 1, 0, '', '', 1370740437, ''),
+(20, '幻灯片', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370740646, '');
 
 -- --------------------------------------------------------
 
@@ -116,18 +122,16 @@ INSERT INTO `y_channel` (`id`, `title`, `parent_id`, `theme_id`, `model_id`, `ch
 
 CREATE TABLE IF NOT EXISTS `y_channel_alias` (
   `id` int(10) unsigned NOT NULL DEFAULT '0',
-  `identifier` char(16) NOT NULL,
   `alias` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `identifier` (`identifier`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `y_channel_alias`
 --
 
-INSERT INTO `y_channel_alias` (`id`, `identifier`, `alias`) VALUES
-(5, '64f11c7332e4f868', 'promotions');
+INSERT INTO `y_channel_alias` (`id`, `alias`) VALUES
+(5, 'promotions');
 
 -- --------------------------------------------------------
 
@@ -136,23 +140,23 @@ INSERT INTO `y_channel_alias` (`id`, `identifier`, `alias`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `y_channel_model` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
   `title` varchar(50) NOT NULL,
   `table_name` varchar(20) NOT NULL,
-  `alias` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+  `controller` varchar(50) NOT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `y_channel_model`
 --
 
-INSERT INTO `y_channel_model` (`id`, `title`, `table_name`, `alias`) VALUES
-(1, '新闻', 'archive', 'news'),
-(2, '友情链接', 'link', 'link'),
-(3, '图片', 'archive', 'picture'),
-(4, '视频', 'archive', 'video'),
-(5, '促销', 'archive', 'promotion');
+INSERT INTO `y_channel_model` (`name`, `title`, `table_name`, `controller`) VALUES
+('link', '链接', 'link', 'link'),
+('news', '新闻', 'archive', 'news'),
+('picture', '图片', 'archive', 'picture'),
+('promotion', '促销', 'archive', 'promotion'),
+('video', '视频', 'archive', 'video');
 
 -- --------------------------------------------------------
 
@@ -222,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `y_link` (
   `sort_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `post_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- 转存表中的数据 `y_link`
@@ -235,7 +239,23 @@ INSERT INTO `y_link` (`id`, `cid`, `title`, `url`, `logo`, `visible`, `sort_id`,
 (4, 7, '爱握乐', 'http://', '/uploads/images/logo/index-unit-img4.png', 1, 0, 1370493811),
 (5, 7, '宁波银行', 'http://', '/uploads/images/logo/index-unit-img5.png', 1, 0, 1370493835),
 (6, 7, '好又多量贩', 'http://', '/uploads/images/logo/index-unit-img6.png', 1, 0, 1370493871),
-(7, 7, '中国银行', 'http://', '/uploads/images/logo/index-unit-img7.png', 1, 0, 1370493895);
+(7, 7, '中国银行', 'http://', '/uploads/images/logo/index-unit-img7.png', 1, 0, 1370493895),
+(8, 7, 'sdfgsdfg', 'http://', '/uploads/images/logo.jpg', 1, 0, 1370676273),
+(10, 4, 'sdfgsdg', 'http://', '/uploads/images/logo.jpg', 1, 0, 1370680863);
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `y_model_tag`
+--
+
+CREATE TABLE IF NOT EXISTS `y_model_tag` (
+  `id` int(10) unsigned NOT NULL DEFAULT '0',
+  `tid` int(10) unsigned NOT NULL DEFAULT '0',
+  `model_name` varchar(32) NOT NULL,
+  `type_name` varchar(32) NOT NULL,
+  KEY `tid` (`tid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -282,6 +302,21 @@ CREATE TABLE IF NOT EXISTS `y_news` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- 转存表中的数据 `y_news`
+--
+
+INSERT INTO `y_news` (`id`, `content`, `source`) VALUES
+(16, '<p>\r\n	banner1</p>\r\n', ''),
+(17, '<p>\r\n	banner2</p>\r\n', ''),
+(18, '<p>\r\n	banner3</p>\r\n', ''),
+(19, '<p>\r\n	品牌促进中心家具品牌专业委员会昨天宣告成立。委员会作为国内首个服务家居生活用品品牌</p>\r\n', ''),
+(20, '<p>\r\n	中国（上海）包子文化节隆重举行</p>\r\n', ''),
+(21, '<p>\r\n	中国（上海）包子文化节隆重举行</p>\r\n', ''),
+(22, '<p>\r\n	中国（上海）包子文化节隆重举行</p>\r\n', ''),
+(23, '<p>\r\n	中国（上海）包子文化节隆重举行</p>\r\n', ''),
+(24, '<p>\r\n	中国（上海）包子文化节隆重举行</p>\r\n', '');
+
 -- --------------------------------------------------------
 
 --
@@ -300,6 +335,13 @@ CREATE TABLE IF NOT EXISTS `y_promotion` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- 转存表中的数据 `y_promotion`
+--
+
+INSERT INTO `y_promotion` (`id`, `promotion_type`, `promotion_category`, `location`, `discounts`, `start_time`, `end_time`, `content`) VALUES
+(5, 6, 1, 8, '', 1371052800, 1372435200, '<p>\r\n	dfg</p>\r\n');
+
 -- --------------------------------------------------------
 
 --
@@ -312,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `y_tag` (
   `title` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `type_name` (`type_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 --
 -- 转存表中的数据 `y_tag`
@@ -327,7 +369,10 @@ INSERT INTO `y_tag` (`id`, `type_name`, `title`) VALUES
 (6, 'promotion_type', '线下促销'),
 (7, 'promotion_type', '线上促销'),
 (8, 'location', '天一国际购物中心'),
-(9, 'location', '江北万达广场');
+(9, 'location', '江北万达广场'),
+(10, 'happy_shopping', '百货促销'),
+(11, 'happy_shopping', '汽车生活'),
+(12, 'happy_shopping', '影视盛宴');
 
 -- --------------------------------------------------------
 
@@ -346,6 +391,7 @@ CREATE TABLE IF NOT EXISTS `y_tag_type` (
 --
 
 INSERT INTO `y_tag_type` (`name`, `title`) VALUES
+('happy_shopping', '快乐购物'),
 ('location', '购物街'),
 ('promotion_category', '促销分类'),
 ('promotion_type', '促销类别');
@@ -438,7 +484,7 @@ CREATE TABLE IF NOT EXISTS `y_user` (
 --
 
 INSERT INTO `y_user` (`id`, `username`, `password`, `email`, `role_id`, `last_login`, `login_token`) VALUES
-(1, 'admin', '2d1d5137f626b2d4b7750b60dd3a43a8', '', 1, 1370588406, '94cd615b3009092aff3a1949588eb341'),
+(1, 'admin', '2d1d5137f626b2d4b7750b60dd3a43a8', '', 1, 1370757595, 'ad6ef57173d356296a7479b9c7161e9e'),
 (9, 'manager', 'e10adc3949ba59abbe56e057f20f883e', '', 2, 1355970822, 'c91a4b48b26360a54dcb971a8b046cc8'),
 (10, 'nbspadmin', '8652606c8d662eac2fcf1ce9a9d0fa10', '', 2, 1360112352, '568021eb0ca378fc738074472ed9f3f9');
 

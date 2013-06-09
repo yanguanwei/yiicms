@@ -20,6 +20,7 @@ class LinkController extends ChannelModelBaseController
 
     protected function prepareListSQL(SelectSQL $sql)
     {
+        parent::prepareListSQL($sql);
         $sql->order('sort_id DESC, id ASC');
     }
 
@@ -35,6 +36,8 @@ class LinkController extends ChannelModelBaseController
 
     protected function deleteModel(array $ids)
     {
+        parent::deleteModel($ids);
+
         $criteria = new CDbCriteria();
         $criteria->addInCondition('id', $ids);
         return FriendLink::model()->deleteAll($criteria);

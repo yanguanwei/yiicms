@@ -16,9 +16,14 @@ class PromotionController extends ArchiveAdminController
         $form->setAttributes($model->archive->getAttributes(), false);
     }
 
-    protected function onPrevDelete(array $ids)
+    protected function deleteModel(array $ids)
     {
-        Promotion::deletePromotion($ids);
+        parent::deleteModel($ids);
+
+        $criteria = new CDbCriteria();
+        $criteria->addInCondition('id', $ids);
+
+        return self::model()->deleteAll($criteria);
     }
 
     protected function prepareListSQLForTagsFilter(SelectSQL $sql)

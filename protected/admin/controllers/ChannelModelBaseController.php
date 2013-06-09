@@ -80,6 +80,8 @@ abstract class ChannelModelBaseController extends AdminController
         if (isset($_POST[get_class($form)])) {
             $form->setAttributes($_POST[get_class($form)], false);
             if ($form->save()) {
+                $this->onFormCreateSubmitSuccess($form);
+                $this->onFormSubmitSuccess($form);
                 $this->setFlashMessage(
                     'success',
                   '创建成功！点击<a href="' . $this->createUrl('create', array('cid' => $form->cid)) . '">继续创建</a>'
@@ -122,6 +124,8 @@ abstract class ChannelModelBaseController extends AdminController
         if (isset($_POST[get_class($form)])) {
             $form->setAttributes($_POST[get_class($form)], false);
             if ($form->save()) {
+                $this->onFormUpdateSubmitSuccess($form);
+                $this->onFormSubmitSuccess($form);
                 $this->setFlashMessage('success', '更新成功！');
                 $this->redirect($this->createUrl('list', array('cid' => $form->cid)));
             } else {
@@ -210,8 +214,32 @@ abstract class ChannelModelBaseController extends AdminController
     {
     }
 
+    protected function onFormCreateSubmitSuccess($form)
+    {
+    }
+
+    protected function onFormUpdateSubmitSuccess($form)
+    {
+    }
+
+    protected function onFormSubmitSuccess($form)
+    {
+        if (isset($_POST[get_class($form)]['tags'])) {
+            $tags = array();
+            foreach ($_POST[get_class($form)]['tags'] as $key => $value) {
+                if ($value) {
+                    $tags[$key] = $value;
+                }
+            }
+            if ($tags) {
+                ModelTag::update($this->getChannelModel()->name, $form->id, $tags);
+            }
+        }
+    }
+
     protected function onFormUpdate($id, $form)
     {
+        $form->tags = ModelTag::find($this->getChannelModel()->name, $id);
     }
 
     protected function onPrevDelete(array $ids)
@@ -220,18 +248,46 @@ abstract class ChannelModelBaseController extends AdminController
 
     protected function prepareListSQL(SelectSQL $sql)
     {
+        $this->prepareListSQLForTagsFilter($sql);
+    }
+
+    protected function prepareListSQLForTagsFilter(SelectSQL $sql)
+    {
+        $tags = $this->getChannel()->tags;
+        if ($tags) {
+            $model_name = $this->getChannelModel()->name;
+            foreach ($tags as $key) {
+                if (isset($_GET[$key]) && $_GET[$key]) {
+                    $tid = intval($_GET[$key]);
+                    $sql->where("base.id in (SELECT id FROM {{model_tag}} WHERE model_name='{$model_name}' AND tid='{$tid}')");
+                }
+            }
+        }
     }
 
     protected function getListFilters()
     {
-        return array();
+        $filters = array();
+        $tagTypeNames = $this->getChannel()->tags;
+        if ($tagTypeNames) {
+            $tagTypes = TagType::getTagTypeTitles($tagTypeNames);
+            $tagOptions = Tag::getTagOptions($tagTypeNames);
+            foreach ($tagTypes as $name => $typeTitle) {
+                $options = isset($tagOptions[$name]) ? $tagOptions[$name] : array();
+                $filters[$name] = CHtml::dropDownList($name, isset($_GET[$name]) ? $_GET[$name] : '', $options, array('empty' => '--' . $tagTypes[$name] . '--'));
+            }
+        }
+        return $filters;
     }
 
     /**
      * @param array $ids
      * @return int
      */
-    abstract protected function deleteModel(array $ids);
+    protected function deleteModel(array $ids)
+    {
+        ModelTag::delete($this->getChannelModel()->name, $ids);
+    }
 
     /**
      * @return Channel
@@ -268,18 +324,36 @@ abstract class ChannelModelBaseController extends AdminController
 
         if ($this->cid) {
             $model = $this->getChannelModel();
-            $shortcuts = array(
-                array(
+            if (!$this->isAttach) {
+                $channel = $this->getChannel();
+                $parent = $channel->getParentChannel();
+                if (!$parent) {
+                    $parent = $channel;
+                }
+
+                $shortcuts[] = array(
                     'shortcut' => $this->getChannelModelIcon($model->name, 'list'),
-                    'label' => $this->getChannel()->title,
-                    'url' => $this->createUrl('list', array('cid' => $this->cid))
-                ),
-                array(
-                    'shortcut' => $this->getChannelModelIcon($model->name, 'create'),
-                    'label' => '创建' . $this->getChannel()->title,
-                    'url' => $this->createUrl('create', array('cid' => $this->cid))
-                )
-            );
+                    'label' => $channel->title,
+                    'url' => $this->createUrl('list', array('cid' => $channel->id))
+                );
+
+                $subs = $parent->getSubChannels();
+                if ($subs) {
+                    foreach ($subs as $sub) {
+                        $shortcuts[] = array(
+                            'shortcut' => $this->getChannelModelIcon($model->name, 'create'),
+                            'label' => '创建' . $sub->title,
+                            'url' => $this->createUrl('create', array('cid' => $sub->id))
+                        );
+                    }
+                } else {
+                    $shortcuts[] = array(
+                        'shortcut' => $this->getChannelModelIcon($model->name, 'create'),
+                        'label' => '创建' . $channel->title,
+                        'url' => $this->createUrl('create', array('cid' => $channel->id))
+                    );
+                }
+            }
         }
 
         return $shortcuts;

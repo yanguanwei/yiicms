@@ -132,7 +132,8 @@ body { color:#333; background:url(../images/bg.png) repeat-x scroll left top #6C
 .promotion-sort .sort-wrap dl dt { width:75px; text-indent:7px;}
 .promotion-sort .sort-wrap dl dd { margin-left:75px;}
 .promotion-sort .sort-wrap dl dd a { padding:0px 8px;}
-.promotion-sort .sort-wrap dl dd a:hover { color:#E02680; font-weight:bold; text-decoration:none;}
+.promotion-sort .sort-wrap dl dd a:hover,
+.promotion-sort .sort-wrap dl dd a.actived { color:#E02680; font-weight:bold; text-decoration:none;}
 .promotion-sort .sort-wrap .link { position:absolute; top:30px; right:14px;}
 
 .promotion-list { width:1000px; padding:10px 0px; background:#ffffff;}

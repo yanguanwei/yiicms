@@ -4,16 +4,11 @@ Yii::import('admin.controllers.ArchiveAdminController');
 
 class PromotionController extends ArchiveAdminController
 {
-
     protected function onFormUpdate($id, $form)
     {
-        $model = Promotion::model()->with('archive')->findByPk($id);
-        if (!$model) {
-            $this->setFlashMessage('error', "没有找到ID为{$id}的记录！");
-        }
-
+        parent::onFormUpdate($id, $form);
+        $model = Promotion::model()->findByPk($id);
         $form->setAttributes($model->getAttributes(), false);
-        $form->setAttributes($model->archive->getAttributes(), false);
     }
 
     protected function deleteModel(array $ids)
@@ -25,7 +20,7 @@ class PromotionController extends ArchiveAdminController
 
         return self::model()->deleteAll($criteria);
     }
-
+/*
     protected function prepareListSQLForTagsFilter(SelectSQL $sql)
     {
         $hasFilter = false;
@@ -39,7 +34,7 @@ class PromotionController extends ArchiveAdminController
             $sql->leftJoin(array('{{promotion}}', 'p'), null, 'p.id=base.id');
         }
     }
-
+*/
     /**
      * @return ChannelModel
      */

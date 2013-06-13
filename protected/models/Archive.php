@@ -36,6 +36,8 @@ class Archive extends CActiveRecord
     public $update_time;
     public $visits = 0;
 
+    private $channel;
+
     public static function fetchArchiveStatusOptions($status = null)
     {
         $array = array(
@@ -193,10 +195,20 @@ class Archive extends CActiveRecord
     }
 
     /**
+     * @return Channel
+     */
+    public function getChannel()
+    {
+        return $this->channel === null ? ($this->channel = Channel::model()->findByPk($this->cid)) : $this->channel;
+    }
+
+    /**
      * 根据栏目ID返回文档数组
      *
      * @param int|array $cid
-     * @param int $limit
+     * @param $count
+     * @param int $offset
+     * @internal param int $limit
      * @return array
      */
     public static function getArchivesByChannelId($cid, $count, $offset = 0)
@@ -254,7 +266,7 @@ class Archive extends CActiveRecord
         return intval($row[0]);
     }
 
-    public static function getArchiveTemplate($id)
+    public static function findArchiveTemplate($id)
     {
         $id = intval($id);
         $sql = "SELECT a.template, c.archive_template FROM {{archive}} a LEFT JOIN {{channel}} c ON c.id=a.cid WHERE a.id='{$id}'";
@@ -264,7 +276,7 @@ class Archive extends CActiveRecord
         }
     }
 
-    public static function getArchiveTitle($id)
+    public static function findArchiveTitle($id)
     {
         $id = intval($id);
         $sql = "SELECT title FROM {{archive}} WHERE id='{$id}'";
@@ -274,7 +286,7 @@ class Archive extends CActiveRecord
         }
     }
 
-    public static function getChannelId($id)
+    public static function findChannelId($id)
     {
         $id = intval($id);
         $sql = "SELECT cid FROM {{archive}} WHERE id='{$id}'";

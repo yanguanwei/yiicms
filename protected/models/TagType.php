@@ -66,4 +66,9 @@ class TagType extends CActiveRecord
         }
         return $titles;
     }
+
+    public static function fetchTagTypeTitles($names = null)
+    {
+        return self::getTagTypeTitles($names);
+    }
 }

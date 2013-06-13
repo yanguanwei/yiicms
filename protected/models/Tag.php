@@ -57,6 +57,16 @@ class Tag extends CActiveRecord
         );
     }
 
+    public static function fetchByTypes(array $types)
+    {
+        $sql = "SELECT id, title, type_name FROM {{tag}} WHERE type_name IN('" . implode("', '", $types) . "')";
+        $titles = array();
+        foreach (Yii::app()->db->createCommand($sql)->queryAll() as $row) {
+            $titles[$row['type_name']][$row['id']] = $row['title'];
+        }
+        return $titles;
+    }
+
     public static function countByType($type_name)
     {
         $sql = "SELECT COUNT(id) FROM {{tag}} WHERE type_name=:type_name";

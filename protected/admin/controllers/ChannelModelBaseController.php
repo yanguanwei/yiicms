@@ -239,6 +239,11 @@ abstract class ChannelModelBaseController extends AdminController
 
     protected function onFormUpdate($id, $form)
     {
+        $archive = Archive::model()->findByPk($id);
+        if (!$archive) {
+            $this->setFlashMessage('error', "没有找到ID为{$id}的记录！");
+        }
+        $form->setAttributes($archive->getAttributes(), false);
         $form->tags = ModelTag::find($this->getChannelModel()->name, $id);
     }
 

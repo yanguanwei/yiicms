@@ -5,7 +5,7 @@ class FrontendController extends YController
     protected $subTitle;
 
     private $_navs = array();
-    private $_blocks = array();
+    private $_channels = array();
     private $_channelAlias = array();
     private $_channelTags = array();
 
@@ -141,7 +141,7 @@ class FrontendController extends YController
         return Archive::getArchivesByChannelId($subIds, $limit);
     }
 
-    public function getArchivesForPager(array $conditions, $pageSize = 10, $page = null)
+    public function getArchivesForPager(array $conditions, $pageSize = 10, $page = null, array $joins = array())
     {
         if (null === $page) {
             $page = intval($_GET['page']);
@@ -149,27 +149,33 @@ class FrontendController extends YController
 
         $page = $page ? $page : 1;
 
-        Yii::import('ext.youngx.SelectSQL');
+        Yii::import('apps.ext.young.SelectSQL');
 
         $sql = new SelectSQL();
-        $sql->from('{{archive}}', '*');
+        $sql->from(array('{{archive}}', 'archive'), '*');
 
-        foreach ($conditions as $cond => $value) {
-            if (is_string($cond)) {
-                $sql->where($cond, $value);
+        foreach ($joins as $table => $info) {
+            foreach ($info['on'] as $s => $t) {
+                $sql->leftJoin(array("{{{$table}}}", "{$table}"), $info['fields'], "archive.{$s}={$table}.{$t}");
+            }
+        }
+
+        foreach ($conditions as $condition => $value) {
+            if (is_string($condition)) {
+                $sql->where($condition, $value);
             } else {
                 $sql->where($value);
             }
         }
 
-        $sql->where('status=?', Archive::STATUS_PUBLISHED)
+        $sql->where('archive.status=?', Archive::STATUS_PUBLISHED)
           ->limit($pageSize, ($page - 1) * $pageSize);
 
         $db = Yii::app()->db;
 
         return array(
             $db->createCommand($sql->toSQL())->queryAll(),
-            $db->createCommand($sql->toTotalCountSQL())->queryColumn()
+            $db->createCommand($sql->toTotalCountSQL())->queryScalar()
         );
     }
 
@@ -183,31 +189,23 @@ class FrontendController extends YController
      */
     public function getArchivesForPagerByChannelId($cid, $pageSize = 10, $page = null)
     {
-        return $this->getArchivesForPager(
-            array(
-                'cid=?',
-                $cid
-            ),
-            $pageSize,
-            $page
-        );
+        return $this->getArchivesForPager(array('archive.cid=?' => $cid), $pageSize, $page);
     }
 
-    public function getArchivesForPagerByChannelIdWithTags($cid, $pageSize = 10, $page = null)
+    public function getArchivesForPagerByChannelWithTags(Channel $channel, $pageSize = 10, $page = null, array $joins = array())
     {
         $conditions = array(
-            'cid=?',
-            $cid
+            'archive.cid=?' => $channel->id
         );
 
-        foreach ($this->getChannelTags($cid) as $name) {
-            if (isset($_GET[$name]) && $_GET[$name]) {
-                $tid = intval($_GET[$name]);
-                $conditions[] = "id IN (SELECT aid FROM {{archive_tag}} WHERE tid='{$tid}')";
+        foreach ($channel->tags as $type) {
+            if (isset($_GET[$type]) && $_GET[$type]) {
+                $tid = intval($_GET[$type]);
+                $conditions[] = "archive.id IN (SELECT id FROM {{model_tag}} WHERE model_name='{$channel->model_name}' AND tid='{$tid}')";
             }
         }
 
-        return $this->getArchivesForPager($conditions, $pageSize, $page);
+        return $this->getArchivesForPager($conditions, $pageSize, $page, $joins);
     }
 
     /**
@@ -226,17 +224,12 @@ class FrontendController extends YController
     /**
      * 根据栏目ID返回栏目信息
      *
-     * @param int $id 栏目ID
-     * @return array
+     * @param int $cid 栏目ID
+     * @return Channel
      */
-    public function getChannel($id)
+    public function getChannel($cid)
     {
-        $channel = Channel::findChannel($id);
-        if ($channel) {
-            return $channel;
-        }
-
-        return array();
+        return Channel::model()->findByPk($cid);
     }
 
     /**
@@ -291,7 +284,7 @@ class FrontendController extends YController
      */
     public function getFirstSubChannelId($cid)
     {
-        return Channel::getFirstSubChannelId($cid);
+        return Channel::fetchFirstSubChannelId($cid);
     }
 
     /**
@@ -394,12 +387,7 @@ class FrontendController extends YController
      */
     public function getNews($id)
     {
-        $news = News::findNews($id);
-        if ($news) {
-            return $news;
-        }
-
-        return array();
+        return News::model()->findByPk($id);
     }
 
     /**

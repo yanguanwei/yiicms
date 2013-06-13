@@ -11,15 +11,9 @@ class NewsController extends ArchiveAdminController
 
     protected function onFormUpdate($id, $form)
     {
-        $news = News::model()->with('archive')->findByPk($id);
-        if (!$news) {
-            $this->setFlashMessage('error', "没有找到ID为{$id}的记录！");
-        }
-
-        $form->setAttributes($news->getAttributes(), false);
-        $form->setAttributes($news->archive->getAttributes(), false);
-
         parent::onFormUpdate($id, $form);
+        $news = News::model()->findByPk($id);
+        $form->setAttributes($news->getAttributes(), false);
     }
 
     protected function deleteModel(array $ids)

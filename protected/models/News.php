@@ -17,7 +17,8 @@ class News extends CActiveRecord
 
     /**
      * Returns the static model of the specified AR class.
-     * @return CActiveRecord the static model class
+     * @param string $className
+     * @return News the static model class
      */
     public static function model($className = __CLASS__)
     {
@@ -78,14 +79,4 @@ class News extends CActiveRecord
 
         return parent::beforeSave();
     }
-
-    public static function findNews($id)
-    {
-        $id = intval($id);
-        $sql = "SELECT * FROM `{{news}}` WHERE `id`='{$id}'";
-
-        return Yii::app()->db->createCommand($sql)->queryRow();
-    }
 }
-
-?>

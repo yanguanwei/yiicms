@@ -47,19 +47,19 @@ class Channel extends CActiveRecord
 
     public $post_time;
 
-    private $topChannel;
-    private $channelAttachModel;
-    private $parentChannel;
-    private $channelModel;
-    private $subChannels;
-    private $channelAlias;
+    private $channelAttachModel = false;
+    private $topChannel = false;
+    private $parentChannel = false;
+    private $channelModel = false;
+    private $subChannels = false;
+    private $channelAlias = false;
 
     /**
      * @return ChannelModel
      */
     public function getChannelAttach()
     {
-        if ($this->channel_attach && null === $this->channelAttachModel) {
+        if ($this->channel_attach && false === $this->channelAttachModel) {
             $this->channelAttachModel = ChannelModel::findModel($this->channel_attach);
         }
         return $this->channelAttachModel;
@@ -70,7 +70,7 @@ class Channel extends CActiveRecord
      */
     public function getSubChannels()
     {
-        if ($this->id && null === $this->subChannels) {
+        if ($this->id && false === $this->subChannels) {
             $this->subChannels = array();
             $channels = self::model()->findAll(array(
                     'condition' => 'parent_id=:parent_id',
@@ -102,7 +102,7 @@ class Channel extends CActiveRecord
      */
     public function getParentChannel()
     {
-        if ($this->parent_id && null === $this->parentChannel) {
+        if ($this->parent_id && false === $this->parentChannel) {
             $this->parentChannel = Channel::model()->findByPk($this->parent_id);
         }
         return $this->parentChannel;
@@ -113,7 +113,7 @@ class Channel extends CActiveRecord
      */
     public function getTopChannel()
     {
-        if ($this->id && null === $this->topChannel) {
+        if ($this->id && false === $this->topChannel) {
             $topid = self::getTopChannelId($this->id);
             if ($topid !== $this->id) {
                 $this->topChannel = Channel::model()->findByPk($topid);
@@ -129,7 +129,7 @@ class Channel extends CActiveRecord
      */
     public function getChannelModel()
     {
-        if ($this->model_name && null === $this->channelModel) {
+        if ($this->model_name && false === $this->channelModel) {
             $this->channelModel = ChannelModel::findModel($this->model_name);
         }
         return $this->channelModel;
@@ -140,10 +140,49 @@ class Channel extends CActiveRecord
      */
     public function getChannelAlias()
     {
-        if ($this->id && null === $this->channelAlias) {
+        if ($this->id && false === $this->channelAlias) {
             $this->channelAlias = ChannelAlias::model()->findByPk($this->id);
         }
         return $this->channelAlias;
+    }
+
+    public function getViewUrl(array $params = array())
+    {
+        $alias = $this->getChannelAlias();
+        if ($alias) {
+            $route = "channel/{$alias->alias}";
+        } else {
+            $route = 'channel/index';
+            $params['cid'] = $this->id;
+        }
+        return Yii::app()->controller->createUrl($route, $params);
+    }
+
+    public function getTagTypeViewUrl($type)
+    {
+        return $this->getViewUrl(array(
+                'type' => $type
+            ));
+    }
+
+    public function getTagViewUrl($type, $tid)
+    {
+        $params = array();
+        foreach ($this->tags as $t) {
+            if (isset($_GET[$t])) {
+                $params[$t] = $_GET[$t];
+            }
+        }
+        $params[$type] = $tid;
+        return $this->getViewUrl($params);
+    }
+
+    public function getTagTypes()
+    {
+        if ($this->tags) {
+            return TagType::fetchTagTypeTitles($this->tags);
+        }
+        return array();
     }
 
     /**
@@ -241,7 +280,7 @@ class Channel extends CActiveRecord
      * @param int $id
      * @return int
      */
-    public static function getFirstSubChannelId($id)
+    public static function fetchFirstSubChannelId($id)
     {
         $id = intval($id);
         $sql = "SELECT id FROM {{channel}} WHERE parent_id='{$id}' ORDER BY sort_id DESC, id ASC LIMIT 1";
@@ -464,7 +503,7 @@ class Channel extends CActiveRecord
         return $options;
     }
 
-    public static function getChannelTemplate($id)
+    public static function fetchChannelTemplate($id)
     {
         $id = intval($id);
         $sql = "SELECT channel_template FROM {{channel}} WHERE id='{$id}'";

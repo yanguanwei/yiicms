@@ -1,11 +1,11 @@
 <?php
 $breadcrumb = array(
     '<a href="/">首页</a>',
-    '<a href="' . $this->createChannelUrl($top_id) . '" class="current">'. $this->getChannelTitle($top_id) .'</a>'
+    '<a href="' . $this->createChannelUrl($topChannel->id) . '" class="current">'. $topChannel->title .'</a>'
 );
 
-if (isset($channel_id)) {
-    $breadcrumb[] = '<a href="' . $this->createChannelUrl($channel_id) . '" class="current">'. $this->$channel_id($top_id) .'</a>';
+if (isset($channel) && $channel->id != $topChannel->id) {
+    $breadcrumb[] = '<a href="' . $this->createChannelUrl($channel->id) . '" class="current">'. $channel->title .'</a>';
 }
 
 ?>

@@ -14,15 +14,6 @@ class PictureController extends ArchiveAdminController
         return new PictureForm($scenario);
     }
 
-    protected function onFormUpdate($id, $form)
-    {
-        $archive = Archive::model()->findByPk($id);
-        if ($archive) {
-            $form->setAttributes($archive->getAttributes(), false);
-            $form->tags = Archive::getTags($id);
-        }
-    }
-
     /**
      * @return ChannelModel
      */

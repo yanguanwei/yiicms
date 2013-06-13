@@ -14,15 +14,6 @@ class VideoController extends ArchiveAdminController
         return new VideoForm($scenario);
     }
 
-    protected function onFormUpdate($id, $form)
-    {
-        $archive = Archive::model()->findByPk($id);
-        if ($archive) {
-            $form->setAttributes($archive->getAttributes(), false);
-            $form->tags = Archive::getTags($id);
-        }
-    }
-
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), array(

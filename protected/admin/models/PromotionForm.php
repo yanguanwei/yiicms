@@ -22,7 +22,8 @@ class PromotionForm extends ArchiveForm
         return parent::attributeLabels() + array(
             'start_time' => '起始时间',
             'end_time' => '截止时间',
-            'content' => '活动详情'
+            'content' => '活动详情',
+            'discounts' => '折扣'
         );
     }
 

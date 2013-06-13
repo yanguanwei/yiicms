@@ -21,9 +21,11 @@ $widget->beginTab('base');
 
   echo $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input medium-input'));
 
-  echo $this->renderTagSelectRow(array('promotion_type', 'promotion_category','location'));
+  echo $this->renderChannelTagSelectRow();
 
 	echo $this->renderCKFinderInputRow('cover');
+
+  echo $this->renderTextRow('discounts', null, array('class' => 'text-input medium-input'));
 
   echo $this->renderRow(
     $this->renderDateRow('start_time', null, array('class' => 'text-input')),

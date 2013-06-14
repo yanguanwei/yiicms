@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2013 年 06 月 09 日 14:22
+-- 生成日期: 2013 年 06 月 14 日 10:14
 -- 服务器版本: 5.5.31
 -- PHP 版本: 5.4.15-1~precise+1
 
@@ -45,14 +45,14 @@ CREATE TABLE IF NOT EXISTS `y_archive` (
   PRIMARY KEY (`id`),
   KEY `archive_cid_fpk` (`cid`),
   KEY `model_name` (`model_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 --
 -- 转存表中的数据 `y_archive`
 --
 
 INSERT INTO `y_archive` (`id`, `title`, `cover`, `cid`, `uid`, `model_name`, `template`, `visits`, `status`, `is_highlight`, `is_top`, `keywords`, `description`, `post_time`, `update_time`) VALUES
-(5, 'sdfgsdfg43534', '', 5, 1, 'promotion', '0', 0, 1, 1, 1, '', '', 1370672555, 1370749182),
+(5, 'sdfgsdfg43534', '/uploads/images/promotion-list-img.png', 5, 1, 'promotion', '0', 0, 1, 1, 1, '', '', 1370672555, 1371096655),
 (10, '天一广场', '/uploads/images/index-hottest-img.png', 4, 1, 'picture', '0', 0, 1, 0, 1, '', '', 1370681204, 1370681160),
 (11, '鼓楼商业步行街', '/uploads/images/index-hottest-img.png', 4, 1, 'picture', '0', 0, 1, 0, 1, '', '', 1370681250, 1370681160),
 (12, '江北万达广场', '/uploads/images/index-hottest-img.png', 4, 1, 'picture', '0', 0, 1, 0, 1, '', '', 1370681304, 1370681220),
@@ -62,12 +62,12 @@ INSERT INTO `y_archive` (`id`, `title`, `cover`, `cid`, `uid`, `model_name`, `te
 (16, 'banner1', '/uploads/images/banner1.jpg', 20, 1, 'news', '0', 0, 1, 0, 1, '', '', 1370740714, 1370740620),
 (17, 'banner2', '/uploads/images/banner2.jpg', 20, 1, 'news', '0', 0, 1, 0, 1, '', '', 1370740738, 1370740680),
 (18, 'banner3', '/uploads/images/banner3.jpg', 20, 1, 'news', '0', 0, 1, 0, 1, '', '', 1370740757, 1370740740),
-(19, '品牌促进中心家具品牌专业委员会昨天宣告成立', '/uploads/images/index-trends-img.png', 17, 1, 'news', '0', 0, 1, 0, 1, '', '品牌促进中心家具品牌专业委员会昨天宣告成立。委员会作为国内首个服务家居生活用品品牌', 1370742958, 1370742840),
+(19, '品牌促进中心家具品牌专业委员会昨天宣告成立', '/uploads/images/index-trends-img.png', 17, 1, 'news', '0', 1, 1, 0, 1, '', '品牌促进中心家具品牌专业委员会昨天宣告成立。委员会作为国内首个服务家居生活用品品牌', 1370742958, 1370742840),
 (20, '中国（上海）包子文化节隆重举行', '', 18, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743003, 1370742960),
 (21, '中国（上海）包子文化节隆重举行', '', 18, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743020, 1370742960),
-(22, '中国（上海）包子文化节隆重举行', '', 18, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743029, 1370743020),
-(23, '中国（上海）包子文化节隆重举行', '', 17, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743039, 1370743020),
-(24, '中国（上海）包子文化节隆重举行', '', 17, 1, 'news', '0', 0, 1, 0, 0, '', '', 1370743056, 1370743020);
+(22, '中国（上海）包子文化节隆重举行', '', 18, 1, 'news', '0', 1, 1, 0, 0, '', '', 1370743029, 1370743020),
+(23, '中国（上海）包子文化节隆重举行', '', 17, 1, 'news', '0', 2, 1, 0, 0, '', '', 1370743039, 1370743020),
+(24, '中国（上海）包子文化节隆重举行', '', 17, 1, 'news', '0', 1, 1, 0, 0, '', '', 1370743056, 1370743020);
 
 -- --------------------------------------------------------
 
@@ -102,16 +102,16 @@ INSERT INTO `y_channel` (`id`, `title`, `parent_id`, `theme_id`, `model_name`, `
 (1, '主题活动', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370491136, ''),
 (3, '商家', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370491183, ''),
 (4, '旅游购物', 0, 1, 'picture', 'picture', '', '', 1, 0, '', '', 1370491202, ''),
-(5, '促销信息', 0, 1, 'promotion', '', '', '', 1, 0, '', '', 1370652010, 'location|promotion_category|promotion_type'),
+(5, '促销信息', 0, 1, 'promotion', '', '/promotion/list', '', 1, 0, '', '', 1371092902, 'location|promotion_category|promotion_type'),
 (6, '精彩瞬间', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370491236, ''),
 (7, '支持单位', 0, 1, 'link', '', '', '', 1, 0, '', '', 1370491272, ''),
 (13, '快乐购物', 1, 1, 'news', 'link', '', '', 1, 0, '', '', 1370652740, 'happy_shopping'),
 (14, '时尚生活', 1, 1, 'news', 'link', '', '', 1, 0, '', '', 1370657341, ''),
 (15, '满意消费', 1, 1, 'news', 'link', '', '', 1, 0, '', '', 1370657363, ''),
-(16, '购物节动态', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370740361, ''),
-(17, '最新资讯', 16, 1, 'news', '', '', '', 1, 0, '', '', 1370740390, ''),
-(18, '活动预告', 16, 1, 'news', '', '', '', 1, 0, '', '', 1370740424, ''),
-(19, '媒体报道', 16, 1, 'news', '', '', '', 1, 0, '', '', 1370740437, ''),
+(16, '购物节动态', 0, 1, 'news', '', '1', '', 1, 0, '', '', 1371091887, ''),
+(17, '最新资讯', 16, 1, 'news', '', '/news/list', '/news/detail', 1, 0, '', '', 1371089833, 'latest_news'),
+(18, '活动预告', 16, 1, 'news', '', '', '/news/detail', 1, 0, '', '', 1371084509, ''),
+(19, '媒体报道', 16, 1, 'news', '', '', '/news/detail', 1, 0, '', '', 1371084526, ''),
 (20, '幻灯片', 0, 1, 'news', '', '', '', 1, 0, '', '', 1370740646, '');
 
 -- --------------------------------------------------------
@@ -131,7 +131,8 @@ CREATE TABLE IF NOT EXISTS `y_channel_alias` (
 --
 
 INSERT INTO `y_channel_alias` (`id`, `alias`) VALUES
-(5, 'promotions');
+(5, 'promotions'),
+(16, 'news');
 
 -- --------------------------------------------------------
 
@@ -226,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `y_link` (
   `sort_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `post_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- 转存表中的数据 `y_link`
@@ -257,6 +258,16 @@ CREATE TABLE IF NOT EXISTS `y_model_tag` (
   KEY `tid` (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- 转存表中的数据 `y_model_tag`
+--
+
+INSERT INTO `y_model_tag` (`id`, `tid`, `model_name`, `type_name`) VALUES
+(19, 13, 'news', 'latest_news'),
+(5, 8, 'promotion', 'location'),
+(5, 2, 'promotion', 'promotion_category'),
+(5, 7, 'promotion', 'promotion_type');
+
 -- --------------------------------------------------------
 
 --
@@ -283,11 +294,10 @@ CREATE TABLE IF NOT EXISTS `y_nav` (
 INSERT INTO `y_nav` (`id`, `identifier`, `type_id`, `parent_id`, `theme_id`, `title`, `url`, `sort_id`, `enabled`) VALUES
 (1, 'home', 0, 0, 1, '首页', '/', 0, 1),
 (2, 'activities', 0, 0, 1, '主题活动', 'channel/activities', 0, 1),
-(3, 'streets', 0, 0, 1, '购物街', 'channel/streets', 0, 1),
 (4, 'merchants', 0, 0, 1, '商家展示', 'channel/merchants', 0, 1),
 (5, 'shopping', 0, 0, 1, '旅游购物', 'channel/shopping', 0, 1),
 (6, 'promotions', 0, 0, 1, '促销信息', 'channel/promotions', 0, 1),
-(7, 'moments', 0, 0, 1, '精彩瞬间', 'channel/moments', 0, 1);
+(7, 'news', 0, 0, 1, '购物节动态', 'channel/news', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -340,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `y_promotion` (
 --
 
 INSERT INTO `y_promotion` (`id`, `promotion_type`, `promotion_category`, `location`, `discounts`, `start_time`, `end_time`, `content`) VALUES
-(5, 6, 1, 8, '', 1371052800, 1372435200, '<p>\r\n	dfg</p>\r\n');
+(5, 0, 0, 0, '4.2', 1371052800, 1372435200, '<p>\r\n	dfg</p>\r\n');
 
 -- --------------------------------------------------------
 
@@ -354,7 +364,7 @@ CREATE TABLE IF NOT EXISTS `y_tag` (
   `title` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `type_name` (`type_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
 -- 转存表中的数据 `y_tag`
@@ -372,7 +382,9 @@ INSERT INTO `y_tag` (`id`, `type_name`, `title`) VALUES
 (9, 'location', '江北万达广场'),
 (10, 'happy_shopping', '百货促销'),
 (11, 'happy_shopping', '汽车生活'),
-(12, 'happy_shopping', '影视盛宴');
+(12, 'happy_shopping', '影视盛宴'),
+(13, 'latest_news', '开幕式'),
+(14, 'latest_news', '闭幕式');
 
 -- --------------------------------------------------------
 
@@ -392,6 +404,7 @@ CREATE TABLE IF NOT EXISTS `y_tag_type` (
 
 INSERT INTO `y_tag_type` (`name`, `title`) VALUES
 ('happy_shopping', '快乐购物'),
+('latest_news', '最新资讯'),
 ('location', '购物街'),
 ('promotion_category', '促销分类'),
 ('promotion_type', '促销类别');
@@ -432,7 +445,7 @@ CREATE TABLE IF NOT EXISTS `y_theme_template` (
   `path` varchar(100) NOT NULL,
   `post_time` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
 
 --
 -- 转存表中的数据 `y_theme_template`
@@ -460,7 +473,8 @@ INSERT INTO `y_theme_template` (`id`, `theme_id`, `path`, `post_time`) VALUES
 (29, 0, '/blocks/flv', 1356401358),
 (31, 0, '/link/list', 1356590756),
 (32, 0, '/link/picture_list', 1356590769),
-(33, 0, '/blocks/linklist', 1356590887);
+(33, 0, '/blocks/linklist', 1356590887),
+(34, 0, '/promotion/list', 1371092358);
 
 -- --------------------------------------------------------
 
@@ -484,7 +498,7 @@ CREATE TABLE IF NOT EXISTS `y_user` (
 --
 
 INSERT INTO `y_user` (`id`, `username`, `password`, `email`, `role_id`, `last_login`, `login_token`) VALUES
-(1, 'admin', '2d1d5137f626b2d4b7750b60dd3a43a8', '', 1, 1370757595, 'ad6ef57173d356296a7479b9c7161e9e'),
+(1, 'admin', '2d1d5137f626b2d4b7750b60dd3a43a8', '', 1, 1371175618, '82443f219d793f392671a39c9b7f1f16'),
 (9, 'manager', 'e10adc3949ba59abbe56e057f20f883e', '', 2, 1355970822, 'c91a4b48b26360a54dcb971a8b046cc8'),
 (10, 'nbspadmin', '8652606c8d662eac2fcf1ce9a9d0fa10', '', 2, 1360112352, '568021eb0ca378fc738074472ed9f3f9');
 

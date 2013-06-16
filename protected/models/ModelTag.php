@@ -2,6 +2,13 @@
 
 class ModelTag
 {
+    public static function deleteByTag($tid)
+    {
+        $tid = intval($tid);
+        $sql = "DELETE FROM {{model_tag}} WHERE tid='{$tid}'";
+        return Yii::app()->db->createCommand($sql)->execute();
+    }
+
     public static function delete($model_name, $ids)
     {
         $ids = (array) $ids;

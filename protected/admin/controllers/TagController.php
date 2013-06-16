@@ -67,13 +67,10 @@ class TagController extends AdminController
 
     public function actionTypeDelete($name)
     {
-        if (Tag::countByTypeId($name)) {
+        if (Tag::countByType($name)) {
             $this->setFlashMessage('error', "请先删除该类型下的标签！");
         } else {
-            $criteria = new CDbCriteria();
-            $criteria->addInCondition('name', array($name));
-
-            if ( ConfigType::model()->deleteAll($criteria) ) {
+            if (TagType::model()->deleteAll('name=:name', array(':name' => $name))) {
                 $this->setFlashMessage('success', "删除成功！");
             } else {
                 $this->setFlashMessage('information', "该记录不存在或已经被删除！");
@@ -151,5 +148,23 @@ class TagController extends AdminController
             'form' => $form,
             'title' => '更新标签'
         ));
+    }
+
+    public function actionDelete()
+    {
+        $id = intval($_GET['id']);
+        $tag = Tag::model()->findByPk($id);
+
+        if ( !$tag )
+            throw new CHttpException(404);
+
+        $count = $tag->delete();
+        ModelTag::deleteByTag($id);
+
+        $this->setFlashMessage(success, "共删除 {$count} 条标签！");
+
+        $url = Yii::app()->getRequest()->getUrlReferrer();
+        if ( $url )
+            $this->redirect($url);
     }
 }

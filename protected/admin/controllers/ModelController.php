@@ -22,7 +22,7 @@ class ModelController extends AdminController
             if ($model->save()) {
                 $this->setFlashMessage('success', '创建成功！点击<a href="' . $this->createUrl('create') . '">继续创建</a>');
 
-                return $this->redirect($this->createUrl('update', array('id' => $model->id)));
+                return $this->redirect($this->createUrl('update', array('id' => $model->name)));
             } else {
                 $this->setFlashMessage('error', "创建失败");
             }
@@ -67,21 +67,23 @@ class ModelController extends AdminController
         );
     }
 
-    public function actionDelete($name)
+    public function actionDelete($id)
     {
-        $criteria = new CDbCriteria();
-        $criteria->addInCondition('name', $name);
-        $count = ChannelModel::model()->deleteAll($criteria);
+        $count = ChannelModel::model()->deleteAll('name=:name', array(':name' => $id));
 
-        if ($count) {
-            $this->setFlashMessage('success', "删除成功：共删除 {$count} 条记录！");
+        if (Yii::app()->request->isAjaxRequest) {
+            echo 'ok';
         } else {
-            $this->setFlashMessage('information', "该记录不存在或已经被删除！");
-        }
+            if ($count) {
+                $this->setFlashMessage('success', "删除成功：共删除 {$count} 条记录！");
+            } else {
+                $this->setFlashMessage('information', "该记录不存在或已经被删除！");
+            }
 
-        $url = Yii::app()->getRequest()->getUrlReferrer();
-        if ($url) {
-            $this->redirect($url);
+            $url = Yii::app()->getRequest()->getUrlReferrer();
+            if ($url) {
+                $this->redirect($url);
+            }
         }
     }
 

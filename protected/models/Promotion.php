@@ -1,20 +1,9 @@
 <?php
-/**
- * 新闻表
- *
- * @author yanguanwei@qq.com
- *
- * @property int $id 新闻ID，对应于Archive的ID
- * @property string $source 新闻来源
- * @property string $content 新闻内容
- *
- */
+
 class Promotion extends CActiveRecord
 {
     public $id;
-    public $promotion_type;
-    public $promotion_category;
-    public $location;
+    public $phone;
     public $discounts;
     public $start_time;
     public $end_time;

@@ -15,25 +15,18 @@ echo $this->renderHiddenField('id');
 $widget->beginTab('base');
 
 	echo $this->renderTextRow('title', null, array('class' => 'text-input medium-input'));
-    echo $this->renderTextRow('phone', null, array('class' => 'text-input medium-input'));
 	
-	echo $this->renderCheckboxListRow('is_highlight', 'is_top');
+	//echo $this->renderCheckboxListRow('is_highlight', 'is_top');
 
+  echo $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input medium-input'));
 
-    echo $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input medium-input'));
+  echo $this->renderChannelTagSelectRow();
 
-    echo $this->renderChannelTagSelectRow();
+	//echo $this->renderCKFinderInputRow('cover');
 
-	echo $this->renderCKFinderInputRow('cover');
-
-    echo $this->renderTextRow('discounts', null, array('class' => 'text-input medium-input'));
-
-    echo $this->renderRow(
-        $this->renderDateRow('start_time', null, array('class' => 'text-input')),
-        $this->renderDateRow('end_time', null, array('class' => 'text-input'))
-    );
-
-	echo $this->renderCKEditorRow('content');
+  echo $this->renderTextRow('phone', null, array('class' => 'text-input medium-input'));
+  echo $this->renderTextRow('address', null, array('class' => 'text-input medium-input'));
+  echo $this->renderTextareaRow('content');
 
 $widget->endTab();//baseTab
 

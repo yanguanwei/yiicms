@@ -1,11 +1,9 @@
 <?php
-class PromotionForm extends ArchiveForm
+class MerchantForm extends ArchiveForm
 {
     public $id;
     public $phone;
-    public $discounts;
-    public $start_time;
-    public $end_time;
+    public $address;
     public $content;
 
     public function rules()
@@ -19,10 +17,8 @@ class PromotionForm extends ArchiveForm
     {
         return parent::attributeLabels() + array(
             'phone' => '联系电话',
-            'start_time' => '起始时间',
-            'end_time' => '截止时间',
-            'content' => '活动详情',
-            'discounts' => '折扣'
+            'address' => '商家地址',
+            'content' => '商家简介'
         );
     }
 
@@ -31,9 +27,9 @@ class PromotionForm extends ArchiveForm
         parent::doSave();
 
         if ($this->getScenario()=='insert') {
-            $news = new Promotion();
+            $news = new Merchant();
         } else {
-            $news = Promotion::model()->findByPk($this->id);
+            $news = Merchant::model()->findByPk($this->id);
         }
 
         $news->setAttributes($this->getAttributes(), false);
@@ -46,6 +42,6 @@ class PromotionForm extends ArchiveForm
 
     protected function getChannelModel()
     {
-        return ChannelModel::findModel('promotion');
+        return ChannelModel::findModel('merchant');
     }
 }

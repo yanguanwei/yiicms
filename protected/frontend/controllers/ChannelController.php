@@ -1,6 +1,23 @@
 <?php
 class ChannelController extends ChannelBehaviorController
 {
+	public function actionMerchants()
+	{
+		$channels = array (
+  1 => 
+  array (
+    'id' => '3',
+    'template' => '/merchant/list',
+  ),
+);
+	
+		if ( !$channels[Yii::app()->params['theme_id']] )
+			throw new CHttpException(404);
+
+		$current = $channels[Yii::app()->params['theme_id']];
+
+		return $this->perform($current['template'], $current['id']);
+	}
 	public function actionPromotions()
 	{
 		$channels = array (

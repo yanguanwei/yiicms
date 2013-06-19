@@ -379,6 +379,16 @@ class FrontendController extends YController
         return $this->_navs;
     }
 
+    public function getMerchantsWithPromotions()
+    {
+        $archives = Archive::model()->with(array('merchant' => array('select' => 'phone')))->inChannels(3)->published()->top()->recently(5)->findAll();
+
+        var_dump($archives);
+
+        foreach ($archives as $archive) {
+        }
+    }
+
     /**
      * 根据文档ID返回新闻信息数组
      *
@@ -497,5 +507,3 @@ class FrontendController extends YController
         Archive::visit($id);
     }
 }
-
-?>

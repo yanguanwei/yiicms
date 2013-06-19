@@ -12,14 +12,14 @@ class DefaultController extends AdminController
 	{
 		return array(
 			array(
-				'shortcut' => $this->asset('images/icons/info_48.png'),
-				'label' => '发布公告',
-				'url' => $this->createUrl('news/create', array('cid' => 66))
+				'shortcut' => $this->asset('images/icons/paper_content_pencil_48.png'),
+				'label' => '发布促销',
+				'url' => $this->createUrl('promotion/create', array('cid' => 5))
 			),
 			array(
-				'shortcut' => $this->asset('images/icons/paper_content_pencil_48.png'),
-				'label' => '发布新闻',
-				'url' => $this->createUrl('news/create', array('cid' => 29))
+				'shortcut' => $this->asset('images/icons/user_add.png'),
+				'label' => '创建商家',
+				'url' => $this->createUrl('merchant/create', array('cid' => 3))
 			),
 			array(
 				'shortcut' => $this->asset('images/icons/favorite.png'),

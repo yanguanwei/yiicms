@@ -30,7 +30,9 @@ th.selectable-cell, td.selectable-cell { text-align:center; width:20px;}
 th.time-column,
 td.time-column,
 th.update_time-column,
-td.update_time-column
+td.update_time-column,
+th.phone-column,
+td.phone-column
 { width:120px; text-align:center;}
 
 th.operate-column, td.operate-column { text-align:center; width:80px;}

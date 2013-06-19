@@ -54,70 +54,65 @@ if ($isAttach) {
             'label' => $sub->title,
             'url' => array('list', 'cid' => $id)
         );
-        if ($channel->id == $id)
+        if ($channel->id == $id) {
             $defaultTab = $tab;
+        }
     }
 }
 
-$widget = $this->beginWidget('application.widgets.Tabs', array(
+$widget = $this->beginWidget(
+    'application.widgets.Tabs',
+    array(
         'title' => $title,
         'tabs' => $tabs,
         'defaultTab' => $defaultTab
-    ));
+    )
+);
 
-$this->renderPartial('/blocks/filters', array(
-    'filters' => $filters
-));
+$this->renderPartial(
+    '/blocks/filters',
+    array(
+        'filters' => $filters
+    )
+);
 
 $widget->beginTab($defaultTab);
 
-$table = $this->beginWidget('apps.ext.young.ListTable', array(
-    'dataProvider' => $dataProvider,
-    'htmlOptions' => array('class' => 'table'),
-    'selectable' => true,
-    'titles' => array(
-      'id' => 'ID',
-      'title' => '标题',
-      'status' => '状态',
-      'update_time' => '更新时间',
-      'operate' => '操作'
+$table = $this->beginWidget(
+    'apps.ext.young.ListTable',
+    array(
+        'dataProvider' => $dataProvider,
+        'htmlOptions' => array('class' => 'table'),
+        'selectable' => true,
+        'titles' => $this->getFormCellLabels()
     )
-  ));
+);
 $table->beginBody();
-while( $table->nextRow() ) {
-  $table->renderRow(
-    $table->cell('id'),
-    $table->cell('title', array(
-        'type' => 'link',
-        'typeOptions' => array(
-          'url' => $this->createUrl('update', array('id' => $table->data['id']))
-        )
-      ), array(
-        'highlight' => $table->data['is_highlight'],
-        'top' => $table->data['is_top'],
-        'id' => $table->data['id'],
-        'cover' => $table->data['cover'] ? 1 : 0
-      )
-    ),
-    $table->cell('status', Archive::fetchArchiveStatusOptions($table->data['status'])),
-    $table->cell('update_time', array('type' => 'dateTime')),
-    $table->cell('operate', $table->updateButton() . $table->deleteButton())
-  );
+while ($table->nextRow()) {
+    $row = array();
+    foreach ($this->getFormCell($table) as $name => $args) {
+        array_unshift($args, $name);
+        $row[] = call_user_func_array(array($table, 'cell'), $args);
+    }
+    $table->renderRow($row);
 }
 $table->endBody();
 
 $table->beginFoot();
 
-  $this->renderPartial('/blocks/bulk_action', array(
-      'name' => 'id',
-      'options' => $this->getBulkActions()
-    ));
+$this->renderPartial(
+    '/blocks/bulk_action',
+    array(
+        'name' => 'id',
+        'options' => $this->getBulkActions()
+    )
+);
 $table->renderPager();
 $table->endFoot();
 
 $this->endWidget();
 
-$widget->endTab();//baseTab
+$widget->endTab(); //baseTab
 
 $this->endWidget(); //tabs
 

@@ -130,4 +130,45 @@ abstract class ArchiveAdminController extends ChannelModelBaseController
             '取消高亮' => $this->createUrl('highlight', array('disabled' => 1))
         );
     }
+
+    public function getFormCellLabels()
+    {
+        return array(
+            'id' => 'ID',
+            'title' => '标题',
+            'status' => '状态',
+            'update_time' => '更新时间',
+            'operate' => '操作'
+        );
+    }
+
+    public function getFormCell(ListTable $table)
+    {
+        return array(
+            'id' => array(),
+            'title' => array(
+                array(
+                    'type' => 'link',
+                    'typeOptions' => array(
+                        'url' => $this->createUrl('update', array('id' => $table->data['id']))
+                    )
+                ),
+                array(
+                    'highlight' => $table->data['is_highlight'],
+                    'top' => $table->data['is_top'],
+                    'id' => $table->data['id'],
+                    'cover' => $table->data['cover'] ? 1 : 0
+                )
+            ),
+            'status' => array(
+                Archive::fetchArchiveStatusOptions($table->data['status'])
+            ),
+            'update_time' => array(
+                array('type' => 'dateTime')
+            ),
+            'operate' => array(
+                $table->updateButton() . $table->deleteButton()
+            )
+        );
+    }
 }

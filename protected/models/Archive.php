@@ -152,7 +152,9 @@ class Archive extends CActiveRecord
     {
         return array(
             'user' => array(self::BELONGS_TO, 'User', 'uid'),
-            'category' => array(self::BELONGS_TO, 'Category', 'cid')
+            'category' => array(self::BELONGS_TO, 'Category', 'cid'),
+            'merchant' => array(self::HAS_ONE, 'Merchant', 'id'),
+            'promotion' => array(self::HAS_ONE, 'Promotion', 'id')
         );
     }
 

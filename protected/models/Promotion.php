@@ -9,6 +9,8 @@ class Promotion extends CActiveRecord
     public $end_time;
     public $content;
 
+    private $locationTitle;
+
     /**
      * Returns the static model of the specified AR class.
      * @param string $className
@@ -94,5 +96,23 @@ class Promotion extends CActiveRecord
         $this->end_time = date('Y-m-d', $this->end_time);
 
         return parent::afterFind();
+    }
+
+    public function getLocationTitle()
+    {
+        if (null === $this->locationTitle) {
+            if ($this->id) {
+                $tid = ModelTag::findByType('promotion', $this->id, 'location');
+                if ($tid) {
+                    $this->locationTitle = Tag::fetchTitle($tid);
+                } else {
+                    $this->locationTitle = '';
+                }
+            } else {
+                $this->locationTitle = '';
+            }
+        }
+
+        return $this->locationTitle;
     }
 }

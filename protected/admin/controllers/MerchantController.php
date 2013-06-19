@@ -6,7 +6,20 @@ class MerchantController extends ArchiveAdminController
 {
     protected function prepareListSQL(SelectSQL $sql)
     {
+        if (isset($_GET['phone']) && $_GET['phone']!=='') {
+            $sql->where('merchant.phone=?', intval($_GET['phone']));
+        }
+
         $sql->leftJoin(array('{{merchant}}', 'merchant'), 'phone', 'merchant.id=base.id');
+    }
+
+    protected function getListFilters()
+    {
+        $filters = parent::getListFilters();
+
+        $filters['phone'] = CHtml::textField('phone', isset($_GET['phone']) ? $_GET['phone'] : '', array('class' => 'text-input', 'placeholder' => '联系电话'));
+
+        return $filters;
     }
 
     protected function onFormUpdate($id, $form)

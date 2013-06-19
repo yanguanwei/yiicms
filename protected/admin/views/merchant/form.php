@@ -16,7 +16,7 @@ $widget->beginTab('base');
 
 	echo $this->renderTextRow('title', null, array('class' => 'text-input medium-input'));
 	
-	//echo $this->renderCheckboxListRow('is_highlight', 'is_top');
+	echo $this->renderCheckboxListRow('is_highlight', 'is_top');
 
   echo $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input medium-input'));
 

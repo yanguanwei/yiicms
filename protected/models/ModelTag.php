@@ -49,4 +49,11 @@ class ModelTag
         }
         return $tags;
     }
+
+    public static function findByType($model_name, $id, $type)
+    {
+        $id = intval($id);
+        $sql = "SELECT tid FROM {{model_tag}} WHERE model_name='{$model_name}' AND id='{$id}' AND type_name='{$type}'";
+        return Yii::app()->db->createCommand($sql)->queryScalar();
+    }
 }

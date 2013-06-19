@@ -7,6 +7,8 @@ class Merchant extends CActiveRecord
     public $address;
     public $content;
 
+    private $promotions;
+
     /**
      * Returns the static model of the specified AR class.
      * @param string $className
@@ -49,12 +51,17 @@ class Merchant extends CActiveRecord
 
     public function getTopPromotions()
     {
-        if ($this->phone) {
-            Archive::model()
-                ->with(array('promotion' => array('select' => 'discounts, start_time, end_time', 'alias' => 'p')))
-                ->inChannels(5)
-                ->published()->recently(5)->findAll();
+        if (null === $this->promotions) {
+            if ($this->phone) {
+                $this->promotions = Archive::model()
+                    ->with(array('promotion' => array('select' => 'id, discounts, start_time, end_time', 'alias' => 'p')))
+                    ->inChannels(5)
+                    ->published()->recently(5)->findAll('p.phone=:phone', array(':phone' => $this->phone));
+            } else {
+                $this->promotions = array();
+            }
         }
+        return $this->promotions;
     }
 
     protected function beforeSave()

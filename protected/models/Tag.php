@@ -94,4 +94,14 @@ class Tag extends CActiveRecord
         }
         return $options;
     }
+
+    public static function fetchTitle($tid)
+    {
+        static $labels = array();
+        $tid = intval($tid);
+        if (!isset($labels[$tid])) {
+            $labels[$tid] = Yii::app()->db->createCommand("SELECT title FROM {{tag}} WHERE id='{$tid}'")->queryScalar();
+        }
+        return $labels[$tid];
+    }
 }

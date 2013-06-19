@@ -381,12 +381,7 @@ class FrontendController extends YController
 
     public function getMerchantsWithPromotions()
     {
-        $archives = Archive::model()->with(array('merchant' => array('select' => 'phone')))->inChannels(3)->published()->top()->recently(5)->findAll();
-
-        var_dump($archives);
-
-        foreach ($archives as $archive) {
-        }
+        return Archive::model()->with(array('merchant' => array('select' => 'phone')))->inChannels(3)->published()->top()->recently(5)->findAll();
     }
 
     /**

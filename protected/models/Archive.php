@@ -191,6 +191,13 @@ class Archive extends CActiveRecord
         return $this;
     }
 
+    public function inModel($model)
+    {
+        $this->getDbCriteria()->compare('model_name', $model);
+
+        return $this;
+    }
+
     public function getViewUrl()
     {
         return Yii::app()->controller->createUrl('archive/detail', array('id' => $this->id));

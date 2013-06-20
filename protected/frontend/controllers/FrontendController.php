@@ -106,24 +106,38 @@ class FrontendController extends YController
      * 根据栏目ID返回指定条数的文档数组
      *
      * @param int|array $cid 栏目ID
+     * @param string|null $model_name
      * @param int $limit 限制条数，-1表示不限制
      * @return array
      */
-    public function getArchivesByChannelId($cid, $limit = -1)
+    public function getArchivesByChannelId($cid, $limit = -1, $model_name = null)
     {
-        return Archive::model()->inChannels($cid)->published()->recently($limit)->findAll();
+        $archive = Archive::model()->inChannels($cid);
+
+        if ($model_name) {
+            $archive->inModel($model_name);
+        }
+
+        return $archive->published()->recently($limit)->findAll();
     }
 
     /**
      * 根据栏目ID返回指定条数的置顶文档数组
      *
      * @param int|array $cid 栏目ID
+     * @param string|null $model_name
      * @param int $limit 限制条数，-1表示不限制
      * @return array
      */
-    public function getTopArchivesByChannelId($cid, $limit = -1)
+    public function getTopArchivesByChannelId($cid, $limit = -1, $model_name = null)
     {
-        return Archive::model()->inChannels($cid)->top()->published()->recently($limit)->findAll();
+        $archive = Archive::model()->inChannels($cid);
+
+        if ($model_name) {
+            $archive->inModel($model_name);
+        }
+
+        return $archive->top()->published()->recently($limit)->findAll();
     }
 
     /**
@@ -329,18 +343,12 @@ class FrontendController extends YController
      * 根据栏目ID返回友情链接列表数组
      *
      * @param int $cid 栏目ID
-     * @param int $limit 限制条数，0表示不限制
+     * @param int $limit 限制条数，-1表示不限制
      * @return array
      */
-    public function getFriendLinksByChannelId($cid, $limit = 0)
+    public function getLinksByChannelId($cid, $limit = -1)
     {
-        $cid = intval($cid);
-        $sql = "SELECT id, title, url, cid, logo FROM {{link}} WHERE cid='{$cid}' AND visible='1' ORDER BY sort_id DESC, id ASC";
-        if ($limit) {
-            $sql .= " LIMIT {$limit}";
-        }
-
-        return Yii::app()->db->createCommand($sql)->queryAll();
+        return FriendLink::model()->inChannels($cid)->orderly($limit)->findAll();
     }
 
     /**

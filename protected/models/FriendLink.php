@@ -79,6 +79,25 @@ class FriendLink extends CActiveRecord
         );
     }
 
+    public function inChannels($cid)
+    {
+        $this->getDbCriteria()->compare('cid', $cid);
+
+        return $this;
+    }
+
+    public function orderly($limit = -1)
+    {
+        $this->getDbCriteria()->mergeWith(
+            array(
+                'order' => 'sort_id DESC, id ASC',
+                'limit' => $limit,
+            )
+        );
+
+        return $this;
+    }
+
     public static function getSelectData()
     {
         $conn = Yii::app()->db;

@@ -98,12 +98,11 @@ foreach ($this->getTopArchivesByChannelId(4, 6) as $archive) {
         <h4 class="title"><a href="#" class="more fr">更多</a><img src="<?php echo $this->asset('images/index-happy-title.png'); ?>" /></h4>
         <div class="happy-wrap">
             <ul class="clearfix">
-                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img1.jpg')?>" /></a></li>
-                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img2.jpg')?>" /></a></li>
-                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img3.jpg')?>" /></a></li>
-                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img4.jpg')?>" /></a></li>
-                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img5.jpg')?>" /></a></li>
-                <li><a href="#"><img src="<?php echo $this->asset('images/index-happy-img6.jpg')?>" /></a></li>
+                <?php
+                foreach ($this->getLinksByChannelId(13, 6) as $link) {
+                    echo sprintf('<li><a href="%s"><img src="%s" /></a></li>', $link->url, $link->logo);
+                }
+                ?>
             </ul>
         </div>
     </div>
@@ -132,8 +131,8 @@ foreach ($this->getTopArchivesByChannelId(4, 6) as $archive) {
         <h4 class="title"><img src="<?php echo $this->asset('images/index-unit-title.png')?>" /></h4>
         <div class="unit-wrap clearfix">
             <?php
-            foreach ($this->getFriendLinksByChannelId(7, 7) as $link) {
-                echo sprintf('<span><a href="%s"><img src="%s" alt="%s" /></a></a></span>', $link['url'],$link['logo'], $link['title']);
+            foreach ($this->getLinksByChannelId(7, 7) as $link) {
+                echo sprintf('<span><a href="%s"><img src="%s" alt="%s" /></a></a></span>', $link->url,$link->logo, $link->title);
             }
             ?>
         </div>
@@ -143,22 +142,11 @@ foreach ($this->getTopArchivesByChannelId(4, 6) as $archive) {
         <div class="merchant-wrap" id="demo">
             <div class="merchant-box" id="demo1">
                 <ul>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
-                    <li><a href="#">史翠英</a></li>
+                    <?php
+                    foreach ($this->getTopArchivesByChannelId(3, 20, 'merchant') as $archive) {
+                        echo sprintf('<li><a href="%s">%s</a></li>', $archive->getViewUrl(), $archive->title);
+                    }
+                    ?>
                 </ul>
             </div>
             <div id="demo2"></div>

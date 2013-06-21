@@ -7,7 +7,6 @@ if (!$promotion) {
 $merchant = $promotion->getMerchant();
 if ($merchant) {
     $merchantArchive = $this->getArchive($merchant->id);
-    $merchantCover = $merchantArchive->cover;
     $merchantTitle = $merchantArchive->title;
     $merchantAddress = $merchant->address;
     $merchantContent = $merchant->content;
@@ -25,7 +24,7 @@ echo $this->renderPartial('/blocks/breadcrumb', array(
 
 <div class="promotion2-view">
     <div class="promotion2-info clearfix">
-        <div class="pic fl"><img src="<?php echo $merchantCover?>" /></div>
+        <div class="pic fl"><img src="<?php echo $archive->cover?>" /></div>
         <div class="txt fl">
             <h4 class="t">商家介绍</h4>
             <p class="memo">
@@ -37,7 +36,7 @@ echo $this->renderPartial('/blocks/breadcrumb', array(
                 促销时间：<?php echo $promotion->start_time?> — <?php echo $promotion->end_time?></p>
         </div>
         <div class="link fl">
-            <a href="#">
+            <a href="<?php echo $this->createUrl('apply/index')?>">
                 <img src="<?php echo $this->asset('images/promotion2-img1.png')?>" />
             </a><br />
             <em class="color-red"><?php echo $promotion->phone?></em>

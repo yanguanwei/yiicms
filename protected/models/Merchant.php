@@ -49,6 +49,13 @@ class Merchant extends CActiveRecord
         );
     }
 
+    public function inPhone($phone)
+    {
+        $this->getDbCriteria()->compare('phone', $phone);
+
+        return $this;
+    }
+
     public function getTopPromotions()
     {
         if (null === $this->promotions) {

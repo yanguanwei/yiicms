@@ -38,9 +38,9 @@ class ArchiveController extends FrontendController
     {
         $keystr = strtr($key, array("\\" => "\\\\", '_' => '\_', '%' => '\%', "'" => "\\'"));
 
-        $sql = "SELECT count(id) FROM {{archive}} WHERE model_name='news' AND status='" . Archive::STATUS_PUBLISHED . "' AND `title` LIKE '%{$keystr}%' ORD" . "ER BY update_time DESC, id DESC";
+        $sql = "FROM {{archive}} WHERE model_name IN ('news', 'promotion', 'merchant') AND status='" . Archive::STATUS_PUBLISHED . "' AND `title` LIKE '%{$keystr}%' ORD" . "ER BY update_time DESC, id DESC";
 
-        $total = Yii::app()->db->createCommand($sql)->queryScalar();
+        $total = Yii::app()->db->createCommand("SELECT COUNT(id) {$sql}")->queryScalar();
 
         $page = intval($_GET['page']);
         $page = $page ? $page : 1;
@@ -48,7 +48,7 @@ class ArchiveController extends FrontendController
         $offset = ($page - 1) * $pageSize;
         $sql .= " LIMIT {$offset}, {$pageSize}";
 
-        $archives = Yii::app()->db->createCommand($sql)->queryAll();
+        $archives = Yii::app()->db->createCommand("SELECT * {$sql}")->queryAll();
 
         return $this->render(
             '/news/search_list',
@@ -61,5 +61,3 @@ class ArchiveController extends FrontendController
         );
     }
 }
-
-?>

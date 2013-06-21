@@ -13,7 +13,13 @@
 <body>
 <div class="header">
 	<div class="header-wrap header-index clearfix">
-		<div class="search clearfix"><input type="text" value="搜索购物节活动" class="input-txt fl" /><input type="button" value="搜索" class="input-btn fl" /></div>
+		<div class="search clearfix">
+            <form action="" method="get">
+            <input type="hidden" name="r" value="archive/search" />
+            <input type="text" placeholder="搜索购物节活动" name="key" class="input-txt fl" />
+            <input type="submit" value="搜索" class="input-btn fl" />
+            </form>
+        </div>
 	</div>
 </div>
 <div class="navigation clearfix">

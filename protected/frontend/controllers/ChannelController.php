@@ -35,23 +35,6 @@ class ChannelController extends ChannelBehaviorController
 
 		return $this->perform($current['template'], $current['id']);
 	}
-	public function actionShopping()
-	{
-		$channels = array (
-  1 => 
-  array (
-    'id' => '4',
-    'template' => '/shopping_street/list',
-  ),
-);
-	
-		if ( !$channels[Yii::app()->params['theme_id']] )
-			throw new CHttpException(404);
-
-		$current = $channels[Yii::app()->params['theme_id']];
-
-		return $this->perform($current['template'], $current['id']);
-	}
 	public function actionPromotions()
 	{
 		$channels = array (

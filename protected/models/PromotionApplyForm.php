@@ -2,10 +2,7 @@
 
 class PromotionApplyForm extends CFormModel
 {
-    public $merchant;
     public $phone;
-    public $address;
-    public $description;
 
     public $title;
     public $location;
@@ -26,7 +23,9 @@ class PromotionApplyForm extends CFormModel
             'content' => '活动详情',
             'location' => '区域选择',
             'promotion_type' => '促销类别',
-            'promotion_category' => '促销分类'
+            'promotion_category' => '促销分类',
+            'start_time' => '活动起始日期',
+            'end_time' => '活动截止日期'
         );
     }
 
@@ -36,7 +35,6 @@ class PromotionApplyForm extends CFormModel
             array('title, phone, content, location, promotion_type, promotion_category, start_time, end_time', 'required'),
             array('title', 'length', 'max' => 20),
             array('phone', 'length', 'max' => 20),
-            array('merchant', 'safe'),
             array('verifyCode', 'captcha', 'allowEmpty'=> !extension_loaded('gd'))
         );
     }
@@ -48,7 +46,19 @@ class PromotionApplyForm extends CFormModel
         }
 
         $file = CUploadedFile::getInstanceByName('cover');
-        $filepath = Yii::getPathOfAlias('wwwroot') . '/uploads/images/apply';
+
+        if (!in_array(strtolower($file->getExtensionName()), array('gif', 'jpg', 'jpeg', 'png', 'bmp'))) {
+            $this->addError('cover', '不支持的文件格式');
+            return false;
+        }
+
+        $fileUrl = '/uploads/images/apply/' . date('YmdHis', time()) . rand(100,999). '.' . $file->getExtensionName();
+        $filepath = Yii::getPathOfAlias('wwwroot') . $fileUrl;
+        $file->saveAs($filepath);
+
+        foreach (array('title', 'phone', 'content') as $key) {
+            $this->$key = htmlspecialchars(trim($this->$key));
+        }
 
         try {
             $archive = new Archive();
@@ -56,6 +66,7 @@ class PromotionApplyForm extends CFormModel
             $archive->model_name = 'promotion';
             $archive->status = Archive::STATUS_DRAFT;
             $archive->title = trim($this->title);
+            $archive->cover = $fileUrl;
             if ($archive->save()) {
                 $promotion = new Promotion();
                 $promotion->id = $archive->id;

@@ -169,7 +169,7 @@ class FrontendController extends YController
         return Archive::getArchivesByChannelId($subIds, $limit);
     }
 
-    public function getArchivesForPager(array $conditions, $pageSize = 10, array $joins = array())
+    public function getArchivesForPaging(array $conditions, $pageSize = 10, array $joins = array())
     {
         $page = intval($_GET['page']);
         $page = $page ? $page : 1;
@@ -215,9 +215,9 @@ class FrontendController extends YController
      * @param int $page 当前是第几页
      * @return array($archives, $total)
      */
-    public function getArchivesForPagerByChannelId($cid, $pageSize = 10, $page = null)
+    public function getArchivesForPagingByChannelId($cid, $pageSize = 10, $page = null)
     {
-        return $this->getArchivesForPager(array('archive.cid=?' => $cid), $pageSize, $page);
+        return $this->getArchivesForPaging(array('archive.cid=?' => $cid), $pageSize, $page);
     }
 
     public function getArchivesForPagingByChannel(Channel $channel, $pageSize = 10, array $joins = array())
@@ -234,7 +234,7 @@ class FrontendController extends YController
 
         $conditions['archive.model_name=?'] = $channel->model_name;
 
-        return $this->getArchivesForPager($conditions, $pageSize, $joins);
+        return $this->getArchivesForPaging($conditions, $pageSize, $joins);
     }
 
     /**

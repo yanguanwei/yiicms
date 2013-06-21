@@ -6,6 +6,8 @@ class PromotionController extends ArchiveAdminController
 {
     protected function prepareListSQL(SelectSQL $sql)
     {
+        parent::prepareListSQL($sql);
+
         if (isset($_GET['phone']) && $_GET['phone']!=='') {
             $sql->where('promotion.phone=?', intval($_GET['phone']));
         }

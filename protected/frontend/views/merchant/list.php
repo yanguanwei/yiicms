@@ -4,7 +4,7 @@ echo $this->renderPartial('/blocks/breadcrumb', array(
     'channel' => $channel
 ));
 ?>
-<div class="merchant-nav">
+<div class="merchant-nav" xmlns="http://www.w3.org/1999/html">
     <div class="nav-wrap">
         <ul class="clearfix">
             <?php
@@ -23,7 +23,7 @@ echo $this->renderPartial('/blocks/breadcrumb', array(
 foreach ($this->getMerchants($channel, 5) as $archive) :
 ?>
  <div class="merchant-list">
-        <h4 class="tt"><span><?php echo $archive->title?></span></h4>
+        <h4 class="tt"><a href="<?php echo $archive->getViewUrl();?>" target="_blank"><span><?php echo $archive->title?></span></a></h4>
         <ul class="clearfix">
             <?php
             foreach ($archive->merchant->getTopPromotions() as $promotion) :
@@ -33,11 +33,7 @@ foreach ($this->getMerchants($channel, 5) as $archive) :
                 <div class="title"><?php echo $promotion->promotion->getLocationTitle()?></div>
                 <div class="other clearfix"><?php echo $promotion->title?></div>
             </li>
-            <?php
-            endforeach;
-            ?>
+            <?php endforeach;?>
         </ul>
     </div>
-<?php
-endforeach;
-?>
+<?php endforeach;?>

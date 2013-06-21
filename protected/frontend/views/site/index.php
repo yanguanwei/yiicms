@@ -25,7 +25,7 @@ foreach ($this->getTopArchivesByChannelId(20) as $archive) {
         </div>
     </div>
     <div class="index-trends fr">
-        <h4 class="title"><a href="#" class="more fr">更多</a></h4>
+        <h4 class="title"><a href="<?php echo $this->createUrl('channel/news')?>" class="more fr" target="_blank">更多</a></h4>
         <div class="trends-wrap">
 <?php
 $ul = array();
@@ -38,7 +38,7 @@ foreach ($this->getArchivesByChannelId(array(17, 18), 6) as $i => $archive) {
             $archive->getViewUrl()
         );
     } else {
-        $ul[] = sprintf('<li><a href="%s">%s</a></li>', $archive->getViewUrl(), $archive->title);
+        $ul[] = sprintf('<li><a href="%s" target="_blank">%s</a></li>', $archive->getViewUrl(), $archive->title);
     }
 }
 ?>
@@ -95,7 +95,7 @@ foreach ($this->getTags('location', 6) as $tag) {
 <!-- 快乐购物 -->
 <div class="index-column3 clearfix">
     <div class="index-happy fl">
-        <h4 class="title"><a href="#" class="more fr">更多</a><img src="<?php echo $this->asset('images/index-happy-title.png'); ?>" /></h4>
+        <h4 class="title"><a href="<?php echo $this->createUrl('channel/activities')?>" class="more fr" target="_blank">更多</a><img src="<?php echo $this->asset('images/index-happy-title.png'); ?>" /></h4>
         <div class="happy-wrap">
             <ul class="clearfix">
                 <?php
@@ -112,11 +112,11 @@ foreach ($this->getTags('location', 6) as $tag) {
             <dl>
                 <?php
                 foreach ($this->getTags('promotion_category') as $tag) {
-                    echo sprintf('<dt class="t"><a href="%s">%s</a></dt>', '', $tag->title);
+                    echo sprintf('<dt class="t"><a href="%s" target="_blank">%s</a></dt>', '', $tag->title);
                     $archive = $this->getTopArchiveByTag(5, 'promotion', $tag->id);
                     if ($archive) {
                         echo sprintf(
-                            '<dd class="d"><a href="%s"><img src="%s" width="210" height="100" /></a></dd>',
+                            '<dd class="d"><a href="%s" target="_blank"><img src="%s" width="210" height="100" /></a></dd>',
                             $archive->getViewUrl(), $archive->cover
                         );
                     }
@@ -134,7 +134,7 @@ foreach ($this->getTags('location', 6) as $tag) {
         <div class="unit-wrap clearfix">
             <?php
             foreach ($this->getLinksByChannelId(7, 7) as $link) {
-                echo sprintf('<span><a href="%s"><img src="%s" alt="%s" /></a></a></span>', $link->url,$link->logo, $link->title);
+                echo sprintf('<span><a href="%s" target="_blank"><img src="%s" alt="%s" /></a></a></span>', $link->url,$link->logo, $link->title);
             }
             ?>
         </div>
@@ -146,7 +146,7 @@ foreach ($this->getTags('location', 6) as $tag) {
                 <ul>
                     <?php
                     foreach ($this->getTopArchivesByChannelId(3, 20, 'merchant') as $archive) {
-                        echo sprintf('<li><a href="%s">%s</a></li>', $archive->getViewUrl(), $archive->title);
+                        echo sprintf('<li><a href="%s" target="_blank">%s</a></li>', $archive->getViewUrl(), $archive->title);
                     }
                     ?>
                 </ul>

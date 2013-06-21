@@ -184,9 +184,32 @@ class Archive extends CActiveRecord
         return $this;
     }
 
+    public function in($id)
+    {
+        $this->getDbCriteria()->compare('id', $id);
+
+        return $this;
+    }
+
+    public function inTags($tags, $model_name, $alias = null)
+    {
+        $tags = (array) $tags;
+        foreach ($tags as  $tid) {
+            $this->getDbCriteria()->addCondition(($alias ? "{$alias}." : '') . "id IN (SELECT id FROM {{model_tag}} WHERE model_name='{$model_name}' AND tid='{$tid}')");
+        }
+        return $this;
+    }
+
     public function inChannels($cid)
     {
         $this->getDbCriteria()->compare('cid', $cid);
+
+        return $this;
+    }
+
+    public function inParentChannel($cid, $alias = null)
+    {
+        $this->getDbCriteria()->addCondition(($alias ? "{$alias}." : '') . "cid IN (SELECT id FROM {{channel}} WHERE parent='{$cid}' OR id='{$cid}')");
 
         return $this;
     }
@@ -209,6 +232,18 @@ class Archive extends CActiveRecord
     public function getChannel()
     {
         return $this->channel === null ? ($this->channel = Channel::model()->findByPk($this->cid)) : $this->channel;
+    }
+
+    public static function fetchFirstArchiveIdByChannelId($cid)
+    {
+        $cid = intval($cid);
+        $sql = "SELECT id FROM {{archive}} WHERE cid='{$cid}' AND status='" . self::STATUS_PUBLISHED . "' ORDER BY `is_top` DESC, update_time DESC, id DESC LIMIT 1";
+        $row = Yii::app()->db->createCommand($sql)->queryRow();
+        if ($row) {
+            return intval($row['id']);
+        }
+
+        return 0;
     }
 
     /**
@@ -236,18 +271,6 @@ class Archive extends CActiveRecord
         }
 
         return Yii::app()->db->createCommand($sql)->queryAll();
-    }
-
-    public static function getFirstArchiveIdByChannelId($cid)
-    {
-        $cid = intval($cid);
-        $sql = "SELECT id FROM {{archive}} WHERE cid='{$cid}' AND status='" . self::STATUS_PUBLISHED . "' ORDER BY `is_top` DESC, update_time DESC, id DESC LIMIT 1";
-        $row = Yii::app()->db->createCommand($sql)->queryRow();
-        if ($row) {
-            return intval($row['id']);
-        }
-
-        return 0;
     }
 
     /**

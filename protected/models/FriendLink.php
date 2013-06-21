@@ -86,6 +86,22 @@ class FriendLink extends CActiveRecord
         return $this;
     }
 
+    public function inTags($tags, $model_name, $alias = null)
+    {
+        $tags = (array) $tags;
+        foreach ($tags as  $tid) {
+            $this->getDbCriteria()->addCondition(($alias ? "{$alias}." : '') . "id IN (SELECT id FROM {{model_tag}} WHERE model_name='{$model_name}' AND tid='{$tid}')");
+        }
+        return $this;
+    }
+
+    public function visible()
+    {
+        $this->getDbCriteria()->compare('visible', 1);
+
+        return $this;
+    }
+
     public function orderly($limit = -1)
     {
         $this->getDbCriteria()->mergeWith(

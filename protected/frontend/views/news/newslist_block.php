@@ -16,7 +16,7 @@
     <?php
     foreach ($archives as $archive) {
         echo sprintf(
-            '<li><a href="%s" class="%s">%s%s</a></li>',
+            '<li><a href="%s" class="%s" target="_blank">%s%s</a></li>',
             $this->createUrl('archive/detail', array('id' => $archive['id'])),
             $archive['is_highlight'] ? 'highlight' : '',
             $hasPostTime ? sprintf('<span class="fr time">%s</span>', date('Y-m-d H:i', $archive['update_time'])) : '',

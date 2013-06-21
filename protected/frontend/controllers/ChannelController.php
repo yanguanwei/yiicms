@@ -1,6 +1,23 @@
 <?php
 class ChannelController extends ChannelBehaviorController
 {
+	public function actionActivities()
+	{
+		$channels = array (
+  1 => 
+  array (
+    'id' => '1',
+    'template' => '1',
+  ),
+);
+	
+		if ( !$channels[Yii::app()->params['theme_id']] )
+			throw new CHttpException(404);
+
+		$current = $channels[Yii::app()->params['theme_id']];
+
+		return $this->perform($current['template'], $current['id']);
+	}
 	public function actionMerchants()
 	{
 		$channels = array (
@@ -8,6 +25,23 @@ class ChannelController extends ChannelBehaviorController
   array (
     'id' => '3',
     'template' => '/merchant/list',
+  ),
+);
+	
+		if ( !$channels[Yii::app()->params['theme_id']] )
+			throw new CHttpException(404);
+
+		$current = $channels[Yii::app()->params['theme_id']];
+
+		return $this->perform($current['template'], $current['id']);
+	}
+	public function actionShopping()
+	{
+		$channels = array (
+  1 => 
+  array (
+    'id' => '4',
+    'template' => '/shopping_street/list',
   ),
 );
 	

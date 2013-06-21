@@ -19,6 +19,8 @@ echo $this->renderHiddenField('type_name');
 $widget->beginTab('base');
 
 	echo $this->renderTextRow('title', null, array('class' => 'text-input medium-input'));
+    echo $this->renderCKFinderInputRow('cover');
+    echo $this->renderTextRow('sort_id', '越大越靠前', array('class' => 'text-input'));
 
 $widget->endTab();//baseTab
 

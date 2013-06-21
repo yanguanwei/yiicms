@@ -77,9 +77,9 @@ foreach ($this->getArchivesByChannelId(array(17, 18), 6) as $i => $archive) {
 <?php
 //最热购物街
 $lis = $imgs = array();
-foreach ($this->getTopArchivesByChannelId(4, 6) as $archive) {
-    $lis[] = sprintf('<li>%s</li>', $archive->title);
-    $imgs[] = sprintf('<div class=""><img src="%s" /></div>', $archive->cover);
+foreach ($this->getTags('location', 6) as $tag) {
+    $lis[] = sprintf('<li>%s</li>', $tag->title);
+    $imgs[] = sprintf('<div class=""><img src="%s" /></div>', $tag->cover);
 }
 ?>
 
@@ -110,16 +110,18 @@ foreach ($this->getTopArchivesByChannelId(4, 6) as $archive) {
         <h4 class="title"><img src="<?php echo $this->asset('images/index-section-title.png')?>" /></h4>
         <div class="section-wrap" id="splitadver_section">
             <dl>
-                <dt class="t"><a href="#">食品海鲜</a></dt>
-                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
-                <dt class="t"><a href="#">文具礼品</a></dt>
-                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
-                <dt class="t"><a href="#">服饰家纺</a></dt>
-                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
-                <dt class="t"><a href="#">家电数码</a></dt>
-                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
-                <dt class="t"><a href="#">家居日用</a></dt>
-                <dd class="d"><a href="#"><img src="<?php echo $this->asset('images/index-section-d.png')?>" /></a></dd>
+                <?php
+                foreach ($this->getTags('promotion_category') as $tag) {
+                    echo sprintf('<dt class="t"><a href="%s">%s</a></dt>', '', $tag->title);
+                    $archive = $this->getTopArchiveByTag(5, 'promotion', $tag->id);
+                    if ($archive) {
+                        echo sprintf(
+                            '<dd class="d"><a href="%s"><img src="%s" width="210" height="100" /></a></dd>',
+                            $archive->getViewUrl(), $archive->cover
+                        );
+                    }
+                }
+                ?>
             </dl>
             <script type="text/javascript">$('#splitadver_section').AdAdvance();</script>
         </div>

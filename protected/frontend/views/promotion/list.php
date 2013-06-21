@@ -39,13 +39,19 @@ echo $this->renderPartial('/blocks/breadcrumb', array(
 <div class="promotion-list">
     <ul class="clearfix">
         <?php
-        list($archives, $total) = $this->getArchivesForPagerByChannelWithTags($channel, 12, null, array(
-                'promotion' => array('on' => array('id' => 'id'), 'fields' => array('discounts', 'start_time', 'end_time'))
-            ));
+        $join = array(
+            'promotion' => array(
+                'on' => array('id' => 'id'),
+                'fields' => array('discounts', 'start_time', 'end_time')
+            )
+        );
+
+        list($archives, $total) = $this->getArchivesForPagingByChannel($channel, 12, $join);
 
         foreach ($archives as $archive) {
             echo sprintf(
-                '<li><div class="pic"><a href="#"><img src="%s" /></a></div><div class="title"><span class="name">%s</div><div class="other clearfix"><span class="discount fl">%s</span>%s</div></li>',
+                '<li><div class="pic"><a href="%s"><img src="%s" /></a></div><div class="title"><span class="name">%s</div><div class="other clearfix"><span class="discount fl">%s</span>%s</div></li>',
+                $this->createUrl("archive/detail", array('id' => $archive['id'])),
                 $archive['cover'], $archive['title'], $archive['discounts'] ? ($archive['discounts'] . '折') : '',
                 date('m月d日', $archive['start_time']) . ' ~ ' . date('m月d日', $archive['end_time'])
             );

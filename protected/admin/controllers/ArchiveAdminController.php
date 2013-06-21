@@ -40,6 +40,16 @@ abstract class ArchiveAdminController extends ChannelModelBaseController
         $form->update_time = date('Y-m-d H:i', $form->update_time);
     }
 
+    protected function onFormUpdate($id, $form)
+    {
+        $archive = Archive::model()->findByPk($id);
+        if (!$archive) {
+            $this->setFlashMessage('error', "没有找到ID为{$id}的记录！");
+        }
+        $form->setAttributes($archive->getAttributes(), false);
+        $form->tags = ModelTag::find($this->getChannelModel()->name, $id);
+    }
+
     protected function deleteModel(array $ids)
     {
         parent::deleteModel($ids);

@@ -8,6 +8,19 @@ if (isset($channel) && $channel->id != $topChannel->id) {
     $breadcrumb[] = '<a href="' . $this->createChannelUrl($channel->id) . '" class="current">'. $channel->title .'</a>';
 }
 
+if (!isset($current)) {
+    $tags = array();
+    foreach ($channel->tags as $type) {
+        if (isset($_GET[$type]) && $_GET[$type]) {
+            $tags[] = $this->getTagTitle($_GET[$type]);
+        }
+    }
+    $current = implode(' & ', $tags);
+}
+
+if ($current) {
+    $breadcrumb[] = '<a>'.$current.'</a>';
+}
 ?>
 <div class="breadcrumb">
     <?php echo implode('&lt;', $breadcrumb)?>

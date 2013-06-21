@@ -16,6 +16,8 @@ class ChannelBehaviorController extends FrontendController
 
         if ($template === '1') {
             return $this->redirect($this->createChannelUrl($this->getFirstSubChannelId($cid)));
+        } else if ($template === '2') {
+            return $this->redirect($this->createArchiveUrl($this->getFirstArchiveIdByChannelId($cid)));
         }
 
         $channel = $this->getChannel($cid);

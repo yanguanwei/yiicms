@@ -41,7 +41,7 @@ echo $this->renderCKFinderInputRow('logo');
 
 echo $this->renderCheckboxRow('visible');
 
-echo $this->renderTextRow('sort_id', null, array('class' => 'text-input'));
+echo $this->renderTextRow('sort_id', '越大越靠前', array('class' => 'text-input'));
 
 $widget->endTab(); //baseTab
 

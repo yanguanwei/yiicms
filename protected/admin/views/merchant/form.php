@@ -18,9 +18,11 @@ $widget->beginTab('base');
 	
 	echo $this->renderCheckboxListRow('is_highlight', 'is_top');
 
-  echo $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input medium-input'));
+    echo $this->renderHiddenDisabledChannelTextRow('cid', null, array('class' => 'text-input medium-input'));
 
-  echo $this->renderChannelTagSelectRow();
+    echo $this->renderCKFinderInputRow('cover');
+
+    echo $this->renderChannelTagSelectRow();
 
 	//echo $this->renderCKFinderInputRow('cover');
 

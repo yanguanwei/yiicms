@@ -35,6 +35,11 @@ class FrontendController extends YController
         return parent::beforeRender($view);
     }
 
+    public function createArchiveUrl($id, array $params = array())
+    {
+        return $this->createUrl('archive/detail', array_merge(array('id' => $id), $params));
+    }
+
     /**
      * 创建栏目对应的URL；
      * 栏目如果设置了别名，则会生成“channel/别名”这种形式的URL；
@@ -106,8 +111,8 @@ class FrontendController extends YController
      * 根据栏目ID返回指定条数的文档数组
      *
      * @param int|array $cid 栏目ID
-     * @param string|null $model_name
      * @param int $limit 限制条数，-1表示不限制
+     * @param string|null $model_name
      * @return array
      */
     public function getArchivesByChannelId($cid, $limit = -1, $model_name = null)
@@ -119,6 +124,15 @@ class FrontendController extends YController
         }
 
         return $archive->published()->recently($limit)->findAll();
+    }
+
+    public function getArchivesByTag($tags, $model_name, $cid = 0, $limit = -1)
+    {
+        $archive = Archive::model()->inTags($tags, $model_name);
+        if ($cid) {
+            $archive->inChannels($cid);
+        }
+        return $archive->inModel($model_name)->published()->recently($limit)->findAll();
     }
 
     /**
@@ -155,12 +169,9 @@ class FrontendController extends YController
         return Archive::getArchivesByChannelId($subIds, $limit);
     }
 
-    public function getArchivesForPager(array $conditions, $pageSize = 10, $page = null, array $joins = array())
+    public function getArchivesForPager(array $conditions, $pageSize = 10, array $joins = array())
     {
-        if (null === $page) {
-            $page = intval($_GET['page']);
-        }
-
+        $page = intval($_GET['page']);
         $page = $page ? $page : 1;
 
         Yii::import('apps.ext.young.SelectSQL');
@@ -171,6 +182,9 @@ class FrontendController extends YController
         foreach ($joins as $table => $info) {
             foreach ($info['on'] as $s => $t) {
                 $sql->leftJoin(array("{{{$table}}}", "{$table}"), $info['fields'], "archive.{$s}={$table}.{$t}");
+            }
+            if (isset($info['condition']) && $info['condition']) {
+                $sql->where($info['condition']);
             }
         }
 
@@ -206,12 +220,11 @@ class FrontendController extends YController
         return $this->getArchivesForPager(array('archive.cid=?' => $cid), $pageSize, $page);
     }
 
-    public function getArchivesForPagerByChannelWithTags(Channel $channel, $pageSize = 10, $page = null, array $joins = array())
+    public function getArchivesForPagingByChannel(Channel $channel, $pageSize = 10, array $joins = array())
     {
-        $conditions = array(
-            'archive.cid=?' => $channel->id
-        );
+        $conditions = array();
 
+        $conditions['archive.cid=?'] = $channel->id;
         foreach ($channel->tags as $type) {
             if (isset($_GET[$type]) && $_GET[$type]) {
                 $tid = intval($_GET[$type]);
@@ -219,7 +232,9 @@ class FrontendController extends YController
             }
         }
 
-        return $this->getArchivesForPager($conditions, $pageSize, $page, $joins);
+        $conditions['archive.model_name=?'] = $channel->model_name;
+
+        return $this->getArchivesForPager($conditions, $pageSize, $joins);
     }
 
     /**
@@ -309,7 +324,7 @@ class FrontendController extends YController
      */
     public function getFirstArchiveIdByChannelId($cid)
     {
-        return Archive::getFirstArchiveIdByChannelId($cid);
+        return Archive::fetchFirstArchiveIdByChannelId($cid);
     }
 
     /**
@@ -348,7 +363,22 @@ class FrontendController extends YController
      */
     public function getLinksByChannelId($cid, $limit = -1)
     {
-        return FriendLink::model()->inChannels($cid)->orderly($limit)->findAll();
+        return FriendLink::model()->inChannels($cid)->visible()->orderly($limit)->findAll();
+    }
+
+    public function getLinksByChannelWithTags(Channel $channel, $limit = -1)
+    {
+        $tags = array();
+        foreach ($channel->tags as $type) {
+            if (isset($_GET[$type]) && $_GET[$type]) {
+                $tags[$type] = intval($_GET[$type]);
+            }
+        }
+        $link = FriendLink::model()->inChannels($channel->id);
+        if ($tags) {
+            $link->inTags($tags, 'link');
+        }
+        return $link->visible()->orderly($limit)->findAll();
     }
 
     /**
@@ -387,9 +417,26 @@ class FrontendController extends YController
         return $this->_navs;
     }
 
-    public function getMerchantsWithPromotions()
+    public function getMerchants(Channel $channel, $limit = 5)
     {
-        return Archive::model()->with(array('merchant' => array('select' => 'phone')))->inChannels(3)->published()->top()->recently(5)->findAll();
+        $archive = Archive::model()->with(array('merchant' => array('select' => 'id, phone')));
+        if ($channel->tags) {
+            $tags = array();
+            foreach ($channel->tags as $type) {
+                if (isset($_GET[$type]) && $_GET[$type]) {
+                    $tags[$type] = intval($_GET[$type]);
+                }
+            }
+            if ($tags) {
+                $archive->inTags($tags, 'merchant', 't');
+            }
+        }
+        return $archive->inChannels($channel->id)->published()->top()->recently(5)->findAll();
+    }
+
+    public function getMerchant($id)
+    {
+        return Merchant::model()->findByPk($id);
     }
 
     /**
@@ -403,6 +450,11 @@ class FrontendController extends YController
         return News::model()->findByPk($id);
     }
 
+    public function getPromotion($id)
+    {
+        return Promotion::model()->findByPk($id);
+    }
+
     /**
      * 根据栏目ID返回其所有子栏目列表数组
      *
@@ -412,6 +464,22 @@ class FrontendController extends YController
     public function getSubChannels($cid)
     {
         return Channel::getSubChannelTitles($cid);
+    }
+
+    public function getTagTitle($tid)
+    {
+        return Tag::fetchTitle($tid);
+    }
+
+    public function getTags($type, $limit = -1)
+    {
+        $tags = array();
+
+        foreach (Tag::model()->in($type)->orderly($limit)->findAll() as $tag) {
+            $tags[$tag->id] = $tag;
+        }
+
+        return $tags;
     }
 
     /**
@@ -424,6 +492,11 @@ class FrontendController extends YController
     public function getTopChannelId($cid)
     {
         return Channel::getTopChannelId($cid);
+    }
+
+    public function getTopArchiveByTag($cid, $model_name, $tid)
+    {
+        return Archive::model()->inChannels($cid)->inTags($tid, $model_name)->top()->published()->recently(1)->find();
     }
 
     /**

@@ -50,6 +50,17 @@ class ModelTag
         return $tags;
     }
 
+    public static function findIds($model_name, $tid)
+    {
+        $tid = intval($tid);
+        $ids = array();
+        $sql = "SELECT id FROM {{model_tag}} WHERE model_name='{$model_name}' AND tid='{$tid}'";
+        foreach (Yii::app()->db->createCommand($sql)->queryAll() as $row) {
+            $ids[] = $row['id'];
+        }
+        return $ids;
+    }
+
     public static function findByType($model_name, $id, $type)
     {
         $id = intval($id);

@@ -5,6 +5,8 @@ class Tag extends CActiveRecord
     public $id;
     public $type_name;
     public $title;
+    public $sort_id = 0;
+    public $cover;
 
     /**
      * Returns the static model of the specified AR class.
@@ -36,7 +38,8 @@ class Tag extends CActiveRecord
     {
         return array(
             array('id', 'required', 'on' => 'update'),
-            array('type_name, title', 'required')
+            array('type_name, title', 'required'),
+            array('sort_id, cover', 'safe')
         );
     }
 
@@ -47,8 +50,29 @@ class Tag extends CActiveRecord
     {
         return array(
             'id' => 'ID',
-            'title' => '标签名称'
+            'title' => '标签名称',
+            'cover' => '图片',
+            'sort_id' => '排序'
         );
+    }
+
+    public function in($type)
+    {
+        $this->getDbCriteria()->compare('type_name', $type);
+
+        return $this;
+    }
+
+    public function orderly($limit = -1)
+    {
+        $this->getDbCriteria()->mergeWith(
+            array(
+                'order' => 'sort_id DESC, id ASC',
+                'limit' => $limit,
+            )
+        );
+
+        return $this;
     }
 
     public function relations()
@@ -64,6 +88,16 @@ class Tag extends CActiveRecord
         $titles = array();
         foreach (Yii::app()->db->createCommand($sql)->queryAll() as $row) {
             $titles[$row['type_name']][$row['id']] = $row['title'];
+        }
+        return $titles;
+    }
+
+    public static function fetchByType($type)
+    {
+        $sql = "SELECT id, title FROM {{tag}} WHERE type_name='{$type}')";
+        $titles = array();
+        foreach (Yii::app()->db->createCommand($sql)->queryAll() as $row) {
+            $titles[$row['id']] = $row['title'];
         }
         return $titles;
     }

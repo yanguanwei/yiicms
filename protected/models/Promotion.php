@@ -9,7 +9,9 @@ class Promotion extends CActiveRecord
     public $end_time;
     public $content;
 
+    private $promotionCategoryId;
     private $locationTitle;
+    private $merchant;
 
     /**
      * Returns the static model of the specified AR class.
@@ -98,6 +100,21 @@ class Promotion extends CActiveRecord
         return parent::afterFind();
     }
 
+    public function getMerchant()
+    {
+        if (null === $this->merchant) {
+            if ($this->phone) {
+                $this->merchant = Merchant::model()->find('phone=:phone', array(':phone' => $this->phone));
+            }
+
+            if (!$this->merchant){
+                $this->merchant = false;
+            }
+        }
+
+        return $this->merchant;
+    }
+
     public function getLocationTitle()
     {
         if (null === $this->locationTitle) {
@@ -114,5 +131,26 @@ class Promotion extends CActiveRecord
         }
 
         return $this->locationTitle;
+    }
+
+    public function getPromotionCategoryId()
+    {
+        if (null === $this->promotionCategoryId) {
+            $this->promotionCategoryId = ModelTag::findByType('promotion', $this->id, 'promotion_type');
+        }
+        return $this->promotionCategoryId;
+    }
+
+    public function getRelativePromotions($limit)
+    {
+        $ids = ModelTag::findIds('promotion', $this->getPromotionCategoryId());
+        if (false !== ($p = array_search($this->id, $ids))) {
+            unset($ids[$p]);
+        }
+        if ($ids) {
+            return Archive::model()->in($ids)->top()->published()->recently($limit)->findAll();
+        } else {
+            return array();
+        }
     }
 }

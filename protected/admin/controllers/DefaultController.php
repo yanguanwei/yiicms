@@ -23,13 +23,13 @@ class DefaultController extends AdminController
 			),
 			array(
 				'shortcut' => $this->asset('images/icons/favorite.png'),
-				'label' => '友情链接',
-				'url' => $this->createUrl('link/create', array('cid' => 51))
+				'label' => '创建支持单位',
+				'url' => $this->createUrl('link/create', array('cid' => 7))
 			),
 			array(
-				'shortcut' => $this->asset('images/icons/video.png'),
-				'label' => '发布视频',
-				'url' => $this->createUrl('video/create', array('cid' => 69))
+				'shortcut' => $this->asset('images/icons/picture.png'),
+				'label' => '创建幻灯片',
+				'url' => $this->createUrl('news/create', array('cid' => 20))
 			),
 			array(
 				'shortcut' => $this->asset('images/icons/settings_48.png'),

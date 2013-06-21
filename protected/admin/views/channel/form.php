@@ -62,12 +62,11 @@ $templates = ThemeTemplate::getTemplateSelectOptions();
 echo $this->renderRow(
     $this->renderSelectField(
         'channel_template',
-        $templates,
+        array('1' => '跳转至第一个子栏目','2' => ' 跳转至第一个内容页') + $templates,
         '当不使用模板时，将不能访问此栏目',
         array(
             'empty' => array(
-                '' => '不使用模板',
-                '1' => '跳转至第一个子栏目'
+                '' => '不使用模板'
             )
         )
     ),

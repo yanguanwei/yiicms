@@ -88,7 +88,7 @@ class TagController extends AdminController
         Yii::import('apps.ext.young.SelectDataProvider');
 
         $sql = new SelectSQL();
-        $sql->from('{{tag}}', '*')->where('type_name=?', $type_name);
+        $sql->from('{{tag}}', '*')->where('type_name=?', $type_name)->order('sort_id DESC, id ASC');
 
         $dataProvider = new SelectDataProvider(Yii::app()->db, $sql);
 
@@ -166,5 +166,10 @@ class TagController extends AdminController
         $url = Yii::app()->getRequest()->getUrlReferrer();
         if ( $url )
             $this->redirect($url);
+    }
+
+    public function actionUpdateSort()
+    {
+        return $this->doUpdateSort('tag');
     }
 }
